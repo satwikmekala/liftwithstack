@@ -12,6 +12,7 @@ export function useActiveStep<StepId extends string>(
   defaultId: StepId,
 ): {
   readonly activeId: StepId;
+  readonly activateStep: (id: StepId) => void;
   readonly registerStep: (id: StepId) => (element: HTMLElement | null) => void;
 } {
   const [activeId, setActiveId] = useState<StepId>(defaultId);
@@ -52,7 +53,7 @@ export function useActiveStep<StepId extends string>(
       }
     };
 
-  return { activeId, registerStep };
+  return { activeId, activateStep: setActiveId, registerStep };
 }
 
 export default useActiveStep;

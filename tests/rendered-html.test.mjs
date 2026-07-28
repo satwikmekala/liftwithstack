@@ -29,7 +29,7 @@ test("server-renders the Stack marketing page", async () => {
 
   const html = await response.text();
   assert.match(html, /Get stronger on the schedule you/);
-  assert.match(html, /Plan the days\. Progress the lifts\. Adapt to the week\./);
+  assert.match(html, /Open it\.[\s\S]*Lift\.[\s\S]*Keep moving\./);
   assert.match(html, /What if I miss a workout\?/);
   assert.match(html, /The only decision is showing up\./);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);

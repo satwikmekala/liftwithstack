@@ -27,10 +27,12 @@ function StepCopy({ step }: { readonly step: HowItWorksStep }) {
 function DesktopStep({
   step,
   isActive,
+  activateStep,
   registerRef,
 }: {
   readonly step: HowItWorksStep;
   readonly isActive: boolean;
+  readonly activateStep: () => void;
   readonly registerRef: (element: HTMLElement | null) => void;
 }) {
   return (
@@ -38,39 +40,53 @@ function DesktopStep({
       ref={registerRef}
       className={`how-step${isActive ? " how-step--active" : ""}`}
     >
-      <StepCopy step={step} />
+      <button
+        type="button"
+        className="how-step__button"
+        aria-pressed={isActive}
+        onClick={activateStep}
+      >
+        <StepCopy step={step} />
+        <span className="how-step__action" aria-hidden="true">
+          View in Stack <span>↗</span>
+        </span>
+      </button>
     </div>
   );
 }
 
 export function HowItWorks() {
-  const { activeId, registerStep } = useActiveStep<HowItWorksStepId>("today");
+  const { activeId, activateStep, registerStep } =
+    useActiveStep<HowItWorksStepId>("today");
 
   return (
     <section id="how" className="how-section scroll-mt-20" aria-labelledby="how-heading">
       <div className="how-intro">
-        <RevealOnScroll className="how-eyebrow">
-          {howItWorksIntro.eyebrow}
-        </RevealOnScroll>
-        <RevealOnScroll delay={0.08}>
-          <h2 id="how-heading" className="how-heading">
-            {howItWorksIntro.headline.map((segment, index) => (
-              <span
-                key={index}
-                className={segment.emphasis ? "text-accent" : undefined}
-              >
-                {segment.text}
-              </span>
-            ))}
-          </h2>
-        </RevealOnScroll>
+        <div>
+          <RevealOnScroll className="how-eyebrow">
+            {howItWorksIntro.eyebrow}
+          </RevealOnScroll>
+          <RevealOnScroll delay={0.08}>
+            <h2 id="how-heading" className="how-heading">
+              {howItWorksIntro.headline.map((segment, index) => (
+                <span
+                  key={index}
+                  className={segment.emphasis ? "text-accent" : undefined}
+                >
+                  {segment.text}
+                </span>
+              ))}
+            </h2>
+          </RevealOnScroll>
+        </div>
         <RevealOnScroll delay={0.16}>
           <p className="how-paragraph">{howItWorksIntro.paragraph}</p>
         </RevealOnScroll>
       </div>
 
-      <div className="how-layout hidden lg:grid">
-        <div className="how-visual">
+      <div className="how-layout">
+        <div className="how-visual" aria-label="Stack product preview">
+          <div className="how-visual__glow" aria-hidden="true" />
           <StackProductDemo state={activeId} />
         </div>
         <div className="how-steps">
@@ -79,23 +95,11 @@ export function HowItWorks() {
               key={step.id}
               step={step}
               isActive={activeId === step.id}
+              activateStep={() => activateStep(step.id)}
               registerRef={registerStep(step.id)}
             />
           ))}
         </div>
-      </div>
-
-      <div className="how-sequence lg:hidden">
-        {howItWorksSteps.map((step) => (
-          <div key={step.id} className="how-sequence__item">
-            <RevealOnScroll>
-              <StepCopy step={step} />
-            </RevealOnScroll>
-            <RevealOnScroll delay={0.1} className="how-sequence__demo">
-              <StackProductDemo state={step.id} />
-            </RevealOnScroll>
-          </div>
-        ))}
       </div>
     </section>
   );

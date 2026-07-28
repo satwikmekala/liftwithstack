@@ -185,13 +185,14 @@ export function ProblemBeat() {
       <div className="problem-layout">
         <motion.div className="problem-introduction" initial={reduceMotion ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={viewport} transition={panelTransition}>
           <div className="problem-eyebrow">THE REAL PROBLEM</div>
-          <h2 id="problem-heading"><span>You don’t need more discipline.</span><strong className="text-accent">You need fewer decisions.</strong></h2>
+          <h2 id="problem-heading"><span>You don’t need more discipline.</span><strong>You need fewer decisions.</strong></h2>
         </motion.div>
         <motion.div className="problem-grid" initial="hidden" whileInView="visible" viewport={viewport}>
           {problems.map((problem, index) => <ProblemPanel key={problem.number} problem={problem} index={index} reduceMotion={reduceMotion} />)}
         </motion.div>
         <motion.p className="problem-conclusion" initial={reduceMotion ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={viewport} transition={{ ...panelTransition, delay: reduceMotion ? 0 : 0.14 }}>
-          <span>The problem isn’t effort.</span><br />It’s everything you have to figure out <em>before the effort begins.</em>
+          <span className="problem-conclusion__primary">The problem isn’t effort.</span>{" "}
+          <span className="problem-conclusion__secondary">It’s everything you have to figure out before the effort begins.</span>
         </motion.p>
       </div>
     </section>
