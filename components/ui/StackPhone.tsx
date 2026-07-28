@@ -58,7 +58,7 @@ export function StackPhone() {
         </div>
 
         <div className="mt-0.5 font-display text-[22px] font-extrabold tracking-[-0.01em]">
-          Hey, pav
+          hey wik
         </div>
 
         <WorkoutCard />
