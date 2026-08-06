@@ -60,7 +60,7 @@ export function HowItWorks() {
     useActiveStep<HowItWorksStepId>("today");
 
   return (
-    <section id="how" className="how-section scroll-mt-20" aria-labelledby="how-heading">
+    <section id="how-it-works" className="how-section scroll-mt-20" aria-labelledby="how-heading">
       <div className="how-intro">
         <div>
           <RevealOnScroll className="how-eyebrow">

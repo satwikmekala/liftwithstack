@@ -54,20 +54,20 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL(`${protocol}://${safeHost}`),
     title: {
-      default: "Stack — Strength training that adapts",
+      default: "Stack — Strength Training for Busy People",
       template: "%s | Stack",
     },
     description:
-      "Choose how often you train. Stack keeps your workouts balanced, progresses your lifts, and adapts when your week changes.",
+      "Stack prepares your workouts, remembers your lifts, and keeps your training moving when life gets busy.",
     icons: {
       icon: "/favicon.png",
       shortcut: "/favicon.png",
     },
     openGraph: {
       type: "website",
-      title: "Get stronger on the schedule you actually keep.",
+      title: "Stack — Strength Training for Busy People",
       description:
-        "Stack plans the days, progresses the lifts, and adapts to your real week.",
+        "Stack prepares your workouts, remembers your lifts, and keeps your training moving when life gets busy.",
       siteName: "Stack",
       images: [
         {
@@ -80,9 +80,9 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: "Get stronger on the schedule you actually keep.",
+      title: "Stack — Strength Training for Busy People",
       description:
-        "Stack plans the days, progresses the lifts, and adapts to your real week.",
+        "Stack prepares your workouts, remembers your lifts, and keeps your training moving when life gets busy.",
       images: ["/og.png"],
     },
   };

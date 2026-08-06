@@ -28,9 +28,11 @@ test("server-renders the Stack marketing page", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /Get stronger on the schedule you/);
+  assert.match(html, /Stack — Strength Training for Busy People/);
   assert.match(html, /Open it\.[\s\S]*Lift\.[\s\S]*Keep moving\./);
-  assert.match(html, /What if I miss a workout\?/);
-  assert.match(html, /The only decision is showing up\./);
+  assert.match(html, /Fitness should demand effort from your body/);
+  assert.match(html, /Show up\. Stack will have the workout ready\./);
+  assert.match(html, /id="why-stack-exists"/);
+  assert.match(html, /id="download"/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 });

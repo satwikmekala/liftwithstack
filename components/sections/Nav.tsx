@@ -13,16 +13,16 @@ export function Nav() {
 
       <div className="hidden items-center gap-1 md:flex">
         <a
-          href="#how"
+          href="#how-it-works"
           className="rounded-lg px-[14px] py-2 font-body text-[13.5px] font-semibold text-text-muted transition-colors hover:text-text"
         >
           How it works
         </a>
         <a
-          href="#principles"
+          href="#progress"
           className="rounded-lg px-[14px] py-2 font-body text-[13.5px] font-semibold text-text-muted transition-colors hover:text-text"
         >
-          Training principles
+          Progress
         </a>
       </div>
 
@@ -30,7 +30,7 @@ export function Nav() {
         href="#download"
         className="rounded-[10px] bg-accent px-[18px] py-[10px] font-body text-[13.5px] font-bold text-ink transition-colors hover:bg-accent-hover hover:text-ink"
       >
-        Download Stack
+        Get launch updates
       </a>
     </nav>
   );

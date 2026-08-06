@@ -16,18 +16,6 @@ export interface TrainingDay {
   readonly split: TrainingSplit | null;
 }
 
-export interface FaqItem {
-  readonly id: string;
-  readonly question: string;
-  readonly answer: string;
-}
-
-export interface PrincipleItem {
-  readonly number: `${number}${number}`;
-  readonly title: string;
-  readonly description: string;
-}
-
 export const TRAINING_FREQUENCIES = [1, 2, 3, 4, 5, 6] as const;
 
 export const TRAINING_ROTATIONS = {
@@ -110,51 +98,6 @@ export const WEEKDAYS = [
   readonly dayIndex: DayIndex;
   readonly shortLabel: string;
 }[];
-
-export const FAQ_ITEMS = [
-  {
-    id: "missed-workout",
-    question: "What if I miss a workout?",
-    answer:
-      "Stack uses what you actually completed to prepare the next session, so you can pick up without manually rebuilding a calendar.",
-  },
-  {
-    id: "change-target",
-    question: "Can I change an exercise or target?",
-    answer:
-      "Yes. Stack suggests; you decide. Adjust an exercise, weight, reps, or session when the gym or your body calls for it.",
-  },
-  {
-    id: "beginners",
-    question: "Is Stack for beginners?",
-    answer:
-      "Stack is designed to make strength training less intimidating for beginners and less administratively annoying for experienced lifters.",
-  },
-] as const satisfies readonly FaqItem[];
-
-export const PRINCIPLE_ITEMS = [
-  {
-    number: "01",
-    title: "Train regularly",
-    description:
-      "Consistent, repeatable sessions do more over months than any single perfect week. Stack is built around showing up at a frequency you can hold.",
-  },
-  {
-    number: "02",
-    title: "Progress gradually",
-    description:
-      "Small, measured increases in weight or reps — suggested from your logged performance, never an arbitrary jump, and always yours to adjust.",
-  },
-  {
-    number: "03",
-    title: "Cover the whole body",
-    description:
-      'A balanced rotation helps spread work sensibly across muscle groups — no single "perfect split," just coverage that fits your available days.',
-  },
-] as const satisfies readonly PrincipleItem[];
-
-export const PRINCIPLES_DISCLAIMER =
-  "Stack is evidence-informed and designed to help you train consistently. It does not promise guaranteed gains, a universally optimal program, or that more training days are inherently better.";
 
 export function getTrainingWeek(
   frequency: TrainingFrequency,

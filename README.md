@@ -36,6 +36,6 @@ test.
 
 ## Content handoff
 
-The footer is intentionally a minimal placeholder until final footer content is
-supplied. App Store and Google Play badges are disabled until real listing URLs
-are available.
+Stack is not yet publicly available and has no TestFlight, waitlist, or launch
+updates route configured. The marketing CTA is intentionally disabled until a
+real conversion path is supplied.

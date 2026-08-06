@@ -58,6 +58,6 @@ export const howItWorksStateDescriptions = {
   today:
     "Stack home screen showing today's prepared workout, Full Body A, with a start workout button.",
   exercise:
-    "Active Bench Press exercise screen showing last time's 60 kilograms by 8 reps and today's 62.5 kilograms by 8 reps.",
+    "Active Bench Press screen with Set 1 ready to log at 40 kilograms for 8 reps, plus completed-set and personal-record follow-up states.",
   next: "Workout complete screen for Full Body A transitioning into the next prepared session, Full Body B.",
 } as const satisfies Record<HowItWorksStepId, string>;

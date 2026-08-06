@@ -13,8 +13,8 @@ export const heroCopy = {
   ] as readonly HeroHeadlineSegment[],
   paragraph:
     "Stack tells you what to train, remembers what you lifted, and prepares what comes next—so every time you make it to the gym, you can just lift.",
-  primaryCta: { label: "Download Stack", href: "#download" },
-  secondaryCta: { label: "See how it works →", href: "#how" },
+  primaryCta: { label: "Get launch updates", href: "#download" },
+  secondaryCta: { label: "See how it works →", href: "#how-it-works" },
 } as const;
 
 export interface HeroDecision {
