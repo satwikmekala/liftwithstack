@@ -28,11 +28,22 @@ test("server-renders the Stack marketing page", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /Stack — Strength Training for Busy People/);
-  assert.match(html, /Open it\.[\s\S]*Lift\.[\s\S]*Keep moving\./);
-  assert.match(html, /Fitness should demand effort from your body/);
-  assert.match(html, /Show up\. Stack will have the workout ready\./);
-  assert.match(html, /id="why-stack-exists"/);
-  assert.match(html, /id="download"/);
+  assert.match(html, /<title>Stack — Every workout stacks up\.<\/title>/);
+  assert.match(html, /Every workout[\s\S]*stacks up\./);
+  assert.match(html, /Log your training\.[\s\S]*See your progress take shape\./);
+  assert.match(html, /Don’t overthink it\./);
+  assert.match(html, /Every week becomes a layer\./);
+  assert.match(html, /Progress has substance\./);
+  assert.match(html, /Paste what you already train\. Stack will sort it out\./);
+  assert.match(html, /Don’t slack\. Just stack\./);
+  assert.match(html, /instagram\.com\/liftwithstack/);
+  assert.match(html, /for beta access/);
+  assert.match(html, /Beta testing now/);
+  assert.match(html, /Beta testing on iOS/);
+  assert.match(html, /id="how"/);
+  // Retired or banned terms from the content style sheet never reach the page.
+  for (const banned of [/\bsplits?\b/i, /\bprogram\b/i, /\bsession\b/i, /\bsealed\b/i, /\bvolume\b/i, /\blbs\b/, /NEW BEST|NEW RECORD/, /Oops|Something went wrong/, /!(?=[\s<])/, /\bMy Stack\b/]) {
+    assert.doesNotMatch(html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, ""), banned);
+  }
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 });

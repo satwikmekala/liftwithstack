@@ -1,31 +1,28 @@
-import Footer from "@/components/sections/Footer";
-import FinalCtaSection from "@/components/sections/FinalCtaSection";
-import GymFloorProof from "@/components/sections/GymFloorProof";
-import Hero from "@/components/sections/Hero";
-import HowItWorks from "@/components/sections/HowItWorks";
-import Nav from "@/components/sections/Nav";
-import PillarAdapt from "@/components/sections/PillarAdapt";
-import PillarPlan from "@/components/sections/PillarPlan";
-import PillarProgress from "@/components/sections/PillarProgress";
-import ProblemBeat from "@/components/sections/ProblemBeat";
-import SeeWorkStackUp from "@/components/sections/SeeWorkStackUp";
-import WhyStackExistsSection from "@/components/sections/WhyStackExistsSection";
+import { SmoothScroll } from "@/components/ui/SmoothScroll";
+import { DemoJourney } from "@/components/stack/DemoJourney";
+import { Closing, Footer } from "@/components/sections/Closing";
+import { Hero, Nav } from "@/components/sections/Hero";
+import { Progress } from "@/components/sections/Progress";
+import { Routines } from "@/components/sections/Routines";
+import { Story } from "@/components/sections/Story";
+import { Thesis } from "@/components/sections/Thesis";
+import { StackFinale } from "@/components/stack/StackFinale";
 
 export default function Home() {
   return (
     <>
+      <SmoothScroll />
       <Nav />
       <main>
         <Hero />
-        <ProblemBeat />
-        <HowItWorks />
-        <PillarPlan />
-        <PillarProgress />
-        <PillarAdapt />
-        <GymFloorProof />
-        <SeeWorkStackUp />
-        <WhyStackExistsSection />
-        <FinalCtaSection />
+        <Thesis />
+        <DemoJourney>
+          <Story />
+          <StackFinale />
+        </DemoJourney>
+        <Progress />
+        <Routines />
+        <Closing />
       </main>
       <Footer />
     </>
