@@ -979,3 +979,15 @@ a.nav__beta:hover, a.nav__beta:focus-visible { background: var(--accent); color:
 @media (max-width: 960px) and (min-height: 641px) and (max-height: 740px) {
   .story__captions { min-height: 210px; }
 }
+
+/* Phone copy takes only the room it needs; the device gets the rest. */
+@media (max-width: 640px) {
+  .story__explore { display: none; }
+  .story__captions { min-height: 0; height: auto; }
+  .story__caption.is-on { position: relative; }
+  .story__caption .story__copy { height: auto; }
+  .story__controls { margin-top: 10px; padding-top: 0; }
+}
+@media (max-width: 640px) and (max-height: 640px) {
+  .story__captions { max-height: 150px; }
+}

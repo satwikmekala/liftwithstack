@@ -122,9 +122,11 @@ export function StackFinale() {
     const lower = (bandTop - bandBottom) / 2;
     const layerTop = baseY + composite * BASE_HEIGHT;
     const near = focusFrame(layerTop, width, band, { bottom: baseY - 0.6, top: layerTop + 1.5 });
-    const closeZoom = Math.min(near.zoom, Math.min(width, band) / (narrow ? 4.2 : 6.2));
+    // Keep the tower lighter on phones without scaling the canvas or its hit targets.
+    const phoneScale = width <= 640 ? 0.82 : 1;
+    const closeZoom = Math.min(near.zoom, Math.min(width, band) / (narrow ? 4.2 : 6.2)) * phoneScale;
     const close = { targetY: near.targetY + lower / (closeZoom * 0.906), zoom: closeZoom };
-    const wideZoom = Math.min((width * 0.84) / 3.32, (band * 0.92) / (history.final.top * 0.906 + 1.41));
+    const wideZoom = Math.min((width * 0.84) / 3.32, (band * 0.92) / (history.final.top * 0.906 + 1.41)) * phoneScale;
     const wide = { targetY: history.final.top / 2 + lower / (wideZoom * 0.906), zoom: wideZoom };
     const pull = smooth(span(t, PULL));
     const goalY = close.targetY + (wide.targetY - close.targetY) * pull;
