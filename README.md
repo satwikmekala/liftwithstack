@@ -129,3 +129,17 @@ explicit in the demo. The infinite/fixed-height hero interaction remains deferre
 
 Same-page anchors now use one scroll handler; the Chromium native/Lenis double
 jump is removed, and the opening chapter lands below navigation.
+
+## Mobile mockup follow-up
+
+The mobile phone now fills the space remaining after the chapter navigation and
+caption, instead of being capped at 53svh / 44svh. The pinned view follows `dvh`
+so collapsing Safari chrome exposes more useful space. Caption controls sit near
+the bottom, and the small-height landscape arrangement remains intact. Very short
+portrait screens use a keyboard-focusable scrolling caption so the phone remains
+usable; changing chapters resets that caption to its beginning.
+
+Checked all four chapters in Chromium and WebKit at 393 × 852, 393 × 740,
+390 × 664, 375 × 812, 320 × 568, 768 × 1024 and 720 × 450. No horizontal overflow
+or browser errors. The existing logged-set/first-block flow and reduced-motion
+checks still pass. Physical iPhone Safari remains unverified.

@@ -31,6 +31,8 @@ export function Story() {
   const canFinish = makeDemoBlock(workout).sets > 0;
   const finishRef = useRef(finish);
   useEffect(() => { finishRef.current = finish; }, [finish]);
+  const captions = useRef<HTMLDivElement>(null);
+  useEffect(() => { captions.current?.scrollTo({ top: 0, behavior: "instant" }); }, [step]);
   const stepRefs = useRef<(HTMLElement | null)[]>([]);
   const screen = step === 0 && launch ? 1 : step;
 
@@ -129,7 +131,7 @@ export function Story() {
                 onClick={() => jump(index)}><i /><span>{CHAPTERS[index]}</span></button>
             ))}
           </div>
-          <div className="story__captions" aria-live="polite">
+          <div ref={captions} className="story__captions" aria-live="polite" tabIndex={0} role="region" aria-label="Chapter details">
             {STEPS.map((item, index) => (
               <div key={item.id} className={`story__caption${index === step ? " is-on" : index < step ? " is-past" : ""}`}
                 aria-hidden={index !== step} inert={index !== step}>

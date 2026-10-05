@@ -943,3 +943,39 @@ a.nav__beta:hover, a.nav__beta:focus-visible { background: var(--accent); color:
   .story__panel { flex: 1; height: calc(100svh - 80px); padding-top: 0; overflow-y: auto; overscroll-behavior: contain; }
   .story__captions { flex: none; min-height: 260px; }
 }
+
+/* Mobile chapters: give the device the space left after a readable caption,
+   rather than leaving an unused flexible area beneath the copy. Use the live
+   viewport so Safari's collapsing toolbar does not strand that space. */
+@media (max-width: 960px) {
+  .story__stage { height: 100dvh; padding: 64px var(--gutter) max(12px, env(safe-area-inset-bottom)); }
+  .story__steps { margin-top: -100dvh; }
+  .story__step:last-child { min-height: 100dvh; }
+  .story__phone { flex: 1; min-height: 0; height: auto; }
+  .story__panel { flex: none; padding-top: 12px; }
+  .story__captions { flex: none; min-height: 224px; margin-top: 12px; }
+  .story__caption .story__copy { display: flex; flex-direction: column; height: 100%; }
+  .story__controls { margin-top: auto; padding-top: 10px; }
+}
+@media (max-width: 360px) {
+  .story__captions { min-height: 230px; }
+}
+@media (min-width: 600px) and (max-width: 960px) and (max-height: 500px) {
+  .story__phone { flex: none; width: 40%; height: calc(100dvh - 80px); }
+  .story__panel { flex: 1; height: calc(100dvh - 80px); padding-top: 0; }
+  .story__captions { min-height: 260px; }
+  .story__caption .story__copy { height: auto; }
+  .story__controls { margin-top: 6px; }
+}
+@media (max-width: 599px) and (max-height: 640px) {
+  /* On very short phones, keep the device usable and let long chapter copy
+     scroll locally instead of shrinking the mockup to fit every line. */
+  .story__captions { min-height: 0; height: 150px; overflow-y: auto; overscroll-behavior: contain; }
+  .story__caption.is-on { position: relative; }
+  .story__caption .story__copy { height: auto; }
+  .story__controls { margin-top: 12px; }
+}
+
+@media (max-width: 960px) and (min-height: 641px) and (max-height: 740px) {
+  .story__captions { min-height: 210px; }
+}

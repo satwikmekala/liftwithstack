@@ -17,7 +17,7 @@ export function Phone({ children, label, className = "" }: { children: ReactNode
     const fit = () => {
       const { width, height } = element.getBoundingClientRect();
       const scale = Math.min(width / DEVICE_WIDTH, height ? height / DEVICE_HEIGHT : Number.POSITIVE_INFINITY);
-      element.style.setProperty("--phone-scale", String(Math.max(0.3, Math.min(1.1, scale))));
+      element.style.setProperty("--phone-scale", String(Math.max(0.1, Math.min(1.1, scale))));
     };
     fit();
     const observer = new ResizeObserver(fit);
