@@ -162,6 +162,8 @@ function StepCopy({ item, onReplay, canFinish, onFinish, personal, onExplore }: 
         const target = document.getElementById("your-stack");
         if (!target) return;
         event.preventDefault();
+        // Lenis also handles anchors at the window; this link has a custom destination.
+        event.stopPropagation();
         onExplore();
         scrollToPosition(window.scrollY + target.getBoundingClientRect().top + Math.max(0, target.offsetHeight - window.innerHeight));
       }}>Explore the stack ↓</a>
