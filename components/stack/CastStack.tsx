@@ -4,7 +4,7 @@ import { useMemo, useRef } from "react";
 import type { DemoBlock } from "@/lib/demo-block";
 import { muscle } from "@/lib/tokens";
 import { block, layoutSlabs } from "@/lib/stack/model";
-import { dropOffset, focusFrame, slabTop } from "@/lib/stack/stage";
+import { dropOffset, focusFrame, slabTop } from "@/lib/stack/motion";
 import { prefersReducedMotion, useStage } from "./useStage";
 
 /** Beat timings for the workout-complete moment, in ms after it starts. */
@@ -46,5 +46,5 @@ export function CastStack({ startedAt, demo }: { startedAt: number | null; demo?
     stage.render({ targetY: frame.targetY, zoom: frame.zoom * 1.22 }, scene.top);
   });
 
-  return <canvas ref={canvas} className="stack-canvas" aria-hidden="true" />;
+  return <><canvas ref={canvas} className="stack-canvas" aria-hidden="true" /><p className="stack-fallback">Workout complete. One workout. One block.</p></>;
 }

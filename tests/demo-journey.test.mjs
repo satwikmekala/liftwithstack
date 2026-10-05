@@ -11,15 +11,15 @@ const cache = new Map();
 function load(file) {
   const path = resolve(root, file);
   if (cache.has(path)) return cache.get(path);
-  const module = { exports: {} };
-  cache.set(path, module.exports);
+  const loaded = { exports: {} };
+  cache.set(path, loaded.exports);
   const code = ts.transpileModule(readFileSync(path, 'utf8'), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   }).outputText;
   const require = (id) => id.startsWith('@/') ? load(`${id.slice(2)}.ts`)
     : id.startsWith('.') ? load(`${resolve(dirname(path), id)}.ts`) : nativeRequire(id);
-  new Function('require', 'module', 'exports', code)(require, module, module.exports);
-  return module.exports;
+  new Function('require', 'module', 'exports', code)(require, loaded, loaded.exports);
+  return loaded.exports;
 }
 const { makeDemoBlock } = load('lib/demo-block.ts');
 const { initialWorkout, workoutReducer } = load('lib/workout.ts');

@@ -3,7 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 import { muscle } from "@/lib/tokens";
 import { block, exampleHistory, layoutSlabs } from "@/lib/stack/model";
-import { dropOffset, focusFrame, follow, slabTop } from "@/lib/stack/stage";
+import { dropOffset, focusFrame, follow, slabTop } from "@/lib/stack/motion";
 import { prefersReducedMotion, useStage } from "./useStage";
 
 const FIRST_DROP_MS = 700;
@@ -63,6 +63,7 @@ export function HeroStack() {
   return (
     <div className="hero-stack">
       <canvas ref={canvas} className="stack-canvas" aria-hidden="true" />
+      <p className="stack-fallback hero-stack__fallback">One workout. One block.<br />Every finished week becomes a layer of Your Stack.</p>
       <p className={`hero-stack__caption mono${landed ? " is-visible" : ""}`} aria-hidden="true">
         THIS WEEK · 3 BLOCKS · <span className="gold">1 PR</span>
       </p>

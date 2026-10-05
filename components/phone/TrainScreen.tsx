@@ -34,7 +34,7 @@ export function TrainScreen({ onStart, resetKey }: { onStart: (origin: { x: numb
           </div>
           <div className="train__routine">
             <Icon name="calendarDays" size={22} color={color.ash} />
-            <span className="train__copy"><span className="train__row-title">My routine</span><span className="train__row-detail">Stack’s plan</span></span>
+            <span className="train__copy"><span className="train__row-title">Your routines</span><span className="train__row-detail">Stack’s plan</span></span>
             <Icon name="chevronRight" size={20} stroke={2.2} color={color.ash} />
           </div>
         </div>
@@ -57,7 +57,7 @@ function TabBar() {
       </span>
       <span className="tab-bar__item">
         <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"><path d="M14 4.2 24.2 9.4 14 14.6 3.8 9.4Z" /><path d="M3.8 13.8 14 19l10.2-5.2" /><path d="M3.8 18.2 14 23.4l10.2-5.2" /></svg>
-        <span>Your Stack</span>
+        <span>My Stack</span>
       </span>
     </div>
   );

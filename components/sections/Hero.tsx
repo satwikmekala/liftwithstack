@@ -29,7 +29,8 @@ export function Hero() {
         </h1>
         <p className="hero__body">Log your training.<br />See your progress take shape.</p>
         <div className="hero__actions">
-          <Download label="Beta testing on iOS" apple />
+          <Download />
+          <p className="hero__beta-note">iPhone beta · DM @liftwithstack on Instagram</p>
           <a className="text-link" href="#how">See how it works<Icon name="arrowDown" size={16} /></a>
         </div>
       </div>

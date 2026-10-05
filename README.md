@@ -21,7 +21,7 @@ npm test        # production build, then a rendered-HTML smoke test
 ```
 
 The smoke test also fails if a banned term from the content style sheet (split,
-program, session, sealed, volume, lbs, My Stack, exclamation marks…) reaches the page.
+program, session, sealed, volume, lbs, exclamation marks…) reaches the page.
 
 ## How the page is built
 
@@ -40,7 +40,7 @@ program, session, sealed, volume, lbs, My Stack, exclamation marks…) reaches t
 
 ## Launch handoff
 
-- **Download:** set `APP_STORE_URL` in `lib/site.ts` to the verified production listing. Until then the download controls read “Now in beta on iPhone” (and “Beta testing now” in the closing section). When it's live, swap in Apple's official App Store badge artwork.
+- **Download:** set `APP_STORE_URL` in `lib/site.ts` to the verified production listing. Until then the main controls read “Request beta access” and open the existing Instagram destination. When it's live, swap in Apple's official App Store badge artwork.
 - **Shared routines:** `/r/*`, `/routine-share-assets/*` and `/.well-known/apple-app-site-association` belong to the routine-sharing server (see `server/deploy/routine-sharing.nginx.conf` in the app repo). This site must not claim those paths.
 - **Instagram:** `INSTAGRAM_URL` in `lib/site.ts` powers the closing section’s follow, updates and beta request links.
 - `public/og.png` is rendered from the real block geometry and fonts by a script, not drawn by hand.
@@ -63,3 +63,69 @@ four labeled chapter buttons and Explore the stack link provide direct navigatio
 The later hero Add a workout interaction is intentionally deferred: its eventual
 infinite stack should stay inside a fixed-height view, fading older blocks at the
 bottom. No QR flow is planned.
+
+## Finishing pass (6 Oct 2026)
+
+The routine demo offers Push / Pull, Full body and From Notes. Select a sample,
+then Read routine to see an editable-draft example. These are curated local
+examples, not a live parser. They show workout and exercise structure only:
+`features/routineImport/importDraft.ts` does not carry set targets or notes into
+the current app editor. On mobile, reading brings the result into view.
+
+The app tab is My Stack; the object remains Your Stack. The site follows the
+content style sheet except for that current native-tab label. Hevy Free imports
+history; Hevy Pro imports history and routines. The builder copy promises exercise
+selection and ordering, not editable targets. Privacy copy avoids claiming that
+all workout content always stays on-device: paste parsing and routine sharing
+use the app backend.
+
+WebGL loads on approach, and off-screen stages are deferred. The same typefaces
+use 3 local Latin assets rather than 13 preloaded subset assets. The existing tower,
+55svh mobile chapters, 280svh mobile finale and first-block journey are preserved.
+Number-wheel snapping respects reduced motion. Small-screen ruler labels are
+hidden because the week panel already supplies their meaning and the duplicate
+label overlapped the metrics at 320 × 568.
+
+QA evidence and the browser runner are in ignored `outputs/` and `work/`.
+The checks below record the tested scope and remaining limits.
+
+Short landscape and zoomed views place the phone beside the chapter copy so the
+fixed navigation does not cover the logger. Unavailable WebGL falls back to text
+and usable week controls.
+
+### QA scope and results
+
+- Production build, TypeScript, lint and all 4 existing smoke/continuity tests pass.
+- Chromium and WebKit: 1440 × 1000 desktop, 390 × 664 iPhone 13 emulation,
+  320 × 568 narrow phone, 768 × 1024 tablet and reduced-motion phone.
+- All 3 import samples, radio keyboard navigation, touch conversion and mobile
+  result navigation; no horizontal page overflow or browser exceptions.
+- Log 80 kg × 9, finish and explore: the same 1-set / 720 kg orange block remains
+  in the tower in both engines, including reduced-motion visits.
+- Lenis enables on desktop fine pointers, disables on mobile/reduced motion and
+  switches correctly when resized or the motion preference changes. Focused
+  number-wheel scrolling changes reps while the page stays still. Slider drag
+  and keyboard start both work.
+- 720 × 450 viewport (200% desktop zoom equivalent): logger and chapter controls
+  remain visible; short landscape has a phone-and-copy layout.
+- Axe WCAG A/AA/2.1 AA scans: no violations in settled tested views. Transitions
+  are frozen for the scan so partially revealed off-screen copy is not misread.
+  WebGL-disabled visits show text and retain working week navigation.
+- Local production load, cold cache, 4× CPU slowdown, 150 ms latency and 1.6 Mbps
+  download: LCP about 1.7 s, CLS 0. This is a local lab observation, not field data.
+  Fonts request 3 files / 88,404 bytes instead of 13 / 169,488 bytes. Routine demo
+  adds about 1.7 KB gzipped. The renderer is a separate chunk; only the hero stage
+  initializes on arrival, with the completion and finale stages deferred.
+
+### Remaining limits
+
+Physical iPhone Safari, real pinch zoom, VoiceOver and sustained low-end-device
+GPU/battery behavior were not tested. WebKit emulation is not a physical-device
+sign-off. The retained renderer is about 129 KB gzipped and still triggers the
+build's large-chunk warning; replacing it or simplifying the tower is outside this
+finishing pass. The App Store destination remains unset; beta access uses the
+existing Instagram path. Routine targets and notes remain an app limitation, made
+explicit in the demo. The infinite/fixed-height hero interaction remains deferred.
+
+Same-page anchors now use one scroll handler; the Chromium native/Lenis double
+jump is removed, and the opening chapter lands below navigation.

@@ -45,7 +45,7 @@ export function Wheel({ values, value, onChange, label, align = "center", height
     const element = list.current;
     if (!element) return;
     const next = Math.max(0, Math.min(values.length - 1, Math.round(element.scrollTop / ITEM)));
-    element.scrollTo({ top: next * ITEM, behavior: "smooth" });
+    element.scrollTo({ top: next * ITEM, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
     if (values[next] !== value) onChange(values[next]);
   }, [onChange, value, values]);
 
@@ -109,7 +109,7 @@ export function Wheel({ values, value, onChange, label, align = "center", height
 
   return (
     <div ref={list} className={`wheel wheel--${align}`} style={{ height }} role="spinbutton" tabIndex={0} aria-label={label}
-      aria-valuenow={value} aria-valuetext={format(value)} onScroll={paint} onKeyDown={onKeyDown}
+      aria-valuemin={values[0]} aria-valuemax={values[values.length - 1]} aria-valuenow={value} aria-valuetext={format(value)} onScroll={paint} onKeyDown={onKeyDown}
       onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}>
       <div style={{ height: pad }} aria-hidden="true" />
       {values.map((item, i) => (

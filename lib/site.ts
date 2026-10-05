@@ -2,7 +2,7 @@ export const SITE_URL = "https://liftwithstack.com";
 
 /**
  * Stack's verified App Store listing. Leave null until the production listing exists:
- * every download control then reads “Now in beta on iPhone” instead of linking anywhere.
+ * access controls link to Instagram for beta requests.
  */
 export const APP_STORE_URL: string | null = null;
 

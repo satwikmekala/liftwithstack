@@ -1,5 +1,7 @@
 "use client";
 
+import type { StageItem } from "@/lib/stack/stage";
+
 import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { useDemoJourney } from "./DemoJourney";
 import { formatWeight } from "@/lib/workout";
@@ -7,7 +9,7 @@ import { Icon } from "@/components/ui/Icon";
 import { fusionFrame, FUSION_DURATION_MS } from "@/lib/stack/fusion";
 import { finaleHistory } from "@/lib/stack/history";
 import { BASE_HEIGHT, weeklyHeight } from "@/lib/stack/model";
-import { dropOffset, focusFrame, follow, slabTop, type StageItem } from "@/lib/stack/stage";
+import { dropOffset, focusFrame, follow, slabTop } from "@/lib/stack/motion";
 import { prefersReducedMotion, useStage } from "./useStage";
 
 /** Scroll progress at which each part of the sequence happens. */
@@ -152,7 +154,7 @@ export function StackFinale() {
       setRuler((current) => (current && Math.abs(current.top - next.top) < 0.5 && Math.abs(current.bottom - next.bottom) < 0.5
         && Math.abs(current.left - next.left) < 0.5 ? current : next));
     }
-  });
+  }, () => setPhase(2));
 
   const pick = (event: ReactPointerEvent<HTMLCanvasElement>) => {
     if (phase !== 2) return;
@@ -177,6 +179,7 @@ export function StackFinale() {
         <canvas ref={canvas} className={`stack-canvas finale__canvas${phase === 2 ? " is-interactive" : ""}`}
           onPointerMove={(event) => event.pointerType === "mouse" && event.buttons === 0 && pick(event)} onPointerDown={pick}
           aria-hidden="true" />
+        <p className="stack-fallback finale__fallback">Your Stack’s 3D view is unavailable here. Choose a week below to explore its workouts.</p>
 
         <div className="finale__copy">
           <p className="eyebrow">YOUR STACK</p>

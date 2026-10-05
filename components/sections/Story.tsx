@@ -69,7 +69,7 @@ export function Story() {
     if (!exerciseDone) return;
     const timer = setTimeout(() => dispatch({ type: "next" }), 1100);
     return () => clearTimeout(timer);
-  }, [exerciseDone, workout.exercise]);
+  }, [exerciseDone, workout.exercise, dispatch]);
 
   const start = useCallback((origin: { x: number; y: number }) => {
     setLaunch(origin);
