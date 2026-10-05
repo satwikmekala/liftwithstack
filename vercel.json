@@ -1,4 +1,46 @@
 {
   "framework": "nextjs",
-  "buildCommand": "npx next build"
+  "buildCommand": "npx next build",
+  "rewrites": [
+    {
+      "source": "/r",
+      "destination": "https://motivated-caring-production-04ef.up.railway.app/r"
+    },
+    {
+      "source": "/r/:path*",
+      "destination": "https://motivated-caring-production-04ef.up.railway.app/r/:path*"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/.well-known/apple-app-site-association",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
+      ]
+    },
+    {
+      "source": "/r/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        }
+      ]
+    }
+  ]
 }
