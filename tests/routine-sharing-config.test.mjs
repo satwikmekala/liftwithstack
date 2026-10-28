@@ -16,7 +16,11 @@ test('sharing routes proxy internally to the existing Railway backend without cl
 
 test('AASA and preview assets remain available even when the Railway backend is unavailable', () => {
   const aasa = JSON.parse(fs.readFileSync(new URL('../public/.well-known/apple-app-site-association', import.meta.url), 'utf8'));
-  assert.deepEqual(aasa, { applinks: { apps: [], details: [{ appID: '4JMBGPRDZG.com.liftwithstack.stack', paths: ['/r/*'] }] } });
+  // Stack keeps routine links only; Private Circle invitations (/i/*) open only the internal Stack Staging app for now.
+  assert.deepEqual(aasa, { applinks: { apps: [], details: [
+    { appID: '4JMBGPRDZG.com.liftwithstack.stack', paths: ['/r/*'] },
+    { appID: '4JMBGPRDZG.com.liftwithstack.stack.staging', paths: ['/i/*'] },
+  ] } });
   const header = config.headers.find(rule => rule.source === '/.well-known/apple-app-site-association');
   assert.ok(header.headers.some(h => h.key === 'Content-Type' && h.value === 'application/json'));
   const png = fs.readFileSync(new URL('../public/routine-share-assets/stack-routine-v1.png', import.meta.url));
