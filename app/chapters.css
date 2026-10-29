@@ -413,3 +413,31 @@ button.logger__info:hover svg { stroke: var(--bone); }
   .cs-base, .cs-friend, .cs-sheet__panel { transition: none; }
   .cs-bolt { animation: none; }
 }
+
+/* ── The science teaser (between Progress and Get started) ──── */
+.teaser { max-width: var(--max); margin: 0 auto; padding: 6vh var(--gutter) 8vh; }
+.teaser__card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: center; padding: clamp(28px, 4vw, 56px); border-radius: 36px; background: radial-gradient(70% 90% at 85% 50%, #241510 0%, #0f0d0b 70%); box-shadow: inset 0 0 0 1px rgba(245, 240, 232, 0.07); transition: box-shadow 0.3s var(--ease-out), transform 0.3s var(--ease-out); }
+.teaser__card:hover { box-shadow: inset 0 0 0 1px rgba(255, 122, 61, 0.5); transform: translateY(-3px); }
+.teaser__title { font: 700 clamp(34px, 4.2vw, 60px)/1 var(--display); letter-spacing: -0.035em; text-wrap: balance; }
+.teaser__body { margin-top: 18px; max-width: 42ch; font-size: clamp(16px, 1.3vw, 19px); line-height: 1.5; color: var(--ash); }
+.teaser__link { margin-top: 26px; display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 24px; background: var(--bone); color: var(--ink); font-weight: 600; font-size: 15px; transition: background-color 0.2s; }
+.teaser__card:hover .teaser__link { background: #fff; }
+.teaser__meta { display: block; margin-top: 18px; font-size: 11px; letter-spacing: 0.16em; color: var(--ash-dim); }
+.teaser__stage { display: grid; justify-items: center; gap: 14px; }
+.teaser__stage .sarcomere { width: 100%; max-width: 520px; height: auto; }
+.teaser__caption { font-size: 10px; letter-spacing: 0.16em; color: var(--ash-dim); }
+@media (max-width: 960px) { .teaser__card { grid-template-columns: 1fr; } .teaser__stage { order: -1; } }
+@media (max-width: 640px) { .teaser { padding-top: 2svh; } .teaser__card { padding: 22px; border-radius: 28px; } }
+
+.sarcomere { display: block; overflow: visible; --glow: 0.6; }
+.sarcomere__z { fill: #e8dfd2; opacity: 0.9; }
+.sarcomere__thin { fill: #d9a27c; opacity: 0.85; }
+.sarcomere__thick { fill: #8f3b2a; }
+.sarcomere__head { fill: #ff9a62; opacity: calc(0.45 + 0.55 * var(--glow)); filter: drop-shadow(0 0 3px rgba(255, 122, 61, 0.6)); }
+.sarcomere.is-animating .sarcomere__head { animation: stroke 1.4s ease-in-out infinite; animation-delay: calc(var(--i) * -0.14s + var(--row, 0) * -0.3s); transform-box: fill-box; transform-origin: center; }
+@keyframes stroke { 0%, 100% { transform: translateX(0) scale(1); opacity: 0.5; } 45% { transform: translateX(-4px) scale(1.25); opacity: 1; } }
+.sarcomere.is-animating .sarcomere__thin:nth-child(1), .sarcomere.is-animating .sarcomere__z:first-of-type { animation: slide 2.8s ease-in-out infinite alternate; }
+.sarcomere.is-animating .sarcomere__thin:nth-child(2), .sarcomere.is-animating .sarcomere__z:nth-of-type(2) { animation: slide-right 2.8s ease-in-out infinite alternate; }
+@keyframes slide { to { transform: translateX(9px); } }
+@keyframes slide-right { to { transform: translateX(-9px); } }
+@media (prefers-reduced-motion: reduce) { .sarcomere.is-animating * { animation: none !important; } }

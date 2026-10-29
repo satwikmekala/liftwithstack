@@ -7,6 +7,7 @@ import { Hero, Nav } from "@/components/sections/Hero";
 import { Moments } from "@/components/sections/Moments";
 import { Progress } from "@/components/sections/Progress";
 import { Routines } from "@/components/sections/Routines";
+import { ScienceTeaser } from "@/components/sections/ScienceTeaser";
 import { Story } from "@/components/sections/Story";
 import { Thesis } from "@/components/sections/Thesis";
 import { StackFinale } from "@/components/stack/StackFinale";
@@ -31,6 +32,7 @@ export default function Home() {
         </DemoJourney>
         <Extras />
         <Progress />
+        <ScienceTeaser />
         <Routines />
         <Closing />
       </main>

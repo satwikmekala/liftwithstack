@@ -14,6 +14,7 @@ export function Nav() {
         <a href="#how">How it works</a>
         <a href="#circle">Circle</a>
         <a href="#moments">Moments</a>
+        <a href="/science">The science</a>
         <a href="#routines">Get started</a>
       </nav>
       <a className="download download--small download--soon nav__beta" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer"

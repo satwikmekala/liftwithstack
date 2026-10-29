@@ -1,13 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-async function render() {
+async function render(path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
 
   return worker.fetch(
-    new Request("http://localhost/", {
+    new Request(`http://localhost${path}`, {
       headers: { accept: "text/html" },
     }),
     {
@@ -64,4 +64,31 @@ test("server-renders the Stack marketing page", async () => {
     assert.doesNotMatch(html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, ""), banned);
   }
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
+});
+
+test("server-renders the science of getting stronger", async () => {
+  const response = await render("/science");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /<title>The invisible work/);
+  assert.match(html, /Every rep[\s\S]*changes something\./);
+  assert.match(html, /A muscle is a stack\./);
+  assert.match(html, /Nothing shortens by itself\./);
+  assert.match(html, /The building happens afterwards\./);
+  assert.match(html, /Same weight\. Different workout\./);
+  assert.match(html, /The challenge grows with you\./);
+  assert.match(html, /One more rep\./);
+  assert.match(html, /Stack remembers the numbers\./);
+  assert.match(html, /id="sources"/);
+  assert.match(html, /pubmed\.ncbi\.nlm\.nih\.gov\/30335577/);
+  // The science stays honest: no AI coach, no growth predictions, no soreness-as-progress.
+  assert.doesNotMatch(html, /\bAI\b|guarantee|no pain, no gain/i);
+  assert.match(html, /Soreness isn’t growth\./);
+  // Illustrations are labelled.
+  assert.match(html, /Illustration/);
+});
+
+test("the home page opens the door to the science", async () => {
+  const html = await (await render()).text();
+  assert.match(html, /href="\/science"[\s\S]*Why does last week matter\?/);
 });
