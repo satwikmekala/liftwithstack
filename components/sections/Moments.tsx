@@ -77,12 +77,11 @@ export function Moments() {
     <section className="moments" id="moments" aria-labelledby="moments-title">
       <Reveal className="moments__copy">
         <p className="eyebrow">MOMENTS</p>
-        <h2 id="moments-title" className="section-title">More than numbers.</h2>
-        <p className="section-body">Some workouts are worth remembering for more than the weight. Take a photo between sets and it stays with that workout, tucked into your Stack.</p>
+        <h2 id="moments-title" className="section-title">Pictures too.</h2>
+        <p className="section-body">Stack up a few photos while you train. Each one stays with its workout, there to look back on after it and across your week.</p>
         <ul className="facts">
-          <li><span className="facts__mark"><Icon name="camera" size={16} stroke={2} /></span>One tap from any workout. No filters, captions or feed.</li>
-          <li><span className="facts__mark facts__mark--label">Aa</span>Label prints the exercise and set right into the photo.</li>
-          <li><span className="facts__mark"><Icon name="lock" size={15} stroke={2.2} /></span>Lock a photo to keep it to yourself.</li>
+          <li><span className="facts__mark"><Icon name="camera" size={16} stroke={2} /></span>One tap from any workout. No filters, no feed.</li>
+          <li><span className="facts__mark"><Icon name="lock" size={15} stroke={2.2} /></span>Share them with your circle, or lock them for yourself.</li>
         </ul>
       </Reveal>
 

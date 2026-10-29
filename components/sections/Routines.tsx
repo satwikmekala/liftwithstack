@@ -3,8 +3,8 @@ import { Reveal } from "@/components/ui/Reveal";
 import { RoutineImportDemo } from "./RoutineImportDemo";
 
 const WAYS: { title: string; body: string; icon: IconName }[] = [
-  { title: "Get Stack’s plan", body: "Workouts in order, set by how often you train.", icon: "calendarDays" },
   { title: "Import from Hevy", body: "History from Hevy Free. Routines and history from Pro.", icon: "download" },
+  { title: "Get Stack’s plan", body: "Workouts in order, set by how often you train.", icon: "calendarDays" },
   { title: "Build your own", body: "Choose the exercises and order for each workout.", icon: "pencil" },
   { title: "Share a routine", body: "Send a link. They save their own copy to edit.", icon: "link" },
 ];
@@ -13,9 +13,9 @@ export function Routines() {
   return (
     <section className="routines" id="routines" aria-labelledby="routines-title">
       <Reveal className="section-head">
-        <p className="eyebrow">ROUTINES</p>
-        <h2 id="routines-title" className="section-title">Bring the routine you already have.</h2>
-        <p className="section-body">Paste what you already train. Stack will sort it out.</p>
+        <p className="eyebrow">GET STARTED</p>
+        <h2 id="routines-title" className="section-title">Already training? Bring it with you.</h2>
+        <p className="section-body">Import your workouts so Stack knows what you’ve lifted. Paste a routine from your notes or ChatGPT, and Stack builds it for you.</p>
       </Reveal>
 
       <RoutineImportDemo />

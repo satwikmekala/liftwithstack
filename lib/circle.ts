@@ -72,11 +72,44 @@ export const yourHistory = (): BuildSlab[] => exampleHistory(9, new Date(2026, 8
 export const withoutRecords = (slabs: readonly BuildSlab[]): BuildSlab[] =>
   slabs.map((slab) => ({ ...slab, layers: slab.layers.map((layer) => ({ ...layer, record: false })) }));
 
-export type Friend = { id: string; name: string; activity: string | null; slabs: BuildSlab[] };
+export type FriendWorkout = { label: string; day: string; color: string; lifts: { name: string; sets: string; record?: boolean }[] };
+export type Friend = {
+  id: string; name: string; handle: string; activity: string | null;
+  /** This week's blocks, and every finished week before it. */
+  slabs: BuildSlab[]; history: BuildSlab[];
+  workouts: FriendWorkout[];
+  /** Exercises in the photos they shared this week. */
+  photos: string[];
+};
 
-/** Three example friends, in name order as the circle lists them: this week's blocks only. */
+const past = (weeks: number, seed: number) => exampleHistory(weeks, new Date(2026, 8, 28), seed).map((week) => week.slab);
+
+/** Three example friends, in name order as the circle lists them. */
 export const FRIENDS: Friend[] = [
-  { id: "ben", name: "Ben", activity: "Trained yesterday", slabs: [block("ben-0", muscle.chest, 1.3), block("ben-1", muscle.back, 1.15)] },
-  { id: "maya", name: "Maya", activity: "Trained today", slabs: [block("maya-0", muscle.legs, 1.15), block("maya-1", muscle.chest, 1), block("maya-2", muscle.back, 1.3), block("maya-3", muscle.legs, 1.15, true)] },
-  { id: "sam", name: "Sam", activity: null, slabs: [block("sam-0", muscle.shoulders, 1), block("sam-1", muscle.legs, 1.3), block("sam-2", muscle.arms, 1)] },
+  {
+    id: "ben", name: "Ben", handle: "benlifts", activity: "Trained yesterday",
+    slabs: [block("ben-0", muscle.chest, 1.3), block("ben-1", muscle.back, 1.15)], history: past(14, 5),
+    workouts: [
+      { label: "Pull", day: "Yesterday", color: muscle.back, lifts: [{ name: "Deadlift", sets: "140 kg × 5" }, { name: "Lat Pulldown", sets: "65 kg × 10" }] },
+      { label: "Push", day: "Monday", color: muscle.chest, lifts: [{ name: "Bench Press", sets: "90 kg × 6" }, { name: "Lateral Raise", sets: "12 kg × 12" }] },
+    ],
+    photos: ["Deadlift"],
+  },
+  {
+    id: "maya", name: "Maya", handle: "maya.trains", activity: "Trained today",
+    slabs: [block("maya-0", muscle.legs, 1.15), block("maya-1", muscle.chest, 1), block("maya-2", muscle.back, 1.3), block("maya-3", muscle.legs, 1.15, true)], history: past(22, 19),
+    workouts: [
+      { label: "Legs", day: "Today", color: muscle.legs, lifts: [{ name: "Barbell Squat", sets: "85 kg × 5", record: true }, { name: "Romanian Deadlift", sets: "70 kg × 8" }] },
+      { label: "Pull", day: "Wednesday", color: muscle.back, lifts: [{ name: "Lat Pulldown", sets: "50 kg × 10" }, { name: "Seated Cable Row", sets: "45 kg × 12" }] },
+    ],
+    photos: ["Barbell Squat", "Lat Pulldown", "Incline Dumbbell Press"],
+  },
+  {
+    id: "sam", name: "Sam", handle: "samm", activity: null,
+    slabs: [block("sam-0", muscle.shoulders, 1), block("sam-1", muscle.legs, 1.3), block("sam-2", muscle.arms, 1)], history: past(6, 3),
+    workouts: [
+      { label: "Arms", day: "Tuesday", color: muscle.arms, lifts: [{ name: "Triceps Pushdown", sets: "35 kg × 12" }, { name: "Overhead Triceps Extension", sets: "20 kg × 12" }] },
+    ],
+    photos: [],
+  },
 ];

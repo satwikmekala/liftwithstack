@@ -2,7 +2,7 @@ import { SmoothScroll } from "@/components/ui/SmoothScroll";
 import { DemoJourney } from "@/components/stack/DemoJourney";
 import { Circle } from "@/components/sections/Circle";
 import { Closing, Footer } from "@/components/sections/Closing";
-import { FormCheck } from "@/components/sections/FormCheck";
+import { Extras } from "@/components/sections/Extras";
 import { Hero, Nav } from "@/components/sections/Hero";
 import { Moments } from "@/components/sections/Moments";
 import { Progress } from "@/components/sections/Progress";
@@ -12,8 +12,8 @@ import { Thesis } from "@/components/sections/Thesis";
 import { StackFinale } from "@/components/stack/StackFinale";
 
 /**
- * One workout, carried through the page: logged your way, photographed, pressed into
- * Your Stack, kept as a Moment and shared with your circle.
+ * One workout, carried through the page: started, logged, checked, pressed into Your Stack,
+ * stacked up next to your friends' and remembered in a photo. Then: getting your training in.
  */
 export default function Home() {
   return (
@@ -26,10 +26,10 @@ export default function Home() {
         <DemoJourney>
           <Story />
           <StackFinale />
-          <Moments />
           <Circle />
+          <Moments />
         </DemoJourney>
-        <FormCheck />
+        <Extras />
         <Progress />
         <Routines />
         <Closing />

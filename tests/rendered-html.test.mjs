@@ -30,25 +30,25 @@ test("server-renders the Stack marketing page", async () => {
   const html = await response.text();
   assert.match(html, /<title>Stack — Every workout stacks up\.<\/title>/);
   assert.match(html, /Every workout[\s\S]*stacks up\./);
-  assert.match(html, /Log every set, or just show up\.[\s\S]*Keep the moments\. Bring your people\./);
+  assert.match(html, /Log your training\. See your progress take shape\.[\s\S]*Bring your gym friends along\./);
   assert.match(html, /Don’t overthink it\./);
   assert.match(html, /Every week becomes a layer\./);
-  // The story offers both ways to log, and the chapters that follow it.
-  assert.match(html, /role="radio"[^>]*>Log sets</);
-  assert.match(html, /role="radio"[^>]*>Just train</);
-  assert.match(html, /Keep the moment too\./);
-  assert.match(html, /id="moments"[\s\S]*More than numbers\./);
-  assert.match(html, /Lock a photo to keep it to yourself\./);
-  assert.match(html, /id="circle"[\s\S]*Better with your people\./);
-  assert.match(html, /What friends see/);
-  assert.match(html, /Friends see this week’s Stack\./);
-  assert.match(html, /Nobody can search or browse\./);
-  assert.match(html, /id="form-check"[\s\S]*A little more confidence in every rep\./);
-  assert.match(html, /They stream from YouTube/);
-  // Form Check is a hand-picked video, never an analysis of your own lifting.
+  // The story: history, form check, then Your Stack, your circle and Moments.
+  assert.match(html, /Chest and Triceps/);
+  assert.match(html, /Forgot what you lifted last time\?/);
+  assert.match(html, />Check history</);
+  assert.match(html, /Not sure about the form\?/);
+  assert.match(html, />Check form</);
+  assert.doesNotMatch(html, />Just train</);
+  assert.match(html, /id="circle"[\s\S]*Stack up together\.[\s\S]*id="moments"[\s\S]*Pictures too\./);
+  assert.match(html, /Coming soon|COMING SOON/);
+  assert.match(html, /Made for how you actually train\./);
+  // Form Check is a hand-picked video, never an analysis of your own lifting; it loads only when asked.
   assert.doesNotMatch(html, /\bAI\b|analy[sz]e your form|real-time feedback/i);
+  assert.doesNotMatch(html, /<iframe/);
   assert.match(html, /Progress has substance\./);
-  assert.match(html, /Paste what you already train\. Stack will sort it out\./);
+  assert.match(html, /Already training\? Bring it with you\./);
+  assert.match(html, /From ChatGPT/);
   assert.match(html, /Ready to build your own\?/);
   assert.match(html, /instagram\.com\/liftwithstack/);
   assert.match(html, /for beta access/);

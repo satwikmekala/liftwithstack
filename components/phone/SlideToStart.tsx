@@ -78,7 +78,7 @@ export function SlideToStart({ color, onStart }: {
       <span className="slide__label" aria-hidden="true">Slide to start</span>
       <span className="slide__release" aria-hidden="true">Time to stack up</span>
       <span className="slide__target" aria-hidden="true"><Icon name="arrowRight" size={18} stroke={1.8} /></span>
-      <div ref={thumb} className="slide__thumb" role="button" tabIndex={0} aria-label="Start workout, Push"
+      <div ref={thumb} className="slide__thumb" role="button" tabIndex={0} aria-label="Start workout, Chest and Triceps"
         onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}
         onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); commit(); } }}>
         <Bolt />

@@ -7,9 +7,7 @@ import { StatusBar } from "./Phone";
 import { SlideToStart } from "./SlideToStart";
 
 /** Train, with Stack’s plan active (app/(tabs)/index.tsx). */
-export function TrainScreen({ onStart, resetKey, logSets, onLogSets }: {
-  onStart: (origin: { x: number; y: number }) => void; resetKey: number; logSets: boolean; onLogSets: (value: boolean) => void;
-}) {
+export function TrainScreen({ onStart, resetKey }: { onStart: (origin: { x: number; y: number }) => void; resetKey: number }) {
   return (
     <div className="screen train">
       <div className="train__bg" aria-hidden="true" />
@@ -20,7 +18,7 @@ export function TrainScreen({ onStart, resetKey, logSets, onLogSets }: {
             <p className="train__date">Thursday, 8 Oct</p>
             <p className="train__greeting">Morning, Wik</p>
           </div>
-          <LogSetsSwitch value={logSets} onChange={onLogSets} />
+          <LogSetsSwitch />
         </div>
         <div className="hero-card card-surface" style={{ "--c": color.accent } as CSSProperties}>
           <div className="hero-card__topline">
@@ -28,7 +26,7 @@ export function TrainScreen({ onStart, resetKey, logSets, onLogSets }: {
             <span className="hero-card__change"><Icon name="arrowLeftRight" size={16} color={color.ash} />Change workout</span>
           </div>
           <div className="hero-card__identity">
-            <p className="hero-card__title">Push (Chest, Shoulders, Triceps)</p>
+            <p className="hero-card__title">Chest and Triceps</p>
             <p className="hero-card__meta">Push · 6 exercises</p>
           </div>
           <SlideToStart key={resetKey} color={color.accent} onStart={onStart} />
@@ -53,15 +51,14 @@ export function TrainScreen({ onStart, resetKey, logSets, onLogSets }: {
 
 /**
  * Log sets, beside the greeting (components/home/LogSetsSwitch.tsx): the system switch scaled
- * down in Stack orange. Off means the next workout starts without set logging.
+ * down in Stack orange. Shown as it is in the app, on.
  */
-function LogSetsSwitch({ value, onChange }: { value: boolean; onChange: (value: boolean) => void }) {
+function LogSetsSwitch() {
   return (
-    <button type="button" role="switch" aria-checked={value} className={`log-switch${value ? " is-on" : ""}`}
-      aria-label="Log sets" onClick={() => onChange(!value)}>
-      <span className="log-switch__label">{value ? "LOG SETS" : "NOT LOGGING"}</span>
-      <span className="log-switch__track" aria-hidden="true"><span className="log-switch__thumb" /></span>
-    </button>
+    <span className="log-switch is-on" aria-hidden="true">
+      <span className="log-switch__label">LOG SETS</span>
+      <span className="log-switch__track"><span className="log-switch__thumb" /></span>
+    </span>
   );
 }
 

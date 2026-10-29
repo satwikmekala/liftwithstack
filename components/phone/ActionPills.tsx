@@ -11,7 +11,7 @@ import { color } from "@/lib/tokens";
 export function ActionPills({ left, photos, onCamera, cue }: { left: ReactNode; photos: number; onCamera: () => void; cue: boolean }) {
   return (
     <>
-      <div className="action-pill action-pill--left" aria-hidden="true">{left}</div>
+      <div className="action-pill action-pill--left">{left}</div>
       <div className={`action-pill action-pill--right${cue ? " is-cued" : ""}`}>
         <button type="button" className="action-pill__camera" onClick={onCamera}
           aria-label={photos ? `Camera, ${photos} ${photos === 1 ? "photo" : "photos"} this workout` : "Camera"}>

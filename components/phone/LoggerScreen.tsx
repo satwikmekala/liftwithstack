@@ -20,8 +20,9 @@ const percent = (value: number, previous: number | null) => {
 };
 
 /** The active workout (app/workout.tsx with ActiveSetCard), Push in progress. */
-export function LoggerScreen({ state, dispatch, photos, onCamera, cameraCue }: {
+export function LoggerScreen({ state, dispatch, photos, onCamera, cameraCue, onHistory, onInfo }: {
   state: WorkoutState; dispatch: Dispatch<WorkoutAction>; photos: number; onCamera: () => void; cameraCue: boolean;
+  onHistory: () => void; onInfo: () => void;
 }) {
   const exercise = state.exercises[state.exercise];
   const done = isExerciseDone(exercise);
@@ -64,7 +65,7 @@ export function LoggerScreen({ state, dispatch, photos, onCamera, cameraCue }: {
         </div>
         <div key={`title-${state.exercise}`} className="logger__title-row enter-right">
           <p className={`logger__title${longName ? " logger__title--long" : ""}`}>{exercise.name}</p>
-          <span className="logger__info" aria-hidden="true"><Icon name="info" size={20} color={color.ash} stroke={1.8} /></span>
+          {exercise.name === "Bench Press" && <button type="button" className="logger__info" onClick={onInfo} aria-label="Exercise info"><Icon name="info" size={20} color={color.ash} stroke={1.8} /></button>}
           {done && <span className="logger__done"><Icon name="check" size={16} stroke={3} color={color.accent} />DONE</span>}
         </div>
 
@@ -135,7 +136,7 @@ export function LoggerScreen({ state, dispatch, photos, onCamera, cameraCue }: {
         </div>
       </div>
       <ActionPills photos={photos} onCamera={onCamera} cue={cameraCue}
-        left={<><span><Icon name="history" size={26} stroke={1.8} color={color.bone} /></span><i /><span><Icon name="link" size={24} stroke={1.8} color={color.bone} /></span></>} />
+        left={<><button type="button" className="action-pill__button" onClick={onHistory} aria-label="Exercise history"><Icon name="history" size={26} stroke={1.8} color={color.bone} /></button><i /><span aria-hidden="true"><Icon name="link" size={24} stroke={1.8} color={color.bone} /></span></>} />
     </div>
   );
 }

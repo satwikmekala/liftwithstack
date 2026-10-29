@@ -23,6 +23,14 @@ const SAMPLES = [
     ],
   },
   {
+    label: "From ChatGPT",
+    text: "Here’s a simple 2-day plan:\n\n**Day 1 – Upper**\n1. Bench Press: 3 sets of 8\n2. Seated Cable Row: 3 sets of 10\n3. Lateral Raises: 3 sets of 12\n\n**Day 2 – Lower**\n1. Back Squat: 3 sets of 5\n2. Romanian Deadlift: 3 sets of 8",
+    workouts: [
+      { name: "Upper", color: muscle.chest, exercises: ["Bench Press", "Seated Cable Row", "Lateral Raise"] },
+      { name: "Lower", color: muscle.legs, exercises: ["Back Squat", "Romanian Deadlift"] },
+    ],
+  },
+  {
     label: "From Notes",
     text: "gym notes\n\nPush A:\n• BENCH - 3x8\n• incline db, 3x10\n• lat raises 12/12/12\n\nPull A:\n1) deadlift 3x5\n2) seated row 3x10",
     workouts: [
