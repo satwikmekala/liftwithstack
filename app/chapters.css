@@ -181,6 +181,9 @@
 .moments__pile-count { position: absolute; z-index: 20; right: -2px; bottom: -2px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px; display: grid; place-items: center; background: var(--bone); color: var(--ink); font: 700 11px/1 var(--mono); transition: opacity 0.3s; }
 .moments__stage.is-open .moments__pile-count { opacity: 0; }
 .moments__grid { position: relative; display: grid; gap: 20px; }
+.moments__toggle { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); min-height: 40px; white-space: nowrap; font-size: 13px; font-weight: 500; color: var(--ash); transition: color 0.2s; }
+.moments__toggle:hover { color: var(--bone); }
+@media (max-width: 960px) { .moments__toggle { position: static; transform: none; margin: 4px auto 0; } }
 .moments__group-label { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 11px; letter-spacing: 0.14em; color: var(--ash); opacity: 0; transition: opacity 0.5s var(--ease-out) 0.35s; }
 .moments__group-label i { width: 8px; height: 8px; border-radius: 4px; background: var(--c); }
 .moments__stage.is-open .moments__group-label { opacity: 1; }

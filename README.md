@@ -31,9 +31,18 @@ program, session, sealed, volume, lbs, exclamation marks…) reaches the page.
 | Thesis | Easier to start, keep going, look back on | — |
 | Story (sticky phone) | Train with Slide to start → logger → Lock Screen Live Activity → workout complete | `app/(tabs)/index.tsx`, `components/home/SlideToStart.tsx`, `app/workout.tsx`, `components/ActiveSetCard.tsx`, `components/live-activity/WorkoutLiveActivityLayout.tsx`, `features/build/CastingScreen.tsx`, `castingCopy.ts` |
 | Your Stack | Last week presses into a layer (`fusionFrame`), then the camera pulls back; pick any week | `features/build/fusion.ts`, `Monolith.tsx`, `monolithModel.ts` |
+| Story, Log sets off | Train's Log sets switch (or Log sets / Just train on the page); the guided workout and its summary | `components/home/LogSetsSwitch.tsx`, `features/untracked/GuidedWorkoutScreen.tsx`, `app/workout-summary.tsx` |
+| Story, Moment | The logger's camera pill and the square Moments camera with Label | `components/MomentCameraPill.tsx`, `features/moments/MomentCamera.tsx` |
+| Moments | This week's photo pile, opening into the grid by workout, with locks | `features/moments/WeekMoments.tsx`, `MomentsCluster.tsx`, `MomentLock.tsx` |
+| Private Circle | Friends' this-week Stacks, nudges, What friends see | `features/circle/CircleScreen.tsx`, `MiniStack.tsx`, `visibility.ts`, `nudges.ts` |
+| Form Check | Exercise info sheet, Check form, the player frame; supersets, notes, past workouts, editing | `components/ExerciseInfo.tsx`, `ExerciseFormVideo.tsx`, `constants/exerciseVideos.ts` |
 | Progress | This week, lift progress, records and history | `app/(tabs)/profile.tsx`, `components/LiftProgressCard.tsx` |
 | Routines | Paste a routine and see the workouts Stack builds; four ways to get a routine | `app/paste-routine.tsx`, `features/routineImport/exerciseAliases.ts` |
 
+- The page carries one Push workout from the story to Your Stack, Moments and the Circle (`DemoJourney`): the mode, sets, photos and locks the visitor chooses.
+- `public/exercises/` holds the app's exercise art resized to 640 px. Moments prints are that art in a lit room with the app's label: illustration, not photography. Circle people (Ben, Maya, Sam) and their weeks are examples.
+- Form Check shows the player's frame only. The real clips are third-party YouTube videos, so the site doesn't embed them.
+- Private Circle and photo sharing are behind build flags in the app (`EXPO_PUBLIC_CIRCLE`, `EXPO_PUBLIC_MOMENTS_CLOUD`); check they ship to beta testers before promoting them more widely.
 - `lib/tokens.ts` mirrors `constants/theme.ts`. Phone screens are drawn at 402 × 874 pt with the app's own point metrics and scaled as a whole (`components/phone/Phone.tsx`).
 - `lib/stack/` is a port of the app's block geometry, layout, drop physics and week-close motion, rendered with three.js. Example history is deterministic and illustration only.
 - Copy follows the Stack content style sheet (5 Oct 2026). Verify any new claim against the app before adding it.

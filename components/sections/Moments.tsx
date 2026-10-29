@@ -95,6 +95,9 @@ export function Moments() {
             aria-label={open ? "Tuck this week’s photos back" : `Open this week’s ${all.length} photos`}>
             <span className="moments__pile-count">{all.length}</span>
           </button>
+          <button type="button" className="moments__toggle" onClick={() => setOpen((value) => !value)} aria-hidden="true" tabIndex={-1}>
+            {open ? "Tuck them back" : "Open this week’s photos"}
+          </button>
         </div>
 
         <div id="moments-grid" className="moments__grid">
