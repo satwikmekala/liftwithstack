@@ -40,7 +40,7 @@ test("server-renders the Stack marketing page", async () => {
   assert.match(html, /Not sure about the form\?/);
   assert.match(html, />Check form</);
   assert.doesNotMatch(html, />Just train</);
-  assert.match(html, /id="circle"[\s\S]*Stack up together\.[\s\S]*id="moments"[\s\S]*Pictures too\./);
+  assert.match(html, /id="circle"[\s\S]*Stack up together\.[\s\S]*id="moments"[\s\S]*Some workouts are worth remembering\./);
   assert.match(html, /Coming soon|COMING SOON/);
   assert.match(html, /Made for how you actually train\./);
   // Form Check is a hand-picked video, never an analysis of your own lifting; it loads only when asked.

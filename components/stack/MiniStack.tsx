@@ -45,18 +45,33 @@ export function faceColor(hex: string, face: keyof typeof FACES) {
   return value;
 }
 
+const floorOffset = (base: string) => (base === "shadow" ? 6 : base === "ledge" ? 22 : base === "none" ? 4 : 26);
+
+/** Height over width a Stack needs at this unit: ground, every block, the top face and a little air. */
+export function stackAspect(slabs: readonly BuildSlab[], unit: number, min = 0.42, inset = 0, base = "shadow") {
+  const total = slabs.reduce((sum, slab) => sum + slab.height, 0);
+  const needed = Math.max(min * VB, floorOffset(base) + 2 * D + 4 + total * unit + GAP * Math.max(0, slabs.length - 1));
+  return needed / (VB + VB * inset * 2);
+}
+
+/** The app's Circle tower scale: a block's true height under My Stack's camera. */
+export const TRUE_UNIT = 9.02;
+
 /**
  * Height is truthful across a room: every tower uses the same `unit` (viewBox units per block
  * height), so one block reads as one block everywhere; only a tower taller than its frame is
  * compressed. `base`: `plinth` stands it on its own plinth, `ledge` on a floor the caller draws.
  */
-export function MiniStack({ slabs, width = 140, height = 160, unit = 11, base = "plinth", variant = "stack", glow = false, quietHistory = false,
+export function MiniStack({ slabs, width = 140, height = 160, unit = 11, base = "plinth", inset = 0, variant = "stack", glow = false, quietHistory = false,
   flash = false, sweep = false, selected = null, className = "", style }: {
   slabs: readonly BuildSlab[];
   width?: number;
   height?: number;
   unit?: number;
-  base?: "plinth" | "ledge" | "none";
+  /** `shadow`: a soft contact shadow on the room's floor, as the Circle draws everyone. */
+  base?: "plinth" | "ledge" | "shadow" | "none";
+  /** Share of the width left as air on each side, so a gallery of towers doesn't crowd its columns. */
+  inset?: number;
   /** `private`: an empty plinth, nothing shared. `invite`: a dashed outline waiting for someone. */
   variant?: "stack" | "private" | "invite";
   glow?: boolean;
@@ -68,8 +83,10 @@ export function MiniStack({ slabs, width = 140, height = 160, unit = 11, base = 
   className?: string;
   style?: CSSProperties;
 }) {
-  const vbHeight = VB * height / width;
-  const floor = vbHeight - (base === "plinth" ? 26 : base === "ledge" ? 22 : 4);
+  // Inset widens the viewBox around the same drawing, so blocks stay exactly in proportion.
+  const pad = VB * inset;
+  const vbHeight = (VB + pad * 2) * height / width;
+  const floor = vbHeight - floorOffset(base);
   const stack = variant === "stack" ? slabs : [];
   const total = stack.reduce((sum, slab) => sum + slab.height, 0);
   const room = floor - (2 * D + 4) - GAP * Math.max(0, stack.length - 1);
@@ -79,7 +96,7 @@ export function MiniStack({ slabs, width = 140, height = 160, unit = 11, base = 
   const bottoms = stack.reduce<number[]>((list, slab, index) => [...list, index === 0 ? floor : list[index - 1] - stack[index - 1].height * scale - GAP], []);
   return (
     <svg className={`mini-stack${flash ? " is-flashing" : ""}${sweep ? " is-sweeping" : ""} ${className}`} style={style}
-      width={width} height={height} viewBox={`0 0 ${VB} ${vbHeight}`} aria-hidden="true" focusable="false">
+      width={width} height={height} viewBox={`${-pad} 0 ${VB + pad * 2} ${vbHeight}`} aria-hidden="true" focusable="false">
       {glow && <>
         <defs>
           <radialGradient id="mini-pool" cx="50%" cy="50%" r="50%">
@@ -88,6 +105,16 @@ export function MiniStack({ slabs, width = 140, height = 160, unit = 11, base = 
           </radialGradient>
         </defs>
         <ellipse cx={70} cy={floor + 2} rx={70} ry={26} fill="url(#mini-pool)" />
+      </>}
+      {base === "shadow" && <>
+        <defs>
+          <radialGradient id="mini-contact" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stopColor="#000" stopOpacity="0.5" />
+            <stop offset="0.55" stopColor="#000" stopOpacity="0.22" />
+            <stop offset="1" stopColor="#000" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <ellipse cx={70} cy={floor - D + 2} rx={stack.length ? 58 : 48} ry={D + 4} fill="url(#mini-contact)" />
       </>}
       {base === "plinth" && <g>
         <polygon points={`10,${floor} 70,${floor - 24} 130,${floor} 70,${floor + 24}`} fill={invite ? "transparent" : PLINTH}

@@ -105,6 +105,15 @@ export const FRIENDS: Friend[] = [
     photos: ["Barbell Squat", "Lat Pulldown", "Incline Dumbbell Press"],
   },
   {
+    id: "jess", name: "Jess", handle: "jess.lifts", activity: "Trained today",
+    slabs: [block("jess-0", muscle.back, 1.15), block("jess-1", muscle.legs, 1.3, true)], history: past(11, 8),
+    workouts: [
+      { label: "Legs", day: "Today", color: muscle.legs, lifts: [{ name: "Barbell Squat", sets: "70 kg × 6", record: true }] },
+      { label: "Pull", day: "Monday", color: muscle.back, lifts: [{ name: "Deadlift", sets: "100 kg × 5" }] },
+    ],
+    photos: ["Barbell Squat"],
+  },
+  {
     id: "sam", name: "Sam", handle: "samm", activity: null,
     slabs: [block("sam-0", muscle.shoulders, 1), block("sam-1", muscle.legs, 1.3), block("sam-2", muscle.arms, 1)], history: past(6, 3),
     workouts: [
