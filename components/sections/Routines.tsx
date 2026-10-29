@@ -11,7 +11,7 @@ const WAYS: { title: string; body: string; icon: IconName }[] = [
 
 export function Routines() {
   return (
-    <section className="routines" aria-labelledby="routines-title">
+    <section className="routines" id="routines" aria-labelledby="routines-title">
       <Reveal className="section-head">
         <p className="eyebrow">ROUTINES</p>
         <h2 id="routines-title" className="section-title">Bring the routine you already have.</h2>

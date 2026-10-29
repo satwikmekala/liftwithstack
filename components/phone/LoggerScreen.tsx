@@ -4,7 +4,9 @@ import { useEffect, useRef, useState, type CSSProperties, type Dispatch } from "
 import { Icon } from "@/components/ui/Icon";
 import { color } from "@/lib/tokens";
 import { formatWeight, isExerciseDone, SUGGESTED_WEIGHT, type WorkoutAction, type WorkoutState } from "@/lib/workout";
+import { ActionPills } from "./ActionPills";
 import { StatusBar } from "./Phone";
+import { UpNext } from "./UpNext";
 import { Wheel } from "./Wheel";
 
 const WHOLE = Array.from({ length: 301 }, (_, index) => index);
@@ -18,7 +20,9 @@ const percent = (value: number, previous: number | null) => {
 };
 
 /** The active workout (app/workout.tsx with ActiveSetCard), Push in progress. */
-export function LoggerScreen({ state, dispatch }: { state: WorkoutState; dispatch: Dispatch<WorkoutAction> }) {
+export function LoggerScreen({ state, dispatch, photos, onCamera, cameraCue }: {
+  state: WorkoutState; dispatch: Dispatch<WorkoutAction>; photos: number; onCamera: () => void; cameraCue: boolean;
+}) {
   const exercise = state.exercises[state.exercise];
   const done = isExerciseDone(exercise);
   const set = exercise.sets[state.set];
@@ -126,22 +130,12 @@ export function LoggerScreen({ state, dispatch }: { state: WorkoutState; dispatc
           </div>
 
           {state.exercise < state.exercises.length - 1 && !done && (
-            <div className="up-next" aria-hidden="true">
-              <span className="up-next__copy">
-                <span className="up-next__eyebrow">UP NEXT</span>
-                <span className="up-next__name"><span className="up-next__dot" />{state.exercises[state.exercise + 1].name}</span>
-              </span>
-              <span className="up-next__sets">{state.exercises[state.exercise + 1].sets.length} SETS</span>
-              <Icon name="chevronRight" size={20} color={color.ashDim} />
-            </div>
+            <UpNext name={state.exercises[state.exercise + 1].name} following={state.exercises.slice(state.exercise + 2).map((item) => item.name)} />
           )}
         </div>
       </div>
-      <div className="action-pill" aria-hidden="true">
-        <span><Icon name="history" size={22} stroke={1.8} color={color.bone} /></span>
-        <i />
-        <span><Icon name="message" size={22} stroke={1.8} color={color.bone} /></span>
-      </div>
+      <ActionPills photos={photos} onCamera={onCamera} cue={cameraCue}
+        left={<><span><Icon name="history" size={26} stroke={1.8} color={color.bone} /></span><i /><span><Icon name="link" size={24} stroke={1.8} color={color.bone} /></span></>} />
     </div>
   );
 }

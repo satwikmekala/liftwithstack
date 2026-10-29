@@ -1,40 +1,52 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { CameraScreen } from "@/components/phone/CameraScreen";
+import { GuidedScreen } from "@/components/phone/GuidedScreen";
 import { LockScreen } from "@/components/phone/LockScreen";
 import { LoggerScreen } from "@/components/phone/LoggerScreen";
 import { Phone } from "@/components/phone/Phone";
 import { StackedScreen } from "@/components/phone/StackedScreen";
+import { SummaryScreen } from "@/components/phone/SummaryScreen";
 import { TrainScreen } from "@/components/phone/TrainScreen";
-import { useDemoJourney } from "@/components/stack/DemoJourney";
+import { useDemoJourney, type LogMode } from "@/components/stack/DemoJourney";
 import { makeDemoBlock } from "@/lib/demo-block";
+import { GUIDED_PLAN } from "@/lib/guided";
+import { momentSetLine } from "@/lib/moments";
 import { scrollToPosition } from "@/lib/scroll";
 import { Icon } from "@/components/ui/Icon";
 import { isExerciseDone } from "@/lib/workout";
 
-const STEPS = [
-  { id: "start", eyebrow: "START", title: "Don’t overthink it.", body: "Stack has your workout ready. Just tap start.", hint: "Slide the handle" },
-  { id: "log", eyebrow: "LOG", title: "Forget what you lifted last time.", body: "Stack remembers. Your last weights are already filled in, with your history one scroll away.", hint: "Tap Log" },
-  { id: "lock", eyebrow: "LOCK SCREEN", title: "Don’t even unlock your phone.", body: "Log reps and weight from your Lock Screen or the Dynamic Island.", hint: "Tap + or the check" },
-  { id: "done", eyebrow: "WORKOUT COMPLETE", title: "One workout. One block.", body: "Improve on last time and it lands thicker. Hit a PR and it lands with a line of gold.", hint: null },
-] as const;
+type StepId = "start" | "log" | "moment" | "lock" | "done";
+type Step = { id: StepId; chapter: string; eyebrow: string; title: string; body: string; hint: string | null };
 
-const CHAPTERS = ["Start", "Log", "Lock", "Stack"];
+const START: Step = { id: "start", chapter: "Start", eyebrow: "START", title: "Don’t overthink it.", body: "Your workout is ready. Log every set, or switch Log sets off and just train.", hint: "Slide the handle" };
+const LOG: Step = { id: "log", chapter: "Log", eyebrow: "LOG SETS", title: "Forget what you lifted last time.", body: "Stack remembers. Your last weights are already filled in, with your history one tap away.", hint: "Tap Log" };
+const TRAIN: Step = { id: "log", chapter: "Train", eyebrow: "JUST TRAIN", title: "Or don’t count a thing.", body: "One exercise at a time, with a picture to go by. Tap Done and move on. Nothing to weigh, count or time.", hint: "Tap Done" };
+const MOMENT: Step = { id: "moment", chapter: "Moment", eyebrow: "MOMENTS", title: "Keep the moment too.", body: "The camera sits in the corner of every workout. One tap, one photo, and you’re back on your set. Turn on Label to print the exercise into it.", hint: "Tap the camera" };
+const LOCK: Step = { id: "lock", chapter: "Lock", eyebrow: "LOCK SCREEN", title: "Don’t even unlock your phone.", body: "Log reps and weight from your Lock Screen or the Dynamic Island.", hint: "Tap + or the check" };
+const STACKED: Step = { id: "done", chapter: "Stack", eyebrow: "WORKOUT COMPLETE", title: "One workout. One block.", body: "Improve on last time and it lands thicker. Hit a PR and it lands with a line of gold.", hint: null };
+const NOTED: Step = { id: "done", chapter: "Stack", eyebrow: "WORKOUT COMPLETE", title: "No sets. Still a block.", body: "A workout you didn’t log still lands in your Stack. Show up, and it counts.", hint: "Your Stack is next" };
 
-/** Train → log → Lock Screen → workout complete, on one phone that stays in view. */
+const stepsFor = (mode: LogMode): Step[] => (mode === "tracked" ? [START, LOG, MOMENT, LOCK, STACKED] : [START, TRAIN, MOMENT, NOTED]);
+
+/** Train → log (or just train) → a photo → Lock Screen → workout complete, on one phone that stays in view. */
 export function Story() {
+  const { mode, setMode, workout, dispatch, guided, guide, photos, takePhoto, completed, finish } = useDemoJourney();
+  const steps = useMemo(() => stepsFor(mode), [mode]);
   const [step, setStep] = useState(0);
   const [launch, setLaunch] = useState<{ x: number; y: number } | null>(null);
   const [resetKey, setResetKey] = useState(0);
   const [castAt, setCastAt] = useState<number | null>(null);
-  const { workout, dispatch, completed, finish } = useDemoJourney();
-  const canFinish = makeDemoBlock(workout).sets > 0;
+  const [cameraOpen, setCameraOpen] = useState(false);
+  const canFinish = mode === "tracked" ? makeDemoBlock(workout).sets > 0 : guided.done.length > 0;
   const finishRef = useRef(finish);
   useEffect(() => { finishRef.current = finish; }, [finish]);
   const captions = useRef<HTMLDivElement>(null);
   useEffect(() => { captions.current?.scrollTo({ top: 0, behavior: "instant" }); }, [step]);
   const stepRefs = useRef<(HTMLElement | null)[]>([]);
-  const screen = step === 0 && launch ? 1 : step;
+  const current = steps[Math.min(step, steps.length - 1)].id;
+  const screen = current === "start" && launch ? "log" : current;
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -42,28 +54,35 @@ export function Story() {
         if (entry.isIntersecting) setStep(Number((entry.target as HTMLElement).dataset.step));
       }
     }, { rootMargin: "-48% 0px -48% 0px" });
-    stepRefs.current.forEach((element) => element && observer.observe(element));
+    stepRefs.current.slice(0, steps.length).forEach((element) => element && observer.observe(element));
     return () => observer.disconnect();
-  }, []);
+  }, [steps]);
 
   // Coming back to the start puts the handle back.
   useEffect(() => {
-    if (step !== 0) return;
+    if (current !== "start") return;
     const timer = setTimeout(() => {
       setLaunch(null);
       setResetKey((value) => value + 1);
     }, 0);
     return () => clearTimeout(timer);
-  }, [step]);
+  }, [current]);
+
+  // The camera belongs to the Moment chapter; leaving it closes the camera, as leaving the app does.
+  useEffect(() => {
+    if (current === "moment") return;
+    const timer = setTimeout(() => setCameraOpen(false), 0);
+    return () => clearTimeout(timer);
+  }, [current]);
 
   // The completion moment plays each time it comes into view.
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (screen === 3) finishRef.current();
-      setCastAt(screen === 3 ? performance.now() : null);
+      if (screen === "done") finishRef.current();
+      setCastAt(screen === "done" ? performance.now() : null);
     }, 0);
     return () => clearTimeout(timer);
-  }, [screen]);
+  }, [screen, mode]);
 
   // A finished exercise moves on, as “Move on to …” does in the app.
   const exerciseDone = isExerciseDone(workout.exercises[workout.exercise]);
@@ -81,6 +100,17 @@ export function Story() {
     }, 520);
   }, []);
 
+  // What the label would print: the exercise on screen and, when logging, the set as it stands.
+  const exercise = mode === "tracked" ? workout.exercises[workout.exercise] : null;
+  const shotExercise = exercise?.name ?? GUIDED_PLAN[Math.min(guided.index, GUIDED_PLAN.length - 1)];
+  const shotSet = exercise ? exercise.sets[workout.set] : null;
+  const shotLine = exercise && shotSet ? momentSetLine({ number: workout.set + 1, weight: shotSet.weight, reps: shotSet.reps }) : null;
+  const shoot = (labelled: boolean) => {
+    takePhoto({ exercise: shotExercise, line: labelled ? shotLine : null });
+    setTimeout(() => setCameraOpen(false), 120);
+  };
+  const cue = current === "moment" && photos.length === 0;
+
   const replay = () => setCastAt(performance.now());
   // Chapter buttons on phones: bring that chapter's scroll position to the middle.
   const story = useRef<HTMLElement>(null);
@@ -94,48 +124,64 @@ export function Story() {
     const top = Math.max(window.scrollY + section.getBoundingClientRect().top, middle);
     scrollToPosition(top);
   };
+  const doneIndex = steps.length - 1;
+  const copy = (item: Step, index: number) => (
+    <StepCopy item={item} mode={mode} onMode={setMode} onReplay={replay} canFinish={canFinish && index > 0 && index < doneIndex}
+      onFinish={() => { finish(); jump(doneIndex); }} personal={completed?.mode === mode && index === doneIndex ? completed.exercises.length : null}
+      photoTaken={photos.length > 0 && item.id === "moment"} onExplore={finish} />
+  );
 
   return (
     <section ref={story} className="story" id="how" aria-label="How Stack works">
       <div className="story__steps">
-        {STEPS.map((item, index) => (
-          <article key={item.id} ref={(node) => { stepRefs.current[index] = node; }} data-step={index}
+        {steps.map((item, index) => (
+          <article key={`${mode}-${item.id}`} ref={(node) => { stepRefs.current[index] = node; }} data-step={index}
             className={`story__step${step === index ? " is-active" : ""}`}>
-            <StepCopy item={item} onReplay={replay} canFinish={canFinish && index > 0 && index < 3} onFinish={() => { finish(); jump(3); }} personal={!!completed && index === 3} onExplore={finish} />
+            {copy(item, index)}
           </article>
         ))}
       </div>
       <div className="story__stage">
         <Phone className="story__phone" label="Stack on iPhone">
-          <div className={`screen-slot${screen === 0 ? " is-on" : ""}`} inert={screen !== 0}>
-            <TrainScreen onStart={start} resetKey={resetKey} />
+          <div className={`screen-slot${screen === "start" ? " is-on" : ""}`} inert={screen !== "start"}>
+            <TrainScreen onStart={start} resetKey={resetKey} logSets={mode === "tracked"} onLogSets={(on) => setMode(on ? "tracked" : "untracked")} />
           </div>
-          <div className={`screen-slot${screen === 1 ? " is-on" : ""}`} inert={screen !== 1}>
-            <LoggerScreen state={workout} dispatch={dispatch} />
+          <div className={`screen-slot${(screen === "log" || screen === "moment") && mode === "tracked" ? " is-on" : ""}`}
+            inert={!((screen === "log" || screen === "moment") && mode === "tracked") || cameraOpen}>
+            <LoggerScreen state={workout} dispatch={dispatch} photos={photos.length} onCamera={() => setCameraOpen(true)} cameraCue={cue} />
           </div>
-          <div className={`screen-slot${screen === 2 ? " is-on" : ""}`} inert={screen !== 2}>
+          <div className={`screen-slot${(screen === "log" || screen === "moment") && mode === "untracked" ? " is-on" : ""}`}
+            inert={!((screen === "log" || screen === "moment") && mode === "untracked") || cameraOpen}>
+            <GuidedScreen state={guided} dispatch={guide} photos={photos.length} onCamera={() => setCameraOpen(true)} cameraCue={cue} />
+          </div>
+          <div className={`screen-slot${screen === "lock" ? " is-on" : ""}`} inert={screen !== "lock"}>
             <LockScreen state={workout} dispatch={dispatch} />
           </div>
-          <div className={`screen-slot${screen === 3 ? " is-on" : ""}`} inert={screen !== 3}>
-            <StackedScreen startedAt={castAt} demo={completed} />
+          <div className={`screen-slot${screen === "done" && mode === "tracked" ? " is-on" : ""}`} inert={!(screen === "done" && mode === "tracked")}>
+            <StackedScreen startedAt={mode === "tracked" ? castAt : null} demo={completed?.mode === "tracked" ? completed : null} />
           </div>
-          {launch && step === 0 && (
+          <div className={`screen-slot${screen === "done" && mode === "untracked" ? " is-on" : ""}`} inert={!(screen === "done" && mode === "untracked")}>
+            <SummaryScreen exercises={guided.done} photos={photos} />
+          </div>
+          <CameraScreen open={cameraOpen && (screen === "log" || screen === "moment")} exercise={shotExercise} line={shotLine}
+            count={photos.length} onShoot={shoot} onClose={() => setCameraOpen(false)} />
+          {launch && current === "start" && (
             <span className="launch" aria-hidden="true" style={{ "--x": `${launch.x}px`, "--y": `${launch.y}px` } as CSSProperties} />
           )}
         </Phone>
         <div className="story__panel">
           <div className="story__progress" role="group" aria-label="Chapters">
-            {STEPS.map((item, index) => (
-              <button key={item.id} type="button" aria-pressed={step === index} aria-label={item.title}
+            {steps.map((item, index) => (
+              <button key={`${mode}-${item.id}`} type="button" aria-pressed={step === index} aria-label={item.title}
                 className={`story__segment${index === step ? " is-current" : index < step ? " is-done" : ""}`}
-                onClick={() => jump(index)}><i /><span>{CHAPTERS[index]}</span></button>
+                onClick={() => jump(index)}><i /><span>{item.chapter}</span></button>
             ))}
           </div>
           <div ref={captions} className="story__captions" aria-live="polite" tabIndex={0} role="region" aria-label="Chapter details">
-            {STEPS.map((item, index) => (
-              <div key={item.id} className={`story__caption${index === step ? " is-on" : index < step ? " is-past" : ""}`}
+            {steps.map((item, index) => (
+              <div key={`${mode}-${item.id}`} className={`story__caption${index === step ? " is-on" : index < step ? " is-past" : ""}`}
                 aria-hidden={index !== step} inert={index !== step}>
-                <StepCopy item={item} onReplay={replay} canFinish={canFinish && index > 0 && index < 3} onFinish={() => { finish(); jump(3); }} personal={!!completed && index === 3} onExplore={finish} />
+                {copy(item, index)}
               </div>
             ))}
           </div>
@@ -145,30 +191,47 @@ export function Story() {
   );
 }
 
-function StepCopy({ item, onReplay, canFinish, onFinish, personal, onExplore }: { item: (typeof STEPS)[number]; onReplay: () => void; canFinish: boolean; onFinish: () => void; personal: boolean; onExplore: () => void }) {
+function StepCopy({ item, mode, onMode, onReplay, canFinish, onFinish, personal, photoTaken, onExplore }: {
+  item: Step; mode: LogMode; onMode: (mode: LogMode) => void; onReplay: () => void; canFinish: boolean; onFinish: () => void;
+  /** The visitor's own block: how many exercises it holds. */
+  personal: number | null; photoTaken: boolean; onExplore: () => void;
+}) {
+  const tracked = mode === "tracked";
+  const title = personal !== null ? (tracked ? "Your first block." : "Still a block.") : item.title;
+  const body = personal !== null
+    ? (tracked ? "The sets you just logged, made visible. Find your orange block at the top of the stack."
+      : `${personal} ${personal === 1 ? "exercise" : "exercises"}, no sets, one block. Find it at the top of the stack.`)
+    : photoTaken ? "Kept with this workout, and you’re straight back on your set. No review, no caption, no filter." : item.body;
   return (
     <div className="story__copy">
       <p className="eyebrow">{item.eyebrow}</p>
-      <h2 className="story__title">{personal ? "Your first block." : item.title}</h2>
-      <p className="story__body">{personal ? "The sets you just logged, made visible. Find your orange block at the top of the stack." : item.body}</p>
-      <div className="story__controls">
-      {item.hint ? (
-        <p className="story__hint"><span className="story__hint-dot" />{item.hint}</p>
-      ) : (
-        <button type="button" className="story__hint story__replay" onClick={onReplay}>
-          <Icon name="repeat" size={15} stroke={2} />Play again
-        </button>
+      <h2 className="story__title">{title}</h2>
+      <p className="story__body">{body}</p>
+      {(item.id === "start" || item.id === "log") && (
+        <div className="mode-switch" role="radiogroup" aria-label="How you log this workout">
+          <button type="button" role="radio" aria-checked={tracked} className={tracked ? "is-on" : ""} onClick={() => onMode("tracked")}>Log sets</button>
+          <button type="button" role="radio" aria-checked={!tracked} className={!tracked ? "is-on" : ""} onClick={() => onMode("untracked")}>Just train</button>
+          <span className="mode-switch__thumb" aria-hidden="true" />
+        </div>
       )}
-      {canFinish && <button type="button" className="story__finish" onClick={onFinish}>Finish demo</button>}
-      <a className="story__explore" href="#your-stack" onClick={(event) => {
-        const target = document.getElementById("your-stack");
-        if (!target) return;
-        event.preventDefault();
-        // Lenis also handles anchors at the window; this link has a custom destination.
-        event.stopPropagation();
-        onExplore();
-        scrollToPosition(window.scrollY + target.getBoundingClientRect().top + Math.max(0, target.offsetHeight - window.innerHeight));
-      }}>Explore the stack ↓</a>
+      <div className="story__controls">
+        {item.hint ? (
+          <p className="story__hint"><span className="story__hint-dot" />{photoTaken ? "Photo kept" : item.hint}</p>
+        ) : (
+          <button type="button" className="story__hint story__replay" onClick={onReplay}>
+            <Icon name="repeat" size={15} stroke={2} />Play again
+          </button>
+        )}
+        {canFinish && <button type="button" className="story__finish" onClick={onFinish}>Finish demo</button>}
+        <a className="story__explore" href="#your-stack" onClick={(event) => {
+          const target = document.getElementById("your-stack");
+          if (!target) return;
+          event.preventDefault();
+          // Lenis also handles anchors at the window; this link has a custom destination.
+          event.stopPropagation();
+          onExplore();
+          scrollToPosition(window.scrollY + target.getBoundingClientRect().top + Math.max(0, target.offsetHeight - window.innerHeight));
+        }}>Explore the stack ↓</a>
       </div>
     </div>
   );

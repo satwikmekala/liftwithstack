@@ -213,8 +213,13 @@ export function StackFinale() {
               <p className="week-panel__eyebrow mono">YOUR FIRST BLOCK · DEMO</p>
               <p className="week-panel__title">You made this.</p>
               <span className="week-panel__strata" aria-hidden="true"><i style={{ background: completed.slab.layers[0].color }} /></span>
-              <p className="week-panel__caption">{completed.sets} {completed.sets === 1 ? "set" : "sets"} · {formatWeight(completed.movedKg)} kg moved</p>
-              <ul className="first-block__lifts">{completed.lifts.map((lift, index) => <li key={index}><span>{lift.name}</span><span>{formatWeight(lift.weight)} kg × {lift.reps}</span></li>)}</ul>
+              {completed.mode === "tracked" ? <>
+                <p className="week-panel__caption">{completed.sets} {completed.sets === 1 ? "set" : "sets"} · {formatWeight(completed.movedKg)} kg moved</p>
+                <ul className="first-block__lifts">{completed.lifts.map((lift, index) => <li key={index}><span>{lift.name}</span><span>{formatWeight(lift.weight)} kg × {lift.reps}</span></li>)}</ul>
+              </> : <>
+                <p className="week-panel__caption">Without logging · {completed.exercises.length} {completed.exercises.length === 1 ? "exercise" : "exercises"}</p>
+                <ul className="first-block__lifts">{completed.exercises.map((name) => <li key={name}><span>{name}</span><span>Done</span></li>)}</ul>
+              </>}
             </> : <>
             <p className="week-panel__eyebrow mono">{week.sealed ? week.range.toUpperCase() : "THIS WEEK"}</p>
             <p className="week-panel__title">{weekTitle}</p>

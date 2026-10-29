@@ -30,9 +30,23 @@ test("server-renders the Stack marketing page", async () => {
   const html = await response.text();
   assert.match(html, /<title>Stack — Every workout stacks up\.<\/title>/);
   assert.match(html, /Every workout[\s\S]*stacks up\./);
-  assert.match(html, /Log your training\.[\s\S]*See your progress take shape\./);
+  assert.match(html, /Log every set, or just show up\.[\s\S]*Keep the moments\. Bring your people\./);
   assert.match(html, /Don’t overthink it\./);
   assert.match(html, /Every week becomes a layer\./);
+  // The story offers both ways to log, and the chapters that follow it.
+  assert.match(html, /role="radio"[^>]*>Log sets</);
+  assert.match(html, /role="radio"[^>]*>Just train</);
+  assert.match(html, /Keep the moment too\./);
+  assert.match(html, /id="moments"[\s\S]*More than numbers\./);
+  assert.match(html, /Lock a photo to keep it to yourself\./);
+  assert.match(html, /id="circle"[\s\S]*Better with your people\./);
+  assert.match(html, /What friends see/);
+  assert.match(html, /Friends see this week’s Stack\./);
+  assert.match(html, /Nobody can search or browse\./);
+  assert.match(html, /id="form-check"[\s\S]*A little more confidence in every rep\./);
+  assert.match(html, /They stream from YouTube/);
+  // Form Check is a hand-picked video, never an analysis of your own lifting.
+  assert.doesNotMatch(html, /\bAI\b|analy[sz]e your form|real-time feedback/i);
   assert.match(html, /Progress has substance\./);
   assert.match(html, /Paste what you already train\. Stack will sort it out\./);
   assert.match(html, /Ready to build your own\?/);

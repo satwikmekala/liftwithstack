@@ -21,7 +21,9 @@ function load(file) {
   new Function('require', 'module', 'exports', code)(require, loaded, loaded.exports);
   return loaded.exports;
 }
-const { makeDemoBlock } = load('lib/demo-block.ts');
+const { makeDemoBlock, makeGuidedBlock } = load('lib/demo-block.ts');
+const { guidedReducer, initialGuided, GUIDED_PLAN } = load('lib/guided.ts');
+const { effectiveShare, sharingSummary, DEFAULT_SHARE } = load('lib/circle.ts');
 const { initialWorkout, workoutReducer } = load('lib/workout.ts');
 const { finaleHistory } = load('lib/stack/history.ts');
 
@@ -57,4 +59,34 @@ test('finishing every exercise preserves the completed demo rather than resettin
     workout = workoutReducer(workout, {type:'next'});
   }
   assert.equal(makeDemoBlock(workout).sets, 18);
+});
+
+test('Log sets off keeps only exercises marked done, and still makes a base-height block', () => {
+  let guided = guidedReducer(initialGuided(), {type:'skip'});
+  assert.equal(guided.index, 1);
+  guided = guidedReducer(guided, {type:'done'});
+  assert.deepEqual(guided.done, [GUIDED_PLAN[1]]);
+  assert.equal(guided.index, 2);
+  const demo = makeGuidedBlock(guided.done);
+  assert.equal(demo.mode, 'untracked');
+  assert.equal(demo.sets, 0);
+  assert.equal(demo.slab.height, 1);
+  assert.equal(finaleHistory(demo).final.items.at(-1).slab, demo.slab);
+});
+
+test('skipped exercises come round again until everything is done', () => {
+  let guided = initialGuided();
+  for (let i = 0; i < GUIDED_PLAN.length; i++) guided = guidedReducer(guided, {type:'skip'});
+  assert.equal(guided.index, 0);
+  for (let i = 0; i < GUIDED_PLAN.length; i++) guided = guidedReducer(guided, {type:'done'});
+  assert.equal(guided.done.length, GUIDED_PLAN.length);
+  assert.equal(guided.index, GUIDED_PLAN.length);
+});
+
+test('a new circle member shares this week only; detail needs workouts on', () => {
+  assert.equal(sharingSummary(DEFAULT_SHARE), 'Friends see this week’s Stack.');
+  const photosOnly = { ...DEFAULT_SHARE, photos: true, performance: true };
+  assert.equal(effectiveShare(photosOnly).photos, false);
+  assert.equal(effectiveShare(photosOnly).performance, false);
+  assert.equal(sharingSummary({ ...DEFAULT_SHARE, paused: true }), 'Sharing is paused. Friends see your name and that you’ve paused.');
 });

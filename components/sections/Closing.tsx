@@ -1,17 +1,23 @@
+import { MiniStack } from "@/components/stack/MiniStack";
 import { Download } from "@/components/ui/Download";
 import { StackMark } from "@/components/ui/Icon";
 import { Reveal } from "@/components/ui/Reveal";
+import { FRIENDS, thisWeekSlabs, yourHistory } from "@/lib/circle";
 import { INSTAGRAM_URL } from "@/lib/site";
 
 export function Closing() {
   return (
     <section className="closing" aria-labelledby="closing-title">
       <Reveal className="closing__inner">
-        <StackMark size={72} className="closing__mark" />
+        <div className="closing__stacks" aria-hidden="true">
+          <MiniStack slabs={FRIENDS[0].slabs} width={104} height={150} unit={10} base="ledge" />
+          <MiniStack slabs={[...yourHistory(), ...thisWeekSlabs(null)]} width={150} height={216} unit={10} glow quietHistory className="is-you" />
+          <MiniStack slabs={FRIENDS[1].slabs} width={104} height={150} unit={10} base="ledge" />
+        </div>
         <h2 id="closing-title" className="closing__title">Ready to build your own?</h2>
         <Download />
         <p className="closing__access">iPhone beta · Send a DM on Instagram to join.</p>
-        <p className="closing__facts">Made for iPhone · No Stack account needed</p>
+        <p className="closing__facts">Made for iPhone · No account needed to start</p>
       </Reveal>
     </section>
   );

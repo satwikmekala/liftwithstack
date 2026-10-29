@@ -541,7 +541,7 @@ a.nav__beta:hover, a.nav__beta:focus-visible { background: var(--accent); color:
   -webkit-backdrop-filter: blur(16px);
   box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.14);
 }
-.action-pill span { width: 48px; height: 48px; display: grid; place-items: center; }
+.action-pill > span { width: 48px; height: 48px; display: grid; place-items: center; }
 .action-pill i { width: 0.5px; height: 22px; background: rgba(255, 255, 255, 0.18); }
 
 /* Lock Screen and Live Activity */

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
+import "./chapters.css";
 
 // The same app typefaces, using the existing Latin assets. The Google-font
 // loader in this runtime preloads every subset even when preload is disabled.
@@ -9,7 +10,7 @@ const display = localFont({ src: "./fonts/BricolageGrotesque-Latin.woff2", varia
 const ui = localFont({ src: "./fonts/HankenGrotesk-Latin.woff2", variable: "--font-ui", weight: "400 700", display: "swap" });
 const mono = localFont({ src: "./fonts/JetBrainsMono-Latin.woff2", variable: "--font-mono", weight: "400 700", display: "swap" });
 
-const description = "Log your training. See your progress take shape. Stack makes training easier to start, easier to continue and easier to look back on.";
+const description = "Log every set, or just show up. Keep the moments and share your Stack with the few people you train with. Stack makes training easier to start, easier to keep going and easier to look back on.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

@@ -10,6 +10,12 @@ export function Nav() {
         <StackMark size={26} />
         <span>Stack</span>
       </a>
+      <nav className="nav__links" aria-label="Sections">
+        <a href="#how">How it works</a>
+        <a href="#moments">Moments</a>
+        <a href="#circle">Circle</a>
+        <a href="#routines">Routines</a>
+      </nav>
       <a className="download download--small download--soon nav__beta" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer"
         aria-label="DM Stack on Instagram for beta access">
         DM on <Icon name="instagram" size={16} stroke={1.8} /> for beta access
@@ -27,7 +33,7 @@ export function Hero() {
           <span className="line"><span>Every workout</span></span>
           <span className="line"><span>stacks up.</span></span>
         </h1>
-        <p className="hero__body">Log your training.<br />See your progress take shape.</p>
+        <p className="hero__body">Log every set, or just show up.<br />Keep the moments. Bring your people.</p>
         <div className="hero__actions">
           <Download />
           <p className="hero__beta-note">iPhone beta · DM @liftwithstack on Instagram</p>

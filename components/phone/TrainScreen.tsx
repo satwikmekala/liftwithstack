@@ -7,14 +7,21 @@ import { StatusBar } from "./Phone";
 import { SlideToStart } from "./SlideToStart";
 
 /** Train, with Stack’s plan active (app/(tabs)/index.tsx). */
-export function TrainScreen({ onStart, resetKey }: { onStart: (origin: { x: number; y: number }) => void; resetKey: number }) {
+export function TrainScreen({ onStart, resetKey, logSets, onLogSets }: {
+  onStart: (origin: { x: number; y: number }) => void; resetKey: number; logSets: boolean; onLogSets: (value: boolean) => void;
+}) {
   return (
     <div className="screen train">
       <div className="train__bg" aria-hidden="true" />
       <StatusBar />
       <div className="train__content">
-        <p className="train__date">Thursday, 8 Oct</p>
-        <p className="train__greeting">Morning, Wik</p>
+        <div className="train__header">
+          <div className="train__greeting-column">
+            <p className="train__date">Thursday, 8 Oct</p>
+            <p className="train__greeting">Morning, Wik</p>
+          </div>
+          <LogSetsSwitch value={logSets} onChange={onLogSets} />
+        </div>
         <div className="hero-card card-surface" style={{ "--c": color.accent } as CSSProperties}>
           <div className="hero-card__topline">
             <span className="status-pill" style={{ "--c": color.accent } as CSSProperties}>TODAY</span>
@@ -41,6 +48,20 @@ export function TrainScreen({ onStart, resetKey }: { onStart: (origin: { x: numb
       </div>
       <TabBar />
     </div>
+  );
+}
+
+/**
+ * Log sets, beside the greeting (components/home/LogSetsSwitch.tsx): the system switch scaled
+ * down in Stack orange. Off means the next workout starts without set logging.
+ */
+function LogSetsSwitch({ value, onChange }: { value: boolean; onChange: (value: boolean) => void }) {
+  return (
+    <button type="button" role="switch" aria-checked={value} className={`log-switch${value ? " is-on" : ""}`}
+      aria-label="Log sets" onClick={() => onChange(!value)}>
+      <span className="log-switch__label">{value ? "LOG SETS" : "NOT LOGGING"}</span>
+      <span className="log-switch__track" aria-hidden="true"><span className="log-switch__thumb" /></span>
+    </button>
   );
 }
 
