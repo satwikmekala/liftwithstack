@@ -180,6 +180,9 @@ export class FiberScene {
     sheath.rotation.z = Math.PI / 2;
     (sheath.material as Lit).uniforms.uOpacity.value = 0.14;
     (sheath.material as Lit).side = DoubleSide;
+    // The skins are a wash over what is inside, so they never hide it.
+    (sheath.material as Lit).depthWrite = false;
+    sheath.renderOrder = 2;
     this.muscle.add(sheath);
     this.materials.push(fascicleMaterial, sheath.material as Lit);
 
@@ -194,6 +197,8 @@ export class FiberScene {
     membrane.rotation.z = Math.PI / 2;
     (membrane.material as Lit).uniforms.uOpacity.value = 0.06;
     (membrane.material as Lit).side = DoubleSide;
+    (membrane.material as Lit).depthWrite = false;
+    membrane.renderOrder = 2;
     this.fiber.add(membrane);
     this.materials.push(myofibrilMaterial, membrane.material as Lit);
 
@@ -352,9 +357,9 @@ export class FiberScene {
     }
     const [fascicle, sheath, myofibril, membrane, disc, thin, thick, titin, head] = this.materials;
     fascicle.uniforms.uOpacity.value = muscleOpacity;
-    sheath.uniforms.uOpacity.value = 0.35 * muscleOpacity;
+    sheath.uniforms.uOpacity.value = 0.14 * muscleOpacity;
     myofibril.uniforms.uOpacity.value = fiberOpacity;
-    membrane.uniforms.uOpacity.value = 0.22 * fiberOpacity;
+    membrane.uniforms.uOpacity.value = 0.08 * fiberOpacity;
     for (const material of [disc, thin, thick, head]) material.uniforms.uOpacity.value = sarcomereOpacity;
     titin.uniforms.uOpacity.value = 0.45 * sarcomereOpacity;
     // The heads carry the tension: brighter as the camera arrives.
