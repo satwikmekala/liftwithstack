@@ -22,65 +22,95 @@ type Ctx = CanvasRenderingContext2D;
 /** Plate units visible across the canvas at z = 0, and the point at the centre of the view. */
 const PLATE_VIEW = { width: 640, center: [330, 476] as Pt };
 const ZOOM_ANGLE = 104;               // the elbow angle held while the camera goes in
-const L1_PER_PLATE = 22;              // one plate unit = 22 level-1 units
 
 export function drawScene(ctx: Ctx, w: number, h: number, s: SceneState) {
   ctx.save();
   ctx.fillStyle = C.bg; ctx.fillRect(0, 0, w, h);
   const side = Math.min(w, h);
-  if (s.z <= 1) drawPlateAndFascicles(ctx, w, h, side, s);
-  else drawDeep(ctx, w, h, side, s.z);
+  if (s.z < 1) drawPlateAndFascicles(ctx, w, h, side, s);
+  else drawDeep(ctx, w, h, side, s.z, s.dpr);
   ctx.restore();
 }
 
-/** z ∈ [0, 1]: the plate, then the camera turns and dives into the biceps belly. */
+/**
+ * A magnifying glass: the next level appears inside a circle at the point being studied, then the
+ * circle widens until it fills the view. `t` runs 0 → 1 over one level.
+ */
+const LENS = { start: 0.12, end: 0.94, mag: 3.2 };
+function lensRadius(t: number, w: number, h: number, side: number) {
+  const e = smooth(LENS.start, LENS.end, t);
+  const full = Math.hypot(w, h) / 2 + 4;
+  return Math.exp(Math.log(side * 0.15) * (1 - e) + Math.log(full) * e);
+}
+function lensMagnification(t: number) { return 1 + (LENS.mag - 1) * (1 - smooth(LENS.start, LENS.end, t)); }
+function withLens(ctx: Ctx, x: number, y: number, r: number, w: number, h: number, dpr: number, inside: () => void) {
+  const covering = r >= Math.hypot(Math.max(x, w - x), Math.max(y, h - y));
+  if (!covering) {
+    // Dim the world outside the glass a little, so the eye goes to it.
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, w, h); ctx.arc(x, y, r, 0, Math.PI * 2, true);
+    ctx.fillStyle = "rgba(13,13,13,0.38)"; ctx.fill("evenodd"); ctx.restore();
+  }
+  ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.clip();
+  ctx.fillStyle = C.bg; ctx.fillRect(x - r, y - r, 2 * r, 2 * r);
+  ctx.save(); inside(); ctx.restore();
+  if (!covering) {
+    // Curved glass: darker at the rim, a soft highlight near the top.
+    const v = ctx.createRadialGradient(x, y, r * 0.55, x, y, r);
+    v.addColorStop(0, "rgba(0,0,0,0)"); v.addColorStop(1, "rgba(0,0,0,0.45)");
+    ctx.fillStyle = v; ctx.fillRect(x - r, y - r, 2 * r, 2 * r);
+  }
+  ctx.restore();
+  if (covering) return;
+  ctx.save();
+  ctx.lineWidth = 1.6 * dpr; ctx.strokeStyle = "rgba(240,230,216,0.75)";
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.stroke();
+  ctx.lineWidth = 6 * dpr; ctx.strokeStyle = "rgba(240,230,216,0.08)";
+  ctx.beginPath(); ctx.arc(x, y, r + 4 * dpr, 0, Math.PI * 2); ctx.stroke();
+  ctx.lineWidth = 2 * dpr; ctx.lineCap = "round"; ctx.strokeStyle = "rgba(255,255,255,0.28)";
+  ctx.beginPath(); ctx.arc(x, y, r * 0.86, Math.PI * 1.08, Math.PI * 1.36); ctx.stroke();
+  ctx.restore();
+}
+
+/** z ∈ [0, 1): the plate; the camera turns toward the biceps and a lens opens on its belly. */
 function drawPlateAndFascicles(ctx: Ctx, w: number, h: number, side: number, s: SceneState) {
   const e = smooth(0, 1, s.z);
   const angle = s.z > 0 ? ZOOM_ANGLE : s.angle;
   const pose = platePose(angle);
   const { center, angle: axis } = pose.belly;
-  // Camera in plate units, interpolated in log scale.
-  const width = Math.exp(Math.log(PLATE_VIEW.width) * (1 - e) + Math.log(1000 / L1_PER_PLATE) * e);
+  // The camera moves in on the biceps, but only so far: the lens does the rest.
+  const width = Math.exp(Math.log(PLATE_VIEW.width) * (1 - e) + Math.log(170) * e);
   const cx = PLATE_VIEW.center[0] + (center[0] - PLATE_VIEW.center[0]) * smooth(0, 0.6, s.z);
   const cy = PLATE_VIEW.center[1] + (center[1] - PLATE_VIEW.center[1]) * smooth(0, 0.6, s.z);
   const rot = -axis * e;                                    // the muscle turns to lie flat as we go in
   const k = side / width;
   ctx.save();
   ctx.translate(w / 2, h / 2); ctx.rotate(rot); ctx.scale(k, k); ctx.translate(-cx, -cy);
-  const plateAlpha = 1 - smooth(0.55, 0.92, s.z);
-  if (plateAlpha > 0) drawPlate(ctx, pose, k, plateAlpha);
+  drawPlate(ctx, pose, k);
   ctx.restore();
-  // Level 1 grows out of the biceps belly.
-  const a1 = smooth(0.4, 0.85, s.z);
-  if (a1 > 0) {
-    ctx.save();
-    ctx.translate(w / 2, h / 2); ctx.rotate(rot);
-    const k1 = (side / width) / L1_PER_PLATE;
-    ctx.scale(k1, k1);
-    // place level 1's origin at the belly centre, axis along the muscle
-    const dx = (center[0] - cx) * L1_PER_PLATE, dy = (center[1] - cy) * L1_PER_PLATE;
-    ctx.translate(dx, dy); ctx.rotate(axis);
-    ctx.globalAlpha = a1;
-    drawFascicles(ctx, k1);
-    ctx.restore();
-  }
+  if (s.z <= LENS.start) return;
+  // Where the belly is on screen.
+  const ox = (center[0] - cx) * k, oy = (center[1] - cy) * k;
+  const x = w / 2 + ox * Math.cos(rot) - oy * Math.sin(rot), y = h / 2 + ox * Math.sin(rot) + oy * Math.cos(rot);
+  const r = lensRadius(s.z, w, h, side);
+  const scale = (side / 1000) * Math.pow(STEP, s.z - 1) * lensMagnification(s.z);
+  withLens(ctx, x, y, r, w, h, s.dpr, () => {
+    ctx.translate(x, y); ctx.rotate(axis * (1 - e)); ctx.scale(scale, scale);
+    drawFascicles(ctx, scale);
+  });
 }
 
-/** z ∈ (1, 5]: levels 1–5, each at the centre of the last. */
-function drawDeep(ctx: Ctx, w: number, h: number, side: number, z: number) {
+/** z ∈ [1, 5]: one level fills the view and the next opens in a lens at its centre. */
+function drawDeep(ctx: Ctx, w: number, h: number, side: number, z: number, dpr: number) {
   const draw = [drawFascicles, drawFibres, drawMyofibrils, drawSarcomere, drawFilaments];
-  for (let level = 1; level <= 5; level++) {
-    const rel = z - level;                                  // 0: this level fills the view
-    if (rel < -1.2 || rel > 1.3) continue;
-    const alpha = level === 1 ? 1 - smooth(0.55, 0.95, rel) : smooth(-0.85, -0.4, rel) * (level === 5 ? 1 : 1 - smooth(0.55, 0.95, rel));
-    if (alpha <= 0.002) continue;
-    const scale = (side / 1000) * Math.pow(STEP, rel);
-    ctx.save();
-    ctx.translate(w / 2, h / 2); ctx.scale(scale, scale);
-    ctx.globalAlpha = alpha;
-    draw[level - 1](ctx, scale);
-    ctx.restore();
-  }
+  const level = Math.min(5, Math.floor(z)), t = z - level;
+  const base = (side / 1000) * Math.pow(STEP, t);
+  ctx.save(); ctx.translate(w / 2, h / 2); ctx.scale(base, base); draw[level - 1](ctx, base); ctx.restore();
+  if (level >= 5 || t <= LENS.start) return;
+  const r = lensRadius(t, w, h, side);
+  const scale = (side / 1000) * Math.pow(STEP, t - 1) * lensMagnification(t);
+  withLens(ctx, w / 2, h / 2, r, w, h, dpr, () => {
+    ctx.translate(w / 2, h / 2); ctx.scale(scale, scale); draw[level](ctx, scale);
+  });
 }
 
 // ── Level 0: the plate ───────────────────────────────────────────────
@@ -261,6 +291,7 @@ function drawSarcomere(ctx: Ctx, k: number) {
 // ── Level 5: actin and myosin, where they overlap ────────────────────
 function drawFilaments(ctx: Ctx, k: number) {
   void k;
+  ctx.scale(0.62, 0.62);              // step back a little: the heads read better with more of them in view
   ctx.fillStyle = "#2a0e08"; ctx.fillRect(-9000, -1200, 18000, 2400);
   // Two actin filaments, above and below one myosin filament: beads in a twisted double strand.
   for (const y of [-500, 500]) {

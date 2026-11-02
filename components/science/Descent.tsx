@@ -81,7 +81,7 @@ const STEPS: Step[] = [
     ),
   },
   {
-    angle: 104, z: 4.75, level: 5, content: (
+    angle: 104, z: 5, level: 5, content: (
       <>
         <p className="d-level"><b>Actin and myosin.</b> Inside each sarcomere, two kinds of filament overlap. Thin filaments of <b className="t-actin">actin</b> are anchored to the Z-discs. Thick filaments of <b className="t-myosin">myosin</b> sit in the middle, covered in small heads.</p>
         <p>Those heads are where force begins.</p>
