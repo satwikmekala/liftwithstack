@@ -24,7 +24,8 @@ function load(file) {
 const { makeDemoBlock, makeGuidedBlock } = load('lib/demo-block.ts');
 const { guidedReducer, initialGuided, GUIDED_PLAN } = load('lib/guided.ts');
 const { effectiveShare, sharingSummary, DEFAULT_SHARE } = load('lib/circle.ts');
-const { PATHS, SAME_WEIGHT, TRIAL, effort, framePaths, ZOOM_AT, FRAMES } = load('lib/science/story.ts');
+const { PATHS, SAME_WEIGHT, TRIAL, effort, CLASSIC_CURL } = load('lib/science/story.ts');
+const { platePose } = load('lib/science/arm.ts');
 const { initialWorkout, workoutReducer } = load('lib/workout.ts');
 const { finaleHistory } = load('lib/stack/history.ts');
 
@@ -104,12 +105,17 @@ test('the two paths stay honest: same start, repeating drifts from the limit, pr
   assert.deepEqual(TRIAL.map((row) => row.change), [22.9, 11.6, 1.8]);
 });
 
-test('every rendered frame the page asks for exists on disk', () => {
-  const paths = framePaths();
-  assert.equal(paths.length, FRAMES.curl.count + FRAMES.isolate.count + FRAMES.zoom.count);
-  assert.equal(ZOOM_AT.at(-1), paths.length - 1);
-  for (const path of paths) {
-    for (const file of [path, path.replace(/^(arm|zoom)\//, '$1/s/')]) {
+test('the plate behaves like an arm: the biceps shortens and thickens as the elbow bends', () => {
+  const rest = platePose(0), curled = platePose(110);
+  assert.equal(rest.shortening, 0);
+  assert.ok(curled.shortening > 0.15 && curled.shortening < 0.4, String(curled.shortening));
+  assert.ok(curled.tension > rest.tension);
+  assert.ok(curled.hand[1] < rest.hand[1], 'the dumbbell rises');
+});
+
+test('chapter 3 frames exist on disk at both sizes', () => {
+  for (const path of CLASSIC_CURL) {
+    for (const file of [path, path.replace(/^([a-z]+)\//, '$1/s/')]) {
       assert.ok(existsSync(resolve(root, 'public/science', file)), file);
     }
   }

@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useReducer, useRef, useState } from "react";
-import { CURL_END } from "@/lib/science/story";
+import { CLASSIC_CURL } from "@/lib/science/story";
 import { Foot } from "./Foot";
-import { loadFrames, onFrame, paint } from "./frames";
+import { classicCurl } from "./frames";
 import { Note } from "./Note";
 import { prefersReducedMotion } from "./useProgress";
 
@@ -25,7 +25,7 @@ function Sliding() {
     if (!element) return;
     const io = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting) return;
-      loadFrames(arm.current?.getBoundingClientRect().width ?? 300);
+      classicCurl.load(arm.current?.getBoundingClientRect().width ?? 300);
       if (!prefersReducedMotion()) setPlaying(true);
       io.disconnect();
     }, { threshold: 0.5 });
@@ -47,9 +47,9 @@ function Sliding() {
   }, [playing]);
 
   useEffect(() => {
-    const draw = () => { if (arm.current) paint(arm.current, c * CURL_END, 1.18); };
+    const draw = () => { if (arm.current) classicCurl.paint(arm.current, c * (CLASSIC_CURL.length - 1), 1.18); };
     draw();
-    return onFrame(draw);
+    return classicCurl.onFrame(draw);
   }, [c]);
 
   const half = 300 - 80 * c;

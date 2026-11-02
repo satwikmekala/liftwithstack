@@ -88,7 +88,7 @@ test("server-renders the science of getting stronger", async () => {
   assert.match(html, /id="sources"/);
   assert.match(html, /pubmed\.ncbi\.nlm\.nih\.gov\/41718594/);
   // Credit for the adapted anatomy model, with its licence.
-  assert.match(html, /id="credits"[\s\S]*Écorché[\s\S]*CC BY-SA 4\.0/);
+  assert.match(html, /id="credits"[\s\S]*original illustrations[\s\S]*Écorché[\s\S]*CC BY-SA 4\.0/);
   const body = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, "");
   // Retired copy and the analogy that had to be un-learned stay gone.
   assert.doesNotMatch(body, /Tiny hands|hands pulling|ropes\.|Beat last week|Same gym\. Same days|louder the message|Your muscle is listening|The choice is yours/);

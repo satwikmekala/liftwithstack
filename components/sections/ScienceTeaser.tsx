@@ -1,5 +1,6 @@
 import { Icon } from "@/components/ui/Icon";
 import { Reveal } from "@/components/ui/Reveal";
+import { Plate } from "@/components/science/Plate";
 
 /** The door to /science, between Progress and Get started. */
 export function ScienceTeaser() {
@@ -14,8 +15,7 @@ export function ScienceTeaser() {
           <span className="teaser__meta mono">8 MIN READ · 7 CHAPTERS</span>
         </Reveal>
         <div className="teaser__stage" aria-hidden="true">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="teaser__figure" src="/science/arm/s/c19.webp" alt="" width={640} height={640} loading="lazy" decoding="async" />
+          <Plate className="teaser__figure" angle={96} />
         </div>
       </a>
     </section>

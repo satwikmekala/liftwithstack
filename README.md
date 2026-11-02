@@ -159,15 +159,16 @@ One article in seven chapters answering a single question: why does a weight tha
 easier? The manuscript and storyboard live in `docs/the-weight-story.md`; change the words there first.
 
 - `components/science/Descent.tsx`: the opening and chapters 1 and 2. The article scrolls normally beside one
-  sticky figure that plays pre-rendered frames: a curl, the biceps on its own, then one continuous zoom down
-  to actin and myosin (`frames.ts` loads and paints them; the phone gets the 640 px set).
+  sticky canvas: our own plate of the arm (bones as a lever, the biceps as a spindle of fibres, in
+  `lib/science/arm.ts`) curls, then one continuous zoom goes down five nested levels to actin and myosin
+  (`lib/science/scene.ts`). `Plate.tsx` is the same drawing in SVG for the home teaser and the no-script view.
 - `Pull.tsx` (sliding filaments, cross-bridge cycle), `Adapt.tsx` (nervous system and fiber lanes),
   `SameWeight.tsx` (the same set in week 1 and week 6), `TwoPaths.tsx` (two aligned logs and the 2026 trial),
   `YourLog.tsx` (the live logger on Dumbbell Curl).
 - Every made-up number is in `lib/science/story.ts` and is labelled on the page as an example. Citations
   are in `lib/science/sources.ts`, numbered in the order they are first cited.
-- Frames are rendered offline by `tools/science-frames/`. The arm is adapted from Écorché and is
-  CC BY-SA 4.0: keep the Credits section on the page and `public/science/arm/LICENSE.txt` with the files.
+- Only chapter 3's small arm is pre-rendered (`public/science/curl`, from `tools/science-frames/`). It is
+  adapted from Écorché and is CC BY-SA 4.0: keep the Credits section and `public/science/curl/LICENSE.txt`.
 
 Science rules: keep growth and strength separate, never present an illustration as a forecast, keep the
 nuance that repeating a workout still trains you, and keep more reps and extra sets as real ways to progress.

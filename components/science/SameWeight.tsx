@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CURL_END, SAME_WEIGHT, effort } from "@/lib/science/story";
+import { SAME_WEIGHT, effort } from "@/lib/science/story";
 import { Foot } from "./Foot";
-import { loadFrames, onFrame, paint } from "./frames";
+import { drawScene } from "@/lib/science/scene";
 import { prefersReducedMotion } from "./useProgress";
 
 type Week = "week1" | "week6";
@@ -16,6 +16,17 @@ const COPY: Record<Week, { label: string; line: string }> = {
   week1: { label: "Week 1", line: "Rep 8 is a fight. About one more was left." },
   week6: { label: "Week 6", line: "Rep 8 is comfortable. About four more were left." },
 };
+
+/** Paint the plate at one elbow angle. */
+function draw(canvas: HTMLCanvasElement | null, angle: number) {
+  if (!canvas) return;
+  const rect = canvas.getBoundingClientRect();
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  const w = Math.max(1, Math.round(rect.width * dpr)), h = Math.max(1, Math.round(rect.height * dpr));
+  if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+  const ctx = canvas.getContext("2d");
+  if (ctx) drawScene(ctx, w, h, { angle, z: 0, dpr });
+}
 
 /** Chapter 5's figure: the same arm, the same 10 kg × 8, two different sets. */
 function Set() {
@@ -34,13 +45,12 @@ function Set() {
     if (!element) return;
     const io = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting) return;
-      loadFrames(canvas.current?.getBoundingClientRect().width ?? 400);
       if (prefersReducedMotion()) { setDone(true); setRep(8); } else { setDone(false); setRep(0); setRun((n) => n + 1); }
       io.disconnect();
     }, { threshold: 0.55 });
     io.observe(element);
-    const off = onFrame(() => { if (canvas.current) paint(canvas.current, pose.current, 1.12); });
-    return () => { io.disconnect(); off(); };
+    draw(canvas.current, 0);
+    return () => io.disconnect();
   }, []);
 
   useEffect(() => {
@@ -51,16 +61,16 @@ function Set() {
     const start = performance.now();
     const tick = (now: number) => {
       let t = (now - start) / 1000;
-      if (t >= total) { pose.current = 0; setRep(8); setDone(true); if (canvas.current) paint(canvas.current, 0, 1.12); return; }
+      if (t >= total) { pose.current = 0; setRep(8); setDone(true); draw(canvas.current, 0); return; }
       let i = 0;
       while (t > durations[i]) { t -= durations[i]; i++; }
       const d = durations[i], up = d * 0.5;
       const x = t < up ? t / up : 1 - (t - up) / (d - up);
       const eased = x * x * (3 - 2 * x);
-      pose.current = eased * CURL_END;
+      pose.current = eased * 112;
       setRep(i + (t >= up ? 1 : 0));
       setCurrent(i + 1);
-      if (canvas.current) paint(canvas.current, pose.current, 1.12);
+      draw(canvas.current, pose.current);
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);

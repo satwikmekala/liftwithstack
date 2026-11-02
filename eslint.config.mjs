@@ -9,6 +9,8 @@ const eslintConfig = defineConfig([
   globalIgnores([
     "outputs/**",
     "work/**",
+    // Offline render scripts for /science, run in a browser or Blender, not part of the site.
+    "tools/science-frames/**",
     // Default ignores of eslint-config-next:
     ".next/**",
     "out/**",

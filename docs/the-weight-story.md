@@ -196,18 +196,18 @@ top of a moving picture. Each chapter is readable with every animation off.
 
 | Scene | Reader sees | Reader learns | How the visual explains it | Transition out | Built with |
 | --- | --- | --- | --- | --- | --- |
-| Opening + 1 | An anatomical figure curling a dumbbell, the biceps warming as it contracts | A curl is a muscle shortening | Scroll drives the curl, so the reader does the rep | Camera starts to move in on the biceps | Pre-rendered frames from the Écorché model, no runtime 3D |
-| 2 | One unbroken shot that travels out along the muscle: cut biceps, fascicle, fiber, myofibril, sarcomere, filaments | The hierarchy and its names | Each level visibly comes out of the one before it, and a rail keeps the six names on screen with the current one lit | Lands on the filaments, which the next diagram picks up | Pre-rendered frames from a procedural scene, HTML rail |
-| 3a | A sarcomere between two Z-discs, shortening under the reader’s control | Filaments slide; they don’t shrink | Filament lengths stay marked while the overlap changes | Reader steps into the cycle | Inline SVG |
+| Opening + 1 | A scientific plate of the arm: bones as a lever, the elbow as its pivot, the biceps as a spindle of fibres, curling a 10 kg dumbbell | A curl is a muscle shortening | Scroll drives the curl; the biceps visibly shortens, thickens and warms | Camera turns and dives into the biceps | Canvas, drawn in code (`lib/science/arm.ts`) |
+| 2 | One unbroken zoom: biceps, fascicle, fiber, myofibril, sarcomere, filaments, each level growing out of the centre of the last | The hierarchy and its names | A rail keeps the six names on screen with the current one lit | Lands on the filaments, which the next diagram picks up | Canvas, drawn in code (`lib/science/scene.ts`), HTML rail |
+| 3a | A sarcomere between two Z-discs, shortening under the reader’s control | Filaments slide; they don’t shrink | Filament lengths stay marked while the overlap changes; a small anatomical arm curls in step | Reader steps into the cycle | Inline SVG + 28 pre-rendered frames |
 | 3b | One myosin head and its actin, four labelled stages | Cross-bridge cycle and ATP | Step through it, or let it run; ATP arrives and leaves as a visible object | Curl returns | Inline SVG |
-| 3c | Curl frames beside a row of sarcomeres | Series gives distance, parallel gives force | Both move together from one control | Text bridge to “after you put it down” | Pre-rendered frames + SVG |
+| 3c | A row of sarcomeres end to end, and myofibrils side by side | Series gives distance, parallel gives force | Two small static panels | Text bridge to “after you put it down” | Inline SVG |
 | 4 | A restrained timeline: two lanes, nervous system and fiber | Tension starts it; two separate adaptations | A fiber cross-section thickens slowly; motor units light up in the other lane | Back to the dumbbell | Inline SVG, scroll-free |
-| 5 | The same figure, two rows of rep dots, week 1 and week 6 | Relative effort | Same reps, more empty dots left over | The question: what next? | Pre-rendered frames + HTML |
+| 5 | The same plate doing the set, week 1 and week 6, with rep dots | Relative effort | Same reps, more empty dots left over | The question: what next? | Canvas + HTML |
 | 6 | Two aligned workout logs and one scrubber; a “reps left” mark beside each record | Overload versus repeating | Same week, same line, different record. The gap in effort is readable at once | Real trial bars, then the short version | HTML and CSS |
 | 7 | The Stack log for Dumbbell Curl, live | Why logging helps | Tap to add the rep; the block lands | Closing line | Existing phone components |
 
-**Performance.** Frames are WebP, loaded when the figure approaches, thinnest set first. The 3D model never
-reaches the browser. Reduced motion shows a still for each stage with the text unchanged.
+**Performance.** The plate and the zoom are drawn in code, so nothing heavy loads. Only chapter 3's small arm is
+an image sequence. Reduced motion shows a still for each stage with the text unchanged.
 
-**Licence.** The figure and everything rendered from it are adapted from Écorché and are shared under CC BY-SA
-4.0, with credit on the page, in the README and beside the assets.
+**Licence.** Only chapter 3's small arm is adapted from Écorché; it is shared under CC BY-SA 4.0, with credit on
+the page, in the README and beside the files. Everything else is original.

@@ -1,28 +1,10 @@
 /**
- * The numbers behind /science that aren't research: frame indices for the rendered figures and
- * the illustrative workouts. Every workout here is made up, and the page says so.
+ * The numbers behind /science that aren't research: the hierarchy, chapter 3's frames and the
+ * illustrative workouts. Every workout here is made up, and the page says so.
  */
 
-/** Rendered frames, in the order the opening plays them. */
-export const FRAMES = {
-  /** The curl: elbow from 4° to 110°. */
-  curl: { prefix: "arm/c", count: 28 },
-  /** The rest of the body fades away and the camera moves in on the biceps. */
-  isolate: { prefix: "arm/i", count: 24 },
-  /** One continuous zoom: biceps, fascicle, fiber, myofibril, sarcomere, actin and myosin. */
-  zoom: { prefix: "zoom/z", count: 91 },
-} as const;
-
-export const CURL_END = FRAMES.curl.count - 1;
-export const ISOLATE_END = CURL_END + FRAMES.isolate.count;
-/** Global frame index where each level of the zoom sits still. */
-export const ZOOM_AT = [0, 18, 36, 54, 72, 90].map((frame) => ISOLATE_END + 1 + frame);
-
-export function framePaths() {
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return (Object.values(FRAMES) as { prefix: string; count: number }[])
-    .flatMap(({ prefix, count }) => Array.from({ length: count }, (_, i) => `${prefix}${pad(i)}.webp`));
-}
+/** Chapter 3's small arm beside the sarcomere: the anatomical model, uncovered. Same 28 elbow angles. */
+export const CLASSIC_CURL = Array.from({ length: 28 }, (_, i) => `curl/c${String(i).padStart(2, "0")}.webp`);
 
 /** The hierarchy rail, outermost first. */
 export const LEVELS = ["Biceps brachii", "Fascicle", "Muscle fiber", "Myofibril", "Sarcomere", "Actin & myosin"] as const;
