@@ -2,12 +2,15 @@
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { MomentPhoto } from "@/components/moments/MomentPhoto";
-import { MiniStack } from "@/components/stack/MiniStack";
+import { MiniStack, stackAspect, TRUE_UNIT } from "@/components/stack/MiniStack";
 import { useDemoJourney } from "@/components/stack/DemoJourney";
 import { Icon } from "@/components/ui/Icon";
 import { Reveal } from "@/components/ui/Reveal";
 import { thisWeekSlabs } from "@/lib/circle";
 import { EXAMPLE_WEEK, type MomentPrint } from "@/lib/moments";
+
+/** Drawn wide, at My Stack's true block height. */
+const STACK = 340;
 
 /** Where each print comes to rest around the week's Stack, as a share of the stage, and its tilt. */
 const SPOTS = [
@@ -59,7 +62,7 @@ export function Moments() {
 
       <div ref={stage} className={`moments__stage${open ? " is-open" : ""}`}>
         <div className="moments__floor" aria-hidden="true" />
-        <MiniStack slabs={slabs} width={300} height={330} unit={22} base="shadow" className="moments__stack" />
+        <MiniStack slabs={slabs} width={STACK} height={Math.round(STACK * stackAspect(slabs, TRUE_UNIT))} unit={TRUE_UNIT} base="shadow" className="moments__stack" />
         <p className="moments__week mono" aria-hidden="true">THIS WEEK</p>
         {prints.map((print, index) => {
           const spot = SPOTS[index];

@@ -1,4 +1,4 @@
-import { MiniStack } from "@/components/stack/MiniStack";
+import { MiniStack, TRUE_UNIT } from "@/components/stack/MiniStack";
 import { Download } from "@/components/ui/Download";
 import { StackMark } from "@/components/ui/Icon";
 import { Reveal } from "@/components/ui/Reveal";
@@ -10,9 +10,9 @@ export function Closing() {
     <section className="closing" aria-labelledby="closing-title">
       <Reveal className="closing__inner">
         <div className="closing__stacks" aria-hidden="true">
-          <MiniStack slabs={FRIENDS[0].slabs} width={104} height={150} unit={10} base="ledge" />
-          <MiniStack slabs={[...yourHistory(), ...thisWeekSlabs(null)]} width={150} height={216} unit={10} glow quietHistory className="is-you" />
-          <MiniStack slabs={FRIENDS[1].slabs} width={104} height={150} unit={10} base="ledge" />
+          <MiniStack slabs={FRIENDS[0].slabs} width={104} height={150} unit={TRUE_UNIT} base="ledge" />
+          <MiniStack slabs={[...yourHistory(), ...thisWeekSlabs(null)]} width={150} height={216} unit={TRUE_UNIT} glow quietHistory className="is-you" />
+          <MiniStack slabs={FRIENDS[1].slabs} width={104} height={150} unit={TRUE_UNIT} base="ledge" />
         </div>
         <h2 id="closing-title" className="closing__title">Ready to build your own?</h2>
         <Download />

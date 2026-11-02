@@ -374,8 +374,8 @@ button.logger__info:hover svg { stroke: var(--bone); }
 .moments .section-head .section-title { max-width: 14ch; margin-inline: auto; }
 .moments__stage { position: relative; max-width: 1080px; height: 640px; margin: 56px auto 0; container-type: size; }
 .moments__floor { position: absolute; left: 10%; right: 10%; bottom: 4%; height: 46%; background: radial-gradient(50% 50% at 50% 60%, rgba(90, 58, 34, 0.4), transparent 72%); pointer-events: none; }
-.moments__stack { position: absolute; left: 50%; top: 16%; width: 300px; height: auto; margin-left: -150px; }
-.moments__week { position: absolute; left: 0; right: 0; top: 70%; text-align: center; font-size: 11px; letter-spacing: 0.18em; color: var(--ash-dim); }
+.moments__stack { position: absolute; left: 50%; top: 32%; width: 340px; height: auto; margin-left: -170px; }
+.moments__week { position: absolute; left: 0; right: 0; top: 66%; text-align: center; font-size: 11px; letter-spacing: 0.18em; color: var(--ash-dim); }
 .moment { position: absolute; z-index: 2; left: calc(var(--x) * 1%); top: calc(var(--y) * 1%); width: clamp(150px, 19vw, 210px); margin: 0;
   transform: translate(calc((50 - var(--x)) * 1cqw - 50%), calc((42 - var(--y)) * 1cqh - 50%)) scale(0.3) rotate(0deg); opacity: 0;
   transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--i) * 110ms + 150ms), opacity 0.5s var(--ease-out) calc(var(--i) * 110ms + 150ms); }
@@ -404,8 +404,8 @@ button.logger__info:hover svg { stroke: var(--bone); }
   .circle__points li { font-size: 15px; }
   .circle__phone { height: 70svh; min-height: 520px; }
   .moments__stage { height: 640px; margin-top: 32px; }
-  .moments__stack { top: 30%; width: 190px; margin-left: -95px; }
-  .moments__week { top: 62%; }
+  .moments__stack { top: 37%; width: 210px; margin-left: -105px; }
+  .moments__week { top: 58%; }
   .moment { left: calc(var(--mx) * 1%); top: calc(var(--my) * 1%); width: 40%; max-width: 150px;
     transform: translate(calc((50 - var(--mx)) * 1cqw - 50%), calc((42 - var(--my)) * 1cqh - 50%)) scale(0.3); }
   .moment__print { padding: 5px; border-radius: 12px; }
