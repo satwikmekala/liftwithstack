@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./science.css";
 
-const title = "You’re showing up. So why aren’t you changing? — Stack";
-const description = "The answer is inside your muscle, on every rep. A five-minute look at what really happens when you lift, why the same workout stops doing as much, and what to do about it.";
+const title = "Remember when 10 kg felt heavy? — Stack";
+const description = "Why the same weight gets easier: from a curl down to actin and myosin, how training changes your muscle, and what that means for your next workout.";
 
 export const metadata: Metadata = {
   title,

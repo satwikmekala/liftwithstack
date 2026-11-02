@@ -70,31 +70,38 @@ test("server-renders the science of getting stronger", async () => {
   const response = await render("/science");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /<title>You’re showing up\. So why aren’t you changing\?/);
-  assert.match(html, /The answer is inside your muscle, on every rep\./);
-  assert.match(html, /This is you, curling 10 kg\./);
-  assert.match(html, /Tiny hands, pulling on ropes\./);
-  assert.match(html, /The building happens when you leave\./);
-  assert.match(html, /Then 10 kg stops being hard\./);
-  assert.match(html, /Same gym\. Same days\. Different result\./);
-  assert.match(html, /Beat last week\./);
-  assert.match(html, /One more rep/);
-  assert.match(html, /It’s slower than you think\./);
-  assert.match(html, /You can’t beat a number you can’t remember\./);
-  assert.match(html, /Make the effort count\./);
+  assert.match(html, /<title>Remember when 10 kg felt heavy\?/);
+  // Seven chapters, in order.
+  const order = ["The weight hasn’t changed", "Inside your muscle", "How muscles actually pull", "How training changes the muscle",
+    "10 kg doesn’t feel the same anymore", "Two ways to continue", "Why you remember your workouts"];
+  let at = 0;
+  for (const heading of order) {
+    const next = html.indexOf(heading, at);
+    assert.ok(next > at, `${heading} comes in order`);
+    at = next;
+  }
+  // Real terms, introduced in the article itself.
+  for (const term of ["Biceps brachii", "Fascicle", "Muscle fiber", "Myofibril", "Sarcomere", "Z-disc", "cross-bridge cycle", "ATP", "mechanical tension", "mTORC1", "motor unit", "relative effort", "progressive overload"]) {
+    assert.match(html, new RegExp(term));
+  }
+  assert.match(html, /Every workout stacks up\./);
   assert.match(html, /id="sources"/);
-  assert.match(html, /pubmed\.ncbi\.nlm\.nih\.gov\/30335577/);
-  // Plain words on the page; the jargon lives in the sources.
+  assert.match(html, /pubmed\.ncbi\.nlm\.nih\.gov\/41718594/);
+  // Credit for the adapted anatomy model, with its licence.
+  assert.match(html, /id="credits"[\s\S]*Écorché[\s\S]*CC BY-SA 4\.0/);
   const body = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, "");
-  const story = body.slice(0, body.indexOf('id="sources"'));
-  assert.doesNotMatch(story, /mTORC1|sarcomere|hypertrophy|actin/i);
+  // Retired copy and the analogy that had to be un-learned stay gone.
+  assert.doesNotMatch(body, /Tiny hands|hands pulling|ropes\.|Beat last week|Same gym\. Same days|louder the message|Your muscle is listening|The choice is yours/);
   // The science stays honest: no AI coach, no promises, no soreness-as-progress.
-  assert.doesNotMatch(html, /\bAI\b|guarantee|no pain, no gain/i);
-  // Illustrations are labelled.
-  assert.match(html, /not a forecast/);
+  assert.doesNotMatch(body, /\bAI\b|guarantee|no pain, no gain/i);
+  // Illustrations and examples are labelled as such.
+  assert.match(body, /not to scale/i);
+  assert.match(body, /made-up but typical example/);
+  assert.match(body, /Illustrative\./);
+  assert.match(body, /isn’t a forecast for you/);
 });
 
 test("the home page opens the door to the science", async () => {
   const html = await (await render()).text();
-  assert.match(html, /href="\/science"[\s\S]*You’re showing up\. So why aren’t you changing\?/);
+  assert.match(html, /href="\/science"[\s\S]*Remember when 10(&nbsp;|\u00a0| )kg felt heavy\?/);
 });

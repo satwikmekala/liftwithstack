@@ -429,7 +429,7 @@ button.logger__info:hover svg { stroke: var(--bone); }
 .teaser__card:hover .teaser__link { background: #fff; }
 .teaser__meta { display: block; margin-top: 18px; font-size: 11px; letter-spacing: 0.16em; color: var(--ash-dim); }
 .teaser__stage { display: grid; justify-items: center; gap: 14px; }
-.teaser__stage svg { width: 100%; max-width: 380px; height: auto; }
+.teaser__figure { width: 100%; max-width: 440px; height: auto; aspect-ratio: 1; mask-image: radial-gradient(closest-side, #000 72%, transparent); -webkit-mask-image: radial-gradient(closest-side, #000 72%, transparent); }
 .teaser__caption { font-size: 10px; letter-spacing: 0.16em; color: var(--ash-dim); }
 @media (max-width: 960px) { .teaser__card { grid-template-columns: 1fr; } .teaser__stage { order: -1; } }
 @media (max-width: 640px) { .teaser { padding-top: 2svh; } .teaser__card { padding: 22px; border-radius: 28px; } }

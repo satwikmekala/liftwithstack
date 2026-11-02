@@ -1,0 +1,5 @@
+These images are adapted from Écorché (https://github.com/Charleeh/ecorche), licensed CC BY-SA 4.0
+(https://creativecommons.org/licenses/by-sa/4.0/). Écorché is based on BodyParts3D, © The Database Center
+for Life Science, licensed CC BY 4.0, and on Z-Anatomy by Gauthier Kervyn, licensed CC BY-SA 4.0.
+Changes: the left arm was posed into a curl, a dumbbell was added, materials and lighting were changed, and
+the scene was rendered to images. These images are shared under CC BY-SA 4.0.

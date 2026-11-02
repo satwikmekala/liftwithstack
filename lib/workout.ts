@@ -24,6 +24,21 @@ export function initialWorkout(): WorkoutState {
   };
 }
 
+/** Arms, for /science: last time's 12 kg × 8 already filled in on Dumbbell Curl. */
+export function armsWorkout(): WorkoutState {
+  return {
+    exercise: 0,
+    set: 0,
+    suggestion: false,
+    exercises: [
+      { name: "Dumbbell Curl", short: "Curl", sets: sets(3, 12, 8) },
+      { name: "Hammer Curl", short: "Hammer", sets: sets(3, 12, 10) },
+      { name: "Triceps Pushdown", short: "Pushdown", sets: sets(3, 30, 12) },
+      { name: "Overhead Triceps Extension", short: "Extension", sets: sets(3, 20, 12) },
+    ],
+  };
+}
+
 export type WorkoutAction =
   | { type: "weight"; value: number }
   | { type: "reps"; value: number }

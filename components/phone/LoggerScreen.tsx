@@ -20,9 +20,9 @@ const percent = (value: number, previous: number | null) => {
 };
 
 /** The active workout (app/workout.tsx with ActiveSetCard), Push in progress. */
-export function LoggerScreen({ state, dispatch, photos, onCamera, cameraCue, onHistory, onInfo }: {
+export function LoggerScreen({ state, dispatch, photos, onCamera, cameraCue, onHistory, onInfo, day = "PUSH" }: {
   state: WorkoutState; dispatch: Dispatch<WorkoutAction>; photos: number; onCamera: () => void; cameraCue: boolean;
-  onHistory: () => void; onInfo: () => void;
+  onHistory: () => void; onInfo: () => void; day?: string;
 }) {
   const exercise = state.exercises[state.exercise];
   const done = isExerciseDone(exercise);
@@ -51,7 +51,7 @@ export function LoggerScreen({ state, dispatch, photos, onCamera, cameraCue, onH
       <StatusBar />
       <div className="logger__content">
         <div className="logger__header">
-          <span className="day-label"><span className="day-label__dot" />PUSH</span>
+          <span className="day-label"><span className="day-label__dot" />{day}</span>
           <span className="logger__actions" aria-hidden="true">
             <span className="glass-button glass-button--wide"><Icon name="repeat" size={18} color={color.ash} />Change</span>
             <span className="glass-button"><Icon name="chevronDown" size={20} color={color.ash} /></span>

@@ -153,14 +153,21 @@ Checked all four chapters in Chromium and WebKit at 393 × 852, 393 × 740,
 or browser errors. The existing logged-set/first-block flow and reduced-motion
 checks still pass. Physical iPhone Safari remains unverified.
 
-## /science: The Invisible Work
+## /science: Remember when 10 kg felt heavy?
 
-A plain-language story for someone who has never read a physiology paper. `components/science/Journey.tsx`
-is one sticky 2D SVG stage driven by scroll: the figure curls, and each level of the muscle is drawn inside
-a lens on the level above, so the zoom is continuous and the same curl runs at every depth. It then pulls
-back out and the rest of the story is drawn on one line. `BeatLastWeek.tsx` is the game (rules in
-`lib/science/model.ts`); its blocks use the same thickness rule as Stack.
+One article in seven chapters answering a single question: why does a weight that once felt heavy become
+easier? The manuscript and storyboard live in `docs/the-weight-story.md`; change the words there first.
 
-Keep words like myosin only as a labelled note and put jargon in `lib/science/sources.ts`. Every curve is an
-illustration: never show a growth number as a prediction, and keep the nuance that repeating a workout still
-holds what you built and that more reps count as progress.
+- `components/science/Descent.tsx`: the opening and chapters 1 and 2. The article scrolls normally beside one
+  sticky figure that plays pre-rendered frames: a curl, the biceps on its own, then one continuous zoom down
+  to actin and myosin (`frames.ts` loads and paints them; the phone gets the 640 px set).
+- `Pull.tsx` (sliding filaments, cross-bridge cycle), `Adapt.tsx` (nervous system and fiber lanes),
+  `SameWeight.tsx` (the same set in week 1 and week 6), `TwoPaths.tsx` (two aligned logs and the 2026 trial),
+  `YourLog.tsx` (the live logger on Dumbbell Curl).
+- Every made-up number is in `lib/science/story.ts` and is labelled on the page as an example. Citations
+  are in `lib/science/sources.ts`, numbered in the order they are first cited.
+- Frames are rendered offline by `tools/science-frames/`. The arm is adapted from Écorché and is
+  CC BY-SA 4.0: keep the Credits section on the page and `public/science/arm/LICENSE.txt` with the files.
+
+Science rules: keep growth and strength separate, never present an illustration as a forecast, keep the
+nuance that repeating a workout still trains you, and keep more reps and extra sets as real ways to progress.

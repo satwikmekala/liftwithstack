@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { createRequire } from 'node:module';
 import ts from 'typescript';
@@ -24,7 +24,7 @@ function load(file) {
 const { makeDemoBlock, makeGuidedBlock } = load('lib/demo-block.ts');
 const { guidedReducer, initialGuided, GUIDED_PLAN } = load('lib/guided.ts');
 const { effectiveShare, sharingSummary, DEFAULT_SHARE } = load('lib/circle.ts');
-const { newGame, play, addsALittle, sameWorkout } = load('lib/science/model.ts');
+const { PATHS, SAME_WEIGHT, TRIAL, effort, framePaths, ZOOM_AT, FRAMES } = load('lib/science/story.ts');
 const { initialWorkout, workoutReducer } = load('lib/workout.ts');
 const { finaleHistory } = load('lib/stack/history.ts');
 
@@ -92,21 +92,25 @@ test('a new circle member shares this week only; detail needs workouts on', () =
   assert.equal(sharingSummary({ ...DEFAULT_SHARE, paused: true }), 'Sharing is paused. Friends see your name and that you’ve paused.');
 });
 
-test('Beat last week: small steps stay loud, repeating fades, a huge jump does not count', () => {
-  let game = newGame();
-  for (const choice of ['rep', 'rep', 'heavier', 'rep', 'rep', 'rep']) game = play(game, choice);
-  assert.ok(game.rounds.filter((round) => round.message === 'loud').length >= 4, JSON.stringify(game.rounds));
-  assert.ok(game.rounds.every((round) => round.message !== 'failed'));
-  let same = newGame();
-  for (let i = 0; i < 6; i++) same = play(same, 'same');
-  assert.notEqual(same.rounds.at(-1).message, 'loud');
-  const jump = play(newGame(), 'toomuch');
-  assert.equal(jump.rounds[0].message, 'failed');
-  assert.deepEqual(jump.last, newGame().last);
+test('the two paths stay honest: same start, repeating drifts from the limit, progressing stays near it', () => {
+  assert.deepEqual(PATHS.repeat[0], PATHS.progress[0]);
+  assert.deepEqual(PATHS.repeat[0], SAME_WEIGHT.week6);
+  assert.ok(PATHS.repeat.every((set) => set.load === 10 && set.reps === 8));
+  assert.deepEqual(PATHS.progress.map((set) => `${set.load}x${set.reps}`), ['10x8', '10x9', '10x10', '10x12', '12x8']);
+  assert.ok(effort(PATHS.repeat.at(-1)) < effort(PATHS.repeat[0]));
+  assert.ok(effort(PATHS.progress.at(-1)) > effort(PATHS.repeat.at(-1)));
+  assert.ok(effort(SAME_WEIGHT.week1) > effort(SAME_WEIGHT.week6));
+  // The trial's numbers, as published.
+  assert.deepEqual(TRIAL.map((row) => row.change), [22.9, 11.6, 1.8]);
 });
 
-test('the line that keeps adding stays above the one that repeats, and both keep what they built', () => {
-  assert.equal(addsALittle(4), sameWorkout(4));
-  assert.ok(addsALittle(26) > sameWorkout(26));
-  assert.ok(sameWorkout(26) > 1);
+test('every rendered frame the page asks for exists on disk', () => {
+  const paths = framePaths();
+  assert.equal(paths.length, FRAMES.curl.count + FRAMES.isolate.count + FRAMES.zoom.count);
+  assert.equal(ZOOM_AT.at(-1), paths.length - 1);
+  for (const path of paths) {
+    for (const file of [path, path.replace(/^(arm|zoom)\//, '$1/s/')]) {
+      assert.ok(existsSync(resolve(root, 'public/science', file)), file);
+    }
+  }
 });
