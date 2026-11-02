@@ -233,6 +233,11 @@ button.logger__info:hover svg { stroke: var(--bone); }
 .page-sheet.is-open .page-sheet__panel { transform: none; }
 .page-sheet__panel::before { content: ""; position: absolute; top: 6px; left: 50%; width: 36px; height: 5px; margin-left: -18px; border-radius: 3px; background: rgba(245, 240, 232, 0.28); }
 
+/* A sheet that fits its contents (the app's fitToContents detent): it rises only as far as it needs, and the screen behind only dims. */
+.page-sheet--fit .page-sheet__panel { top: auto; bottom: 0; padding-bottom: 34px; border-radius: 38px 38px 0 0; }
+.page-sheet--fit::before { content: ""; position: absolute; inset: 0; background: rgba(0, 0, 0, 0.42); opacity: 0; transition: opacity 0.4s; pointer-events: none; }
+.page-sheet--fit.is-open::before { opacity: 1; }
+.screen-slot.is-behind-half > .screen { transform: none; border-radius: 0; filter: brightness(0.85); }
 .history { padding-top: 28px; }
 .history__header { display: flex; align-items: flex-start; gap: 12px; padding: 0 24px 20px; }
 .history__header > span:first-child { flex: 1; display: grid; gap: 4px; }
@@ -257,7 +262,7 @@ button.logger__info:hover svg { stroke: var(--bone); }
 
 .info { --c: var(--accent); padding: 22px 24px 0; }
 .info__close { position: absolute; z-index: 1; top: 20px; right: 20px; }
-.info__art { position: relative; height: 330px; margin: 0 -24px; }
+.info__art { position: relative; height: 300px; margin: 0 -24px; }
 .info__art img { position: absolute; left: 7%; top: 6%; width: 86%; height: 90%; object-fit: contain; }
 .info__glow { position: absolute; inset: 10% 6% 0; background: radial-gradient(50% 50% at 50% 55%, color-mix(in srgb, var(--c) 32%, transparent), transparent 70%); }
 .info__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; }

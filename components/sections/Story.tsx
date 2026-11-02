@@ -144,7 +144,7 @@ export function Story() {
           <div className={`screen-slot${screen === "start" ? " is-on" : ""}`} inert={screen !== "start"}>
             <TrainScreen onStart={start} resetKey={resetKey} />
           </div>
-          <div className={`screen-slot${logging ? " is-on" : ""}${sheet ? " is-behind-sheet" : ""}`} inert={!logging || sheet !== null || cameraOpen}>
+          <div className={`screen-slot${logging ? " is-on" : ""}${sheet === "history" ? " is-behind-sheet" : sheet === "info" ? " is-behind-half" : ""}`} inert={!logging || sheet !== null || cameraOpen}>
             <LoggerScreen state={workout} dispatch={dispatch} photos={photos.length} onCamera={() => setCameraOpen(true)} cameraCue={false}
               onHistory={() => setSheet("history")} onInfo={() => setSheet("info")} />
           </div>

@@ -19,7 +19,7 @@ export function InfoSheet({ open, playing, onPlay, onStop, onClose }: {
   const art = artFor("Bench Press");
   return (
     <>
-      <div className={`page-sheet${open ? " is-open" : ""}`} inert={!open || playing} role="dialog" aria-label="Bench Press info">
+      <div className={`page-sheet page-sheet--fit${open ? " is-open" : ""}`} inert={!open || playing} role="dialog" aria-label="Bench Press info">
         <div className="page-sheet__panel info" style={{ "--c": art.color } as CSSProperties}>
           <button type="button" className="info__close" onClick={onClose} aria-label="Close exercise info"><Icon name="x" size={20} color={color.bone} /></button>
           <div className="info__art" aria-hidden="true">
