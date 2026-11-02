@@ -504,8 +504,6 @@ a.nav__beta:hover, a.nav__beta:focus-visible { background: var(--accent); color:
 .wheel--left .wheel__item { text-align: left; }
 .wheel--center .wheel__item { text-align: center; }
 
-.suggestion { align-self: center; min-height: 36px; margin-top: 8px; padding: 8px 12px; border-radius: 999px; background: var(--raised); font-weight: 500; font-size: 13px; color: var(--c); animation: fade 0.3s var(--ease-out); }
-.suggestion:hover { background: var(--hi); }
 
 .set-controls { display: flex; align-items: center; gap: 8px; margin-top: 16px; padding: 0 4px; }
 .set-controls__skip { width: 68px; height: 68px; border-radius: 34px; background: var(--raised); font-weight: 600; font-size: 14px; color: var(--ash); cursor: default; }

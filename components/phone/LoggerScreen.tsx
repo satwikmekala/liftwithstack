@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type Dispatch } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { color } from "@/lib/tokens";
-import { formatWeight, isExerciseDone, SUGGESTED_WEIGHT, type WorkoutAction, type WorkoutState } from "@/lib/workout";
+import { formatWeight, isExerciseDone, type WorkoutAction, type WorkoutState } from "@/lib/workout";
 import { ActionPills } from "./ActionPills";
 import { StatusBar } from "./Phone";
 import { UpNext } from "./UpNext";
@@ -108,12 +108,6 @@ export function LoggerScreen({ state, dispatch, photos, onCamera, cameraCue, onH
                 </div>
               </div>
             </div>
-            {state.suggestion && !done && set.weight < SUGGESTED_WEIGHT && (
-              <button type="button" className="suggestion" onClick={() => dispatch({ type: "suggest" })}
-                aria-label="Last time 80 kg. Use suggested 82.5 kg">
-                Last 80 · Try 82.5
-              </button>
-            )}
           </div>
 
           <div className="set-controls">

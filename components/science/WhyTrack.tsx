@@ -10,7 +10,7 @@ import { ref } from "@/lib/science/sources";
 import { initialWorkout, workoutReducer } from "@/lib/workout";
 import { Foot } from "./Foot";
 
-/** Act VI: the record, and the app that keeps it. The logger is live; its suggestion is the principle in one tap. */
+/** Act VI: the record, and the app that keeps it. The logger is live, with last time's weight already filled in. */
 export function WhyTrack() {
   const [workout, dispatch] = useReducer(workoutReducer, undefined, initialWorkout);
   const [history, setHistory] = useState(false);
@@ -30,14 +30,14 @@ export function WhyTrack() {
         <p className="why__note">iPhone beta · No account needed to start</p>
       </Reveal>
       <div className="why__stage">
-        <Phone className="why__phone" label="Stack's logger, with last time's weight filled in and a suggestion">
+        <Phone className="why__phone" label="Stack's logger, with last time's weight already filled in">
           <div className={`screen-slot is-on${history ? " is-behind-sheet" : ""}`} inert={history}>
             <LoggerScreen state={workout} dispatch={dispatch} photos={0} onCamera={() => undefined} cameraCue={false}
               onHistory={() => setHistory(true)} onInfo={() => undefined} />
           </div>
           <HistorySheet open={history} onClose={() => setHistory(false)} />
         </Phone>
-        <p className="why__callout"><i />Last 80 · Try 82.5. That pill is progressive overload, in one tap.</p>
+        <p className="why__callout"><i />80 kg is already there: it’s what you lifted last time. Check history for the times before.</p>
       </div>
     </section>
   );
