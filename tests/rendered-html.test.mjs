@@ -70,25 +70,31 @@ test("server-renders the science of getting stronger", async () => {
   const response = await render("/science");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /<title>The invisible work/);
-  assert.match(html, /Every rep[\s\S]*changes something\./);
-  assert.match(html, /A muscle is a stack\./);
-  assert.match(html, /Nothing shortens by itself\./);
-  assert.match(html, /The building happens afterwards\./);
-  assert.match(html, /Same weight\. Different workout\./);
-  assert.match(html, /The challenge grows with you\./);
-  assert.match(html, /One more rep\./);
-  assert.match(html, /Stack remembers the numbers\./);
+  assert.match(html, /<title>You’re showing up\. So why aren’t you changing\?/);
+  assert.match(html, /The answer is inside your muscle, on every rep\./);
+  assert.match(html, /This is you, curling 10 kg\./);
+  assert.match(html, /Tiny hands, pulling on ropes\./);
+  assert.match(html, /The building happens when you leave\./);
+  assert.match(html, /Then 10 kg stops being hard\./);
+  assert.match(html, /Same gym\. Same days\. Different result\./);
+  assert.match(html, /Beat last week\./);
+  assert.match(html, /One more rep/);
+  assert.match(html, /It’s slower than you think\./);
+  assert.match(html, /You can’t beat a number you can’t remember\./);
+  assert.match(html, /Make the effort count\./);
   assert.match(html, /id="sources"/);
   assert.match(html, /pubmed\.ncbi\.nlm\.nih\.gov\/30335577/);
-  // The science stays honest: no AI coach, no growth predictions, no soreness-as-progress.
+  // Plain words on the page; the jargon lives in the sources.
+  const body = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, "");
+  const story = body.slice(0, body.indexOf('id="sources"'));
+  assert.doesNotMatch(story, /mTORC1|sarcomere|hypertrophy|actin/i);
+  // The science stays honest: no AI coach, no promises, no soreness-as-progress.
   assert.doesNotMatch(html, /\bAI\b|guarantee|no pain, no gain/i);
-  assert.match(html, /Soreness isn’t growth\./);
   // Illustrations are labelled.
-  assert.match(html, /Illustration/);
+  assert.match(html, /not a forecast/);
 });
 
 test("the home page opens the door to the science", async () => {
   const html = await (await render()).text();
-  assert.match(html, /href="\/science"[\s\S]*Why does last week matter\?/);
+  assert.match(html, /href="\/science"[\s\S]*You’re showing up\. So why aren’t you changing\?/);
 });

@@ -1,17 +1,14 @@
-import { SmoothScroll } from "@/components/ui/SmoothScroll";
-import { Accumulate } from "@/components/science/Accumulate";
-import { Adapt } from "@/components/science/Adapt";
-import { FiberChapter } from "@/components/science/FiberChapter";
-import { Opening, ScienceNav, Interlude } from "@/components/science/Opening";
-import { OverloadLab } from "@/components/science/OverloadLab";
-import { SameChallenge } from "@/components/science/SameChallenge";
+import { BeatLastWeek } from "@/components/science/BeatLastWeek";
+import { Journey } from "@/components/science/Journey";
+import { ScienceNav } from "@/components/science/ScienceNav";
 import { Sources } from "@/components/science/Sources";
-import { WhyTrack } from "@/components/science/WhyTrack";
+import { Slower, WhyStack } from "@/components/science/WhyStack";
 import { Footer } from "@/components/sections/Closing";
+import { SmoothScroll } from "@/components/ui/SmoothScroll";
 
 /**
- * The invisible work: six acts on progressive overload. Inside the lift, the body answering,
- * the same challenge, the principle, small steps stacking, and why you write it down.
+ * Why showing up isn't always enough, for someone who has never read a physiology paper: from
+ * your curl down to the tiny hands and back out onto one line, then your turn, then why Stack.
  */
 export default function Science() {
   return (
@@ -19,16 +16,10 @@ export default function Science() {
       <SmoothScroll />
       <ScienceNav />
       <main className="sci-main">
-        <Opening />
-        <FiberChapter />
-        <Interlude line="Every rep changes something." detail="Not the muscle, yet. A message." />
-        <Adapt />
-        <Interlude line="So what happens when the message never changes?" />
-        <SameChallenge />
-        <OverloadLab />
-        <Interlude line="Progress doesn’t need to be dramatic." detail="It needs to be there." />
-        <Accumulate />
-        <WhyTrack />
+        <Journey />
+        <BeatLastWeek />
+        <Slower />
+        <WhyStack />
         <Sources />
       </main>
       <Footer />

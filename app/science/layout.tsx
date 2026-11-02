@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./science.css";
 
-const title = "The invisible work — the science of getting stronger";
-const description = "What happens inside a muscle when you lift, why the body adapts, why the same weight stops being the same workout, and why one more rep counts. The science of progressive overload, from Stack.";
+const title = "You’re showing up. So why aren’t you changing? — Stack";
+const description = "The answer is inside your muscle, on every rep. A five-minute look at what really happens when you lift, why the same workout stops doing as much, and what to do about it.";
 
 export const metadata: Metadata = {
   title,

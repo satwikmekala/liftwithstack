@@ -24,6 +24,7 @@ function load(file) {
 const { makeDemoBlock, makeGuidedBlock } = load('lib/demo-block.ts');
 const { guidedReducer, initialGuided, GUIDED_PLAN } = load('lib/guided.ts');
 const { effectiveShare, sharingSummary, DEFAULT_SHARE } = load('lib/circle.ts');
+const { newGame, play, addsALittle, sameWorkout } = load('lib/science/model.ts');
 const { initialWorkout, workoutReducer } = load('lib/workout.ts');
 const { finaleHistory } = load('lib/stack/history.ts');
 
@@ -89,4 +90,23 @@ test('a new circle member shares this week only; detail needs workouts on', () =
   assert.equal(effectiveShare(photosOnly).photos, false);
   assert.equal(effectiveShare(photosOnly).performance, false);
   assert.equal(sharingSummary({ ...DEFAULT_SHARE, paused: true }), 'Sharing is paused. Friends see your name and that you’ve paused.');
+});
+
+test('Beat last week: small steps stay loud, repeating fades, a huge jump does not count', () => {
+  let game = newGame();
+  for (const choice of ['rep', 'rep', 'heavier', 'rep', 'rep', 'rep']) game = play(game, choice);
+  assert.ok(game.rounds.filter((round) => round.message === 'loud').length >= 4, JSON.stringify(game.rounds));
+  assert.ok(game.rounds.every((round) => round.message !== 'failed'));
+  let same = newGame();
+  for (let i = 0; i < 6; i++) same = play(same, 'same');
+  assert.notEqual(same.rounds.at(-1).message, 'loud');
+  const jump = play(newGame(), 'toomuch');
+  assert.equal(jump.rounds[0].message, 'failed');
+  assert.deepEqual(jump.last, newGame().last);
+});
+
+test('the line that keeps adding stays above the one that repeats, and both keep what they built', () => {
+  assert.equal(addsALittle(4), sameWorkout(4));
+  assert.ok(addsALittle(26) > sameWorkout(26));
+  assert.ok(sameWorkout(26) > 1);
 });

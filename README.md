@@ -152,3 +152,15 @@ Checked all four chapters in Chromium and WebKit at 393 × 852, 393 × 740,
 390 × 664, 375 × 812, 320 × 568, 768 × 1024 and 720 × 450. No horizontal overflow
 or browser errors. The existing logged-set/first-block flow and reduced-motion
 checks still pass. Physical iPhone Safari remains unverified.
+
+## /science: The Invisible Work
+
+A plain-language story for someone who has never read a physiology paper. `components/science/Journey.tsx`
+is one sticky 2D SVG stage driven by scroll: the figure curls, and each level of the muscle is drawn inside
+a lens on the level above, so the zoom is continuous and the same curl runs at every depth. It then pulls
+back out and the rest of the story is drawn on one line. `BeatLastWeek.tsx` is the game (rules in
+`lib/science/model.ts`); its blocks use the same thickness rule as Stack.
+
+Keep words like myosin only as a labelled note and put jargon in `lib/science/sources.ts`. Every curve is an
+illustration: never show a growth number as a prediction, and keep the nuance that repeating a workout still
+holds what you built and that more reps count as progress.

@@ -1,83 +1,47 @@
 /**
- * The arithmetic behind the interactive chapters. Everything here is an illustration of a
- * principle, not a model of anyone's physiology: Epley's rule of thumb relates load and reps,
- * and the progress curves are shaped to show diminishing returns, not to predict them.
+ * The arithmetic behind the page. All of it illustrates a principle and none of it predicts
+ * anyone's body: the curves are shaped to show the idea, and the game uses Epley's rule of thumb
+ * for how weight and reps relate.
  */
+const reach = (load: number, max: number) => Math.round(30 * (max / load - 1));
 
-/** Epley: the heaviest single rep implied by lifting `load` for `reps` with `reserve` reps left. */
-export const oneRepMax = (load: number, reps: number, reserve = 0) => load * (1 + (reps + reserve) / 30);
+/** How strong you are over the weeks if the workout never changes: up, then levelling off. */
+export const sameWorkout = (week: number) => 1 + 0.36 * (1 - Math.exp(-week / 5));
 
-/** How many reps `load` allows at all, given a one-rep max (the inverse of Epley). */
-export const repsPossible = (load: number, max: number) => Math.max(0, Math.round(30 * (max / load - 1)));
+/** The same start, then a little more whenever it gets easy: it keeps climbing, but more slowly with time. */
+export const addsALittle = (week: number) => (week <= 6 ? sameWorkout(week) : sameWorkout(6) + 0.62 * (1 - Math.exp(-(week - 6) / 16)));
 
-/** Load as a share of the one-rep max. */
-export const relativeLoad = (load: number, max: number) => Math.min(1, load / max);
+/** How loud the message is: full while the weight is hard, fading as you outgrow it. */
+export const loudness = (strength: number) => Math.exp(-(strength - 1) / 0.16);
 
-export type Effort = "limit" | "productive" | "easy" | "none";
+export type Choice = "same" | "rep" | "heavier" | "toomuch";
+export type GameSet = { load: number; reps: number };
+export type Message = "loud" | "medium" | "quiet" | "failed";
+export type Round = { set: GameSet; choice: Choice; message: Message; stoppedAt?: number };
+export type Game = { max: number; last: GameSet; rounds: Round[] };
 
-/** What a set with this many reps in reserve is, in the page's words. */
-export function effortBand(reserve: number): Effort {
-  if (reserve <= 2) return "limit";
-  if (reserve <= 4) return "productive";
-  if (reserve <= 7) return "easy";
-  return "none";
-}
+export const ROUNDS = 6;
+export const newGame = (): Game => ({ max: 14, last: { load: 10, reps: 10 }, rounds: [] });
 
-export const EFFORT_COPY: Record<Effort, { label: string; detail: string }> = {
-  limit: { label: "Close to your limit", detail: "Two reps or fewer in reserve. The fibers that grow most are all working." },
-  productive: { label: "Working", detail: "Three or four in reserve. Still a real stimulus, with room to add." },
-  easy: { label: "Comfortable", detail: "Five or more in reserve. Some of the hardest-working fibers never had to join in." },
-  none: { label: "A warm-up", detail: "Far from your limit. Good for practice; little reason for the body to adapt." },
-};
+/** "A little heavier" is 2 kg up for about as many reps as you have in you: hard, and doable. */
+export const choicesFor = ({ max, last: { load, reps } }: Pick<Game, "max" | "last">): { choice: Choice; label: string; set: GameSet }[] => [
+  { choice: "same", label: "Same again", set: { load, reps } },
+  { choice: "rep", label: "One more rep", set: { load, reps: reps + 1 } },
+  { choice: "heavier", label: "A little heavier", set: { load: load + 2, reps: Math.max(3, reach(load + 2, max) - 1) } },
+  { choice: "toomuch", label: "Way heavier", set: { load: load + 8, reps } },
+];
 
-/**
- * Two lifters over 16 weeks, as the Same Challenge chapter draws them. Capacity is the one-rep
- * max both start with (illustrative), rising fast then slowing. One keeps lifting 60 × 8 and
- * stops there; the other keeps the set close to the limit. Both are made-up curves.
- */
-export function sameChallenge(weeks = 16) {
-  const start = 75;
-  const capacity = (week: number) => start * (1 + 0.22 * (1 - Math.exp(-week / 6)));
-  return Array.from({ length: weeks + 1 }, (_, week) => {
-    const max = capacity(week);
-    const possible = repsPossible(60, max);
-    // B adds a rep whenever reserve drifts past two, and adds 2.5 kg once reps reach 12.
-    let loadB = 60;
-    let repsB = 8;
-    for (let w = 1; w <= week; w++) {
-      const m = capacity(w);
-      if (repsPossible(loadB, m) - repsB > 2) repsB += 1;
-      if (repsB >= 12) { loadB += 2.5; repsB = 8; }
-    }
-    return {
-      week,
-      max,
-      same: { load: 60, reps: 8, reserve: Math.max(0, possible - 8), relative: relativeLoad(60, max) },
-      progressed: { load: loadB, reps: repsB, reserve: Math.max(0, repsPossible(loadB, max) - repsB), relative: relativeLoad(loadB, max) },
-    };
-  });
-}
-
-export type Step = { week: number; load: number; reps: number; change: string | null; record: boolean };
-
-/**
- * Twenty-four weeks of bench press for the Accumulate chapter: a rep here, 2.5 kg there,
- * quick at first and slower later. Illustration only.
- */
-export function smallSteps(weeks = 24): Step[] {
-  const steps: Step[] = [];
-  let load = 50;
-  let reps = 8;
-  for (let week = 1; week <= weeks; week++) {
-    // Early weeks move almost every time; later ones every few weeks.
-    const cadence = week <= 6 ? 1 : week <= 14 ? 2 : 3;
-    let change: string | null = null;
-    let record = false;
-    if (week % cadence === 0) {
-      if (reps >= 10) { load += 2.5; reps = 8; change = "+2.5 kg"; record = true; }
-      else { reps += 1; change = "+1 rep"; }
-    }
-    steps.push({ week, load, reps, change, record });
+/** Play one week: a set you can't finish doesn't count, an easy one barely registers, a hard one does. */
+export function play(game: Game, choice: Choice): Game {
+  const option = choicesFor(game).find((item) => item.choice === choice)!;
+  const possible = reach(option.set.load, game.max);
+  if (possible < option.set.reps) {
+    return { ...game, rounds: [...game.rounds, { set: option.set, choice, message: "failed", stoppedAt: Math.max(1, possible) }] };
   }
-  return steps;
+  const left = possible - option.set.reps;
+  // Repeating last week can never be louder than last week was.
+  const message: Message = choice === "same" ? (left <= 3 ? "medium" : "quiet") : left <= 3 ? "loud" : left <= 5 ? "medium" : "quiet";
+  const slowing = 0.92 ** game.rounds.length;
+  const gain = { loud: 0.6, medium: 0.3, quiet: 0.05 }[message] * slowing;
+  return { max: game.max + gain, last: option.set, rounds: [...game.rounds, { set: option.set, choice, message }] };
 }
