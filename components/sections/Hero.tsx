@@ -14,6 +14,8 @@ export function Nav() {
         <a href="#how">How it works</a>
         <a href="#circle">Circle</a>
         <a href="#moments">Moments</a>
+        <a href="#body-map">Body Map</a>
+        <a href="#progress">Progress</a>
         <a href="/science">The science</a>
         <a href="#routines">Get started</a>
       </nav>

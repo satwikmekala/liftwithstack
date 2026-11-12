@@ -1,3 +1,5 @@
+import { BodyFigure } from "@/components/body/BodyFigure";
+import { statesOf } from "@/lib/body/demo";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { Reveal } from "@/components/ui/Reveal";
 import { RoutineImportDemo } from "./RoutineImportDemo";
@@ -8,6 +10,9 @@ const WAYS: { title: string; body: string; icon: IconName }[] = [
   { title: "Build your own", body: "Choose the exercises and order for each workout.", icon: "pencil" },
   { title: "Share a routine", body: "Send a link. They save their own copy to edit.", icon: "link" },
 ];
+
+/** What an Upper / Lower week reaches, on the figure the plan shows beside its name. */
+const PLAN_STATES = statesOf(["Bench Press", "Seated Dumbbell Shoulder Press", "Lat Pulldown", "Seated Cable Row", "Dumbbell Curl", "Triceps Pushdown", "Barbell Squat", "Romanian Deadlift", "Hanging Leg Raise"]);
 
 /** The four questions Get Stack’s Plan asks (features/stacked-plan/steps), with one example answer each. */
 const ANSWERS = [
@@ -43,9 +48,14 @@ export function Routines() {
           <p className="plan-card__read mono">COMFORTABLE · BALANCED PHYSIQUE</p>
           <p className="plan-card__ready">Your training plan is ready.</p>
           <div className="plan-card__pick">
-            <p className="plan-card__tag mono">RECOMMENDED</p>
-            <p className="plan-card__name">Upper / Lower</p>
-            <p className="plan-card__meta mono">4 days a week</p>
+            <div className="plan-card__top">
+              <div>
+                <p className="plan-card__tag mono">RECOMMENDED</p>
+                <p className="plan-card__name">Upper / Lower</p>
+                <p className="plan-card__meta mono">4 days a week</p>
+              </div>
+              <BodyFigure states={PLAN_STATES} interactive={false} className="plan-card__figure" label="Stack’s 3D figure with the muscles this plan trains lit" />
+            </div>
             <div className="plan-card__days">
               {["Upper A", "Lower A", "Upper B", "Lower B"].map((day, index) => (
                 <span key={day}><i className="mono">{"ABCD"[index]}</i>{day}</span>

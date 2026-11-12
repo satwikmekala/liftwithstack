@@ -5,7 +5,7 @@ import { muscle } from "./tokens";
  * colour each exercise is listed under in constants/exerciseInfo.ts.
  */
 export const EXERCISE_ART: Record<string, { image: string; color: string; primary: string[]; secondary: string[] }> = {
-  "Bench Press": { image: "/exercises/bench-press.webp", color: muscle.chest, primary: ["Chest", "Triceps"], secondary: ["Shoulders"] },
+  "Bench Press": { image: "/exercises/bench-press.webp", color: muscle.chest, primary: ["Chest"], secondary: ["Upper chest", "Front delts", "Triceps"] },
   "Incline Dumbbell Press": { image: "/exercises/incline-dumbbell-press.webp", color: muscle.chest, primary: ["Upper chest", "Triceps"], secondary: ["Shoulders"] },
   "Seated Dumbbell Shoulder Press": { image: "/exercises/seated-dumbbell-shoulder-press.webp", color: muscle.shoulders, primary: ["Shoulders", "Triceps"], secondary: ["Upper chest"] },
   "Lateral Raise": { image: "/exercises/dumbbell-lateral-raise.webp", color: muscle.shoulders, primary: ["Side delts"], secondary: ["Upper traps"] },

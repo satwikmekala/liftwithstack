@@ -1,4 +1,6 @@
 import type { CSSProperties } from "react";
+import { BodyFigure } from "@/components/body/BodyFigure";
+import { regionsOf, statesOf } from "@/lib/body/demo";
 import { Icon } from "@/components/ui/Icon";
 import { Reveal } from "@/components/ui/Reveal";
 import { color, muscle } from "@/lib/tokens";
@@ -8,6 +10,9 @@ const LIFTS = [
   { name: "Incline Dumbbell Press", color: muscle.chest, sets: "3 × 10", top: "28 kg" },
   { name: "Triceps Pushdown", color: muscle.arms, sets: "3 × 12", top: "35 kg" },
 ];
+
+const STATES = statesOf(LIFTS.map((lift) => lift.name));
+const FOCUS = regionsOf(STATES);
 
 /** The workout summary (app/workout-summary.tsx): what you did, the muscles it reached, any PRs, and Share. */
 export function Recap() {
@@ -26,12 +31,13 @@ export function Recap() {
               <p className="bm-label mono">MUSCLES WORKED</p>
               <ul>
                 <li><i style={{ background: muscle.chest }} />Chest</li>
+                <li><i style={{ background: muscle.chest }} />Upper chest</li>
                 <li><i style={{ background: muscle.arms }} />Triceps</li>
               </ul>
               <p className="bm-label mono">SECONDARY</p>
-              <p className="recap-card__secondary">Upper chest · Front delts</p>
+              <p className="recap-card__secondary">Front delts</p>
             </div>
-            <img src="/app/torso-push.webp" alt="" width={720} height={770} loading="lazy" decoding="async" />
+            <BodyFigure states={STATES} focus={FOCUS} interactive={false} className="recap-card__figure" label="Stack’s 3D figure with the chest, front delts and triceps lit" />
           </div>
 
           <p className="bm-label mono">EXERCISES COMPLETED</p>
