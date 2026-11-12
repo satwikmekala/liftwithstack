@@ -28,7 +28,7 @@ test("server-renders the Stack marketing page", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Stack — Every workout stacks up\.<\/title>/);
+  assert.match(html, /<title>Stack: workout tracker for iPhone — Every workout stacks up\.<\/title>/);
   assert.match(html, /Every workout[\s\S]*stacks up\./);
   assert.match(html, /Log your training\. See your progress take shape\.[\s\S]*Bring your gym friends along\./);
   assert.match(html, /Don’t overthink it\./);
@@ -118,4 +118,62 @@ test("server-renders the science of getting stronger", async () => {
 test("the home page opens the door to the science", async () => {
   const html = await (await render()).text();
   assert.match(html, /href="\/science"[\s\S]*Remember when 10(&nbsp;|\u00a0| )kg felt heavy\?/);
+});
+
+const jsonLd = (html) => [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].flatMap((m) => JSON.parse(m[1])["@graph"]);
+
+test("the home page tells search engines and assistants what Stack is", async () => {
+  const html = await (await render()).text();
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.liftwithstack\.com\/?"/);
+  assert.match(html, /<meta name="description" content="Stack is a workout tracker for iPhone\./);
+  const graph = jsonLd(html);
+  const app = graph.find((node) => [].concat(node["@type"]).includes("MobileApplication"));
+  assert.equal(app.operatingSystem, "iOS");
+  assert.match(app.creativeWorkStatus, /TestFlight/);
+  // Nothing that does not exist yet: no price, no rating, no store link.
+  for (const absent of ["offers", "aggregateRating", "downloadUrl", "installUrl"]) assert.equal(absent in app, false);
+  assert.ok(graph.some((node) => node["@type"] === "Organization" && node.sameAs.includes("https://www.instagram.com/liftwithstack")));
+  assert.match(html, /href="\/about"[^>]*>What is Stack\?</);
+});
+
+test("the About page states the facts in plain HTML, and its FAQ data matches what is on the page", async () => {
+  const response = await render("/about");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /<title>What is Stack\? Facts and FAQ<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.liftwithstack\.com\/about"/);
+  assert.match(html, /<h1[^>]*>What is Stack\?<\/h1>/);
+  const body = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, "");
+  const text = body.replace(/<[^>]+>/g, "").replace(/&#x27;/g, "'").replace(/&amp;/g, "&");
+  assert.match(text, /Stack is a workout tracker for iPhone/);
+  assert.match(text, /TestFlight beta/);
+  assert.match(text, /not on the App Store/);
+  const faq = jsonLd(html).find((node) => node["@type"] === "FAQPage");
+  assert.ok(faq.mainEntity.length >= 8);
+  for (const { name, acceptedAnswer } of faq.mainEntity) {
+    assert.ok(text.includes(name), name);
+    assert.ok(text.includes(acceptedAnswer.text), acceptedAnswer.text);
+  }
+  // The same truth rules as the home page.
+  assert.doesNotMatch(html, /\bAI\b|analy[sz]e your form|real-time feedback|Download on the App Store/i);
+  for (const banned of [/\bsplits?\b/i, /\bprogram\b/i, /\bsession\b/i, /\bsealed\b/i, /\bvolume\b/i, /\blbs\b/, /!(?=[\s<])/]) {
+    assert.doesNotMatch(body, banned);
+  }
+});
+
+test("robots, sitemap and llms.txt welcome crawlers and assistants", async () => {
+  const robots = await (await render("/robots.txt")).text();
+  for (const agent of ["GPTBot", "OAI-SearchBot", "ClaudeBot", "PerplexityBot", "Google-Extended"]) assert.match(robots, new RegExp(`User-Agent: ${agent}`, "i"));
+  assert.match(robots, /Allow: \//);
+  assert.doesNotMatch(robots, /Disallow: \/\s*$/m);
+  assert.match(robots, /Disallow: \/r\//);
+  assert.match(robots, /Sitemap: https:\/\/www\.liftwithstack\.com\/sitemap\.xml/);
+  const sitemap = await (await render("/sitemap.xml")).text();
+  for (const path of ["/", "/about", "/science"]) assert.match(sitemap, new RegExp(`<loc>https://www\\.liftwithstack\\.com${path}</loc>`));
+  const llms = await render("/llms.txt");
+  assert.equal(llms.status, 200);
+  const brief = await llms.text();
+  assert.match(brief, /^# Stack\n\n> Stack is a workout tracker for iPhone\./);
+  assert.match(brief, /TestFlight beta\. Stack is not on the App Store yet\./);
+  assert.match(brief, /\]\(https:\/\/www\.liftwithstack\.com\/about\)/);
 });

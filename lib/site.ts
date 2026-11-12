@@ -1,4 +1,5 @@
-export const SITE_URL = "https://liftwithstack.com";
+/** The address Vercel serves: the bare domain redirects here, so this is the canonical one. */
+export const SITE_URL = "https://www.liftwithstack.com";
 
 /**
  * Stack's verified App Store listing. Leave null until the production listing exists:

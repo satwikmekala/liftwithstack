@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { LessonJsonLd } from "@/components/seo/JsonLd";
 import "./science.css";
 
 const title = "Remember when 10 kg felt heavy? — Stack";
@@ -7,10 +8,11 @@ const description = "Why the same weight gets easier, as a six-stop interactive 
 export const metadata: Metadata = {
   title,
   description,
+  alternates: { canonical: "/science" },
   openGraph: { title, description, siteName: "Stack", type: "article", url: "/science", images: [{ url: "/og.png", width: 1200, height: 630, alt: "Stack. Every workout stacks up." }] },
   twitter: { card: "summary_large_image", title, description, images: ["/og.png"] },
 };
 
 export default function ScienceLayout({ children }: { children: React.ReactNode }) {
-  return <div className="sci">{children}</div>;
+  return <div className="sci"><LessonJsonLd title="Remember when 10 kg felt heavy?" description={description} />{children}</div>;
 }

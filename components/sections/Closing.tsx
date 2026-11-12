@@ -28,6 +28,10 @@ export function Footer() {
     <footer className="footer">
       <span className="footer__brand"><StackMark size={18} />Stack</span>
       <span className="footer__meta">
+        {/* A plain anchor: next/link pulls a second React into the vinext dev bundle. */}
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+        <a href="/about">What is Stack?</a>
+        <span aria-hidden="true">·</span>
         <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">Built in public</a>
         <span aria-hidden="true">·</span>
         <span>© 2026 Stack</span>

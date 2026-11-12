@@ -1,3 +1,4 @@
+import { SiteJsonLd } from "@/components/seo/JsonLd";
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
 import { DemoJourney } from "@/components/stack/DemoJourney";
 import { BodyMap } from "@/components/sections/BodyMap";
@@ -21,6 +22,7 @@ import { StackFinale } from "@/components/stack/StackFinale";
 export default function Home() {
   return (
     <>
+      <SiteJsonLd />
       <SmoothScroll />
       <Nav />
       <main>
