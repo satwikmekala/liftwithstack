@@ -46,6 +46,14 @@ test("server-renders the Stack marketing page", async () => {
   // Form Check is a hand-picked video, never an analysis of your own lifting; it loads only when asked.
   assert.doesNotMatch(html, /\bAI\b|analy[sz]e your form|real-time feedback/i);
   assert.doesNotMatch(html, /<iframe/);
+  // The RC6 refresh: Body Map, the recap, the new Progress tab, Get Stack's Plan.
+  assert.match(html, /id="body-map"[\s\S]*See what you’re training, live\.[\s\S]*id="recap"[\s\S]*Every workout gets a proper recap\./);
+  assert.match(html, /YOUR STRENGTH[\s\S]*Your chest lifts are improving together\./);
+  assert.match(html, /Not sure what to train\?[\s\S]*Upper \/ Lower/);
+  assert.match(html, /Cloud Sync/);
+  // Photo sharing to a circle is not live yet, so it is never promised as available.
+  assert.match(html, /ROLLING OUT/);
+  assert.doesNotMatch(html, /the photos they share/);
   assert.match(html, /Progress has substance\./);
   assert.match(html, /Already training\? Bring it with you\./);
   assert.match(html, /From ChatGPT/);

@@ -17,7 +17,7 @@ export function Closing() {
         <h2 id="closing-title" className="closing__title">Ready to build your own?</h2>
         <Download />
         <p className="closing__access">iPhone beta · Send a DM on Instagram to join.</p>
-        <p className="closing__facts">Made for iPhone · No account needed to start</p>
+        <p className="closing__facts">Made for iPhone · Works offline · No account needed to start</p>
       </Reveal>
     </section>
   );

@@ -87,7 +87,7 @@ const past = (weeks: number, seed: number) => exampleHistory(weeks, new Date(202
 /** Three example friends, in name order as the circle lists them. */
 export const FRIENDS: Friend[] = [
   {
-    id: "ben", name: "Ben", handle: "benlifts", activity: "Trained yesterday",
+    id: "ben", name: "Dev", handle: "dev.lifts", activity: "Trained yesterday",
     slabs: [block("ben-0", muscle.chest, 1.3), block("ben-1", muscle.back, 1.15)], history: past(14, 5),
     workouts: [
       { label: "Pull", day: "Yesterday", color: muscle.back, lifts: [{ name: "Deadlift", sets: "140 kg × 5" }, { name: "Lat Pulldown", sets: "65 kg × 10" }] },
@@ -96,7 +96,7 @@ export const FRIENDS: Friend[] = [
     photos: ["Deadlift"],
   },
   {
-    id: "maya", name: "Maya", handle: "maya.trains", activity: "Trained today",
+    id: "maya", name: "Ani", handle: "ani.trains", activity: "Trained today",
     slabs: [block("maya-0", muscle.legs, 1.15), block("maya-1", muscle.chest, 1), block("maya-2", muscle.back, 1.3), block("maya-3", muscle.legs, 1.15, true)], history: past(22, 19),
     workouts: [
       { label: "Legs", day: "Today", color: muscle.legs, lifts: [{ name: "Barbell Squat", sets: "85 kg × 5", record: true }, { name: "Romanian Deadlift", sets: "70 kg × 8" }] },
@@ -105,7 +105,7 @@ export const FRIENDS: Friend[] = [
     photos: ["Barbell Squat", "Lat Pulldown", "Incline Dumbbell Press"],
   },
   {
-    id: "jess", name: "Jess", handle: "jess.lifts", activity: "Trained today",
+    id: "jess", name: "Vishwa", handle: "vishwa.lifts", activity: "Trained today",
     slabs: [block("jess-0", muscle.back, 1.15), block("jess-1", muscle.legs, 1.3, true)], history: past(11, 8),
     workouts: [
       { label: "Legs", day: "Today", color: muscle.legs, lifts: [{ name: "Barbell Squat", sets: "70 kg × 6", record: true }] },

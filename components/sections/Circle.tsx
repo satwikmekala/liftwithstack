@@ -26,7 +26,7 @@ export function Circle() {
   const stage = useRef<HTMLDivElement>(null);
   const friend = FRIENDS.find((item) => item.id === friendId) ?? FRIENDS[1];
 
-  // Soon after you arrive, Maya's nudge lands: her bubble, and light running up your Stack.
+  // Soon after you arrive, Ani's nudge lands: the bubble, and light running up your Stack.
   useEffect(() => {
     const element = stage.current;
     if (!element) return;
@@ -52,7 +52,7 @@ export function Circle() {
         <h2 id="circle-title" className="section-title">Stack up together.</h2>
         <p className="section-body">Bring in the few people you train with. See how their Stacks are growing, and nudge them when they need it.</p>
         <ul className="circle__points">
-          <li><Icon name="eye" size={18} stroke={1.8} /><span><b>See their week.</b> Open anyone’s Stack for their blocks, recent training and the photos they share.</span></li>
+          <li><Icon name="eye" size={18} stroke={1.8} /><span><b>See their week.</b> Open anyone’s Stack for their blocks and what they trained this week.</span></li>
           <li><Bolt width={14} height={18} color="currentColor" /><span><b>Send a nudge.</b> A few kind words. No replies, no streaks, no leaderboard.</span></li>
           <li><Icon name="lock" size={17} stroke={1.8} /><span><b>Yours to decide.</b> Invite only. You choose what friends see, and can change it any time.</span></li>
         </ul>

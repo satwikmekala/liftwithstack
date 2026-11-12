@@ -13,6 +13,8 @@ export const EXERCISE_ART: Record<string, { image: string; color: string; primar
   "Overhead Triceps Extension": { image: "/exercises/cable-overhead-triceps-extension.webp", color: muscle.arms, primary: ["Triceps"], secondary: [] },
   Deadlift: { image: "/exercises/deadlift.webp", color: muscle.back, primary: ["Hamstrings", "Glutes", "Back"], secondary: ["Core", "Forearms"] },
   "Lat Pulldown": { image: "/exercises/lat-pulldown.webp", color: muscle.back, primary: ["Lats"], secondary: ["Biceps", "Upper back"] },
+  "Arnold Press": { image: "/exercises/arnold-press.webp", color: muscle.shoulders, primary: ["Front delts"], secondary: ["Side delts", "Triceps"] },
+  "Bradford Press": { image: "/exercises/bradford-press.webp", color: muscle.shoulders, primary: ["Front delts"], secondary: ["Side delts", "Triceps"] },
   "Barbell Squat": { image: "/exercises/barbell-squat.webp", color: muscle.legs, primary: ["Quads", "Glutes"], secondary: ["Core", "Lower back"] },
 };
 

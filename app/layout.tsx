@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 import "./chapters.css";
+import "./refresh.css";
 
 // The same app typefaces, using the existing Latin assets. The Google-font
 // loader in this runtime preloads every subset even when preload is disabled.

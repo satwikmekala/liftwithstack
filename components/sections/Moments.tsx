@@ -85,7 +85,8 @@ export function Moments() {
 
       <div className="moments__notes">
         <p><Icon name="camera" size={16} stroke={2} />One tap from any workout. No filters, no feed.</p>
-        <p><Icon name="lockOpen" size={15} stroke={2.2} />Share with your circle, or <Icon name="lock" size={15} stroke={2.2} className="is-private" />keep it yours.</p>
+        <p><Icon name="lock" size={15} stroke={2.2} className="is-private" />Yours by default, kept with the workout.</p>
+        <p className="moments__soon"><span className="mono">ROLLING OUT</span><Icon name="lockOpen" size={15} stroke={2.2} />Sharing a photo with your circle.</p>
       </div>
     </section>
   );

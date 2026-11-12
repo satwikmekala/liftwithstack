@@ -1,5 +1,7 @@
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
 import { DemoJourney } from "@/components/stack/DemoJourney";
+import { BodyMap } from "@/components/sections/BodyMap";
+import { Recap } from "@/components/sections/Recap";
 import { Circle } from "@/components/sections/Circle";
 import { Closing, Footer } from "@/components/sections/Closing";
 import { Extras } from "@/components/sections/Extras";
@@ -30,6 +32,8 @@ export default function Home() {
           <Circle />
           <Moments />
         </DemoJourney>
+        <BodyMap />
+        <Recap />
         <Extras />
         <Progress />
         <ScienceTeaser />
