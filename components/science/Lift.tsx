@@ -6,7 +6,7 @@ import { REGION_INFO, type BodyRegion, type RegionStates } from "@/lib/body/regi
 import { platePose } from "@/lib/science/arm";
 import { drawScene } from "@/lib/science/scene";
 import { Foot } from "./Foot";
-import { Ask, Keep, Step, Stop } from "./lesson";
+import { Keep, Point, Step, Stop } from "./lesson";
 import { Plate } from "./Plate";
 
 const CURL_STATES: RegionStates = { biceps: "primary", forearms: "secondary" };
@@ -123,17 +123,12 @@ export function Lift() {
     <Stop n={1} title="Lift it yourself." lead={<p>Here is that arm with the skin off: two bones, one hinge, and the biceps. Drag the dumbbell up and keep your eye on the muscle.</p>}>
       <Step stage={<Curl onMoved={() => setMoved(true)} />}>
         <p className={`step__nudge${moved ? " is-done" : ""}`}><span className="mono">{moved ? "DONE" : "TRY IT"}</span>Curl the dumbbell all the way up, then lower it.</p>
-        <Ask last prompt="You watched the biceps while the arm moved. What can a muscle actually do?"
-          options={[
-            { label: "Push and pull", why: "Watch the biceps on the way down. It never pushes the forearm away. It just lets out, still holding the weight." },
-            { label: "Only pull", correct: true, why: "Right. A muscle can pull its two ends closer together, and that is all it can do." },
-            { label: "Only push", why: "Curl it again and watch the muscle’s length. It gets shorter as the weight rises, which is a pull." },
-          ]}>
+        <Point>A muscle can only pull.</Point>
+          <p>Watch the biceps as the dumbbell rises. It gets shorter and thicker, and the forearm follows. On the way down it never pushes. It lets out slowly, still holding the weight.</p>
           <p>The biceps starts on your shoulder blade, crosses the elbow and attaches to your forearm. When it shortens, the forearm comes up. It has help from two neighbours, the brachialis underneath it and the brachioradialis in the forearm.<Foot of="openstaxStructure" /></p>
-          <p>To lower the dumbbell, the biceps doesn’t push. It lets out slowly while still pulling. To straighten the arm against resistance you need a different muscle on the other side, the triceps, which also only pulls.</p>
+          <p>That is why muscles come in pairs. To straighten the arm against resistance you need a different muscle on the other side, the triceps, and it also only pulls.</p>
           <Keep>Muscles only pull. Every weight you have ever lifted came down to something getting shorter.</Keep>
           <p className="step__bridge">So how does a muscle get shorter? You have to go inside to see it.</p>
-        </Ask>
       </Step>
     </Stop>
   );

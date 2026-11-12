@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { Foot } from "./Foot";
-import { Ask, Keep, Step, Stop } from "./lesson";
+import { Keep, Point, Step, Stop } from "./lesson";
+import { Note } from "./Note";
 
 /** Myofibril positions inside a fiber's cross-section, packed in rings. */
 function packed(radius: number, spacing: number) {
@@ -84,29 +85,17 @@ export function Adapt() {
         <p>When a load is hard for you, all that pulling puts the fibers under strain. The term for it is <b>mechanical tension</b>. Your cells can sense it. The exact sensor is still being worked out, but tension is the leading explanation for what starts muscle growth.<Foot of="wackerhage" /></p>
         <p>Sensing it switches on signalling inside the fiber, including a pathway called mTORC1, and the fiber builds protein faster for about a day or two.<Foot of="roberts" /><Foot of="macdougall" /> Food supplies the material, protein especially,<Foot of="morton" /> and poor sleep can get in the way.<Foot of="knowles" /></p>
       </>}>
-      <Step wide askFirst stage={<Lanes onMoved={() => setMoved(true)} />}>
-        <p className="step__intro">No single workout changes much. Repeat it for weeks and two separate things change. Before you look, take a guess.</p>
-        <Ask prompt="Four weeks in, you can clearly lift more. What has changed the most so far?"
-          options={[
-            { label: "The muscle is much bigger", why: "Growth has started, but four weeks is early for size. Drag the weeks and compare the two lanes at week 4." },
-            { label: "Your nervous system drives the muscle better", correct: true, why: "Right. Early strength is mostly your nervous system learning the lift." },
-            { label: "The muscle stores more ATP", why: "Fuel isn’t the limit here. Drag the weeks and see which lane moves first." },
-          ]}>
-          <p className={`step__nudge${moved ? " is-done" : ""}`}><span className="mono">{moved ? "DONE" : "TRY IT"}</span>Drag from week 0 to week 12 and watch which lane moves first.</p>
+      <Step wide stage={<Lanes onMoved={() => setMoved(true)} />}>
+        <p className="step__intro">No single workout changes much. Repeat it for weeks and two separate things change, at different speeds.</p>
+        <p className={`step__nudge${moved ? " is-done" : ""}`}><span className="mono">{moved ? "DONE" : "TRY IT"}</span>Drag from week 0 to week 12 and watch which lane moves first.</p>
+          <Point>Your nervous system moves first.</Point>
           <p><b>Your nervous system gets better at the lift.</b> Your spinal cord drives muscle through motor units: one nerve cell and all the fibers it controls. In one study, four weeks of training made motor units switch on sooner and fire faster, with more force as the result.<Foot of="delvecchio" /></p>
           <p><b>Your fibers get thicker.</b> This is hypertrophy. A fiber adds contractile protein, so there is more material pulling side by side, which you already know means more force. Whether fibers do it by thickening their myofibrils, adding more, or both is still an open question.<Foot of="jorgenson" /></p>
           <p>The two overlap. Growth starts early as well, but it takes weeks to show, and some early size is swelling.<Foot of="folland" /><Foot of="seynnes" /><Foot of="damas" /></p>
           <Keep>Strength and size are two different changes. The nervous system leads, the muscle follows.</Keep>
-        </Ask>
-      </Step>
-      <Step>
-        <Ask last prompt="True or false: if you aren’t sore the next day, the workout didn’t work." hint="Pick one."
-          options={[
-            { label: "True", why: "Soreness mostly tracks how new a movement is to you. It fades as you repeat it, while progress carries on." },
-            { label: "False", correct: true, why: "Right. Soreness is not a reliable signal that a workout worked." },
-          ]}>
-          <p>Soreness mostly follows movements you aren’t used to. Some muscle damage does happen, especially early on, and early protein building goes largely to repairing it. In one study, protein building only lined up with growth once the damage had faded.<Foot of="damas" /> Damage probably isn’t needed for growth at all.<Foot of="wackerhage" /></p>
-        </Ask>
+          <Note title="Does soreness mean it’s working?">
+            <p>Not reliably. Soreness mostly follows movements you aren’t used to, and it fades as you repeat them while progress carries on. Some muscle damage does happen, especially early on, and early protein building goes largely to repairing it. In one study, protein building only lined up with growth once the damage had faded.<Foot of="damas" /> Damage probably isn’t needed for growth at all.<Foot of="wackerhage" /></p>
+          </Note>
       </Step>
     </Stop>
   );

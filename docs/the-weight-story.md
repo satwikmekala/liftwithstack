@@ -220,20 +220,21 @@ the page, in the README and beside the files. Everything else is original.
 
 ## Part 3: The lesson
 
-**Method.** Borrowed from how Brilliant teaches: the question comes before the explanation, the reader
-handles a picture before it is named, each step carries one idea, a wrong answer gets one line on why and
-another try, and the lesson ends with questions in new settings and no pictures. Nothing is locked: every
-question has a "Show me", and without scripts every explanation is plain text on the page.
+**Method.** Borrowed from how Brilliant teaches, then dialled back after wik's review (12 Nov 2026): too
+many questions "ruins the vibe". The page now explains first. Each step puts something in the reader's
+hands and the explanation sits open beside it, under a plain statement of the point. Only four moments ask
+the reader to answer, and each is answered on the picture: the opening tap, the locked myosin head, setting
+week 7, and the guess before the trial bars. Nothing is locked, and without scripts everything is plain text.
 
-| Stop | The question | What the reader does | Keep |
+| Stop | What the reader does | The point | Keep |
 | --- | --- | --- | --- |
-| Opening | Which muscle lifts a dumbbell in a curl? | Taps it on Stack's own 3D figure | The biceps leads, the forearm helps |
-| 1. The lift | What can a muscle actually do? | Drags the drawn arm through a curl | Muscles only pull |
-| 2. Inside the muscle | How far down does it go? | Presses "Zoom in" five times, then orders four parts by size | Bundles inside bundles |
-| 3. The pull | Do filaments shrink, slide or coil? What frees a locked head? Where do you add sarcomeres for force? | Squeezes a sarcomere, runs one myosin head by hand, builds rows and chains | Filaments slide; ATP lets go; side by side adds force |
-| 4. After you put it down | Four weeks in, what changed most? Is soreness the signal? | Guesses, then drags through 12 weeks of two lanes | Strength and size are two changes; nerves lead |
-| 5. The same 10 kg | Why is week 6 easier? How much did the fixed-load arm grow? | Drags week 1 to 6, then sets week 7 until it is "Hard enough" | Relative effort; progressive overload by reps, weight or sets |
-| 6. Check, then log | Four questions: a squat, a friend, a stale bench, what counts as overload | Answers unaided, then logs one more rep on the Stack phone and sees the figure light | Can explain it; why logging helps |
+| Opening | **Question:** taps the muscle that lifts a dumbbell, on Stack's own 3D figure | The biceps leads, the forearm helps | |
+| 1. The lift | Drags the drawn arm through a curl | A muscle can only pull | Muscles only pull |
+| 2. Inside the muscle | Presses "Zoom in" five times | Each level is a bundle of the one below it | Fascicle, fiber, myofibril, sarcomere |
+| 3. The pull | Squeezes a sarcomere; runs one myosin head by hand (**question:** what frees it?); builds rows and chains | Filaments slide; ATP lets go; side by side for force | Three keeps, one per step |
+| 4. After you put it down | Drags through 12 weeks of two lanes | Your nervous system moves first | Strength and size are two changes |
+| 5. The same 10 kg | Drags week 1 to 6; **does it:** sets week 7 until it is "Hard enough"; **question:** guesses the fixed-load arm's growth | The set didn't move, your limit did; progressive overload | Relative effort; overload by reps, weight or sets |
+| 6. The short version | Reads five lines, then logs one more rep on the Stack phone and sees the figure light | Why 10 kg stopped feeling heavy | |
 
 **Changes to the manuscript's claims.** A curl names the brachialis and brachioradialis as helpers. Early
 growth is described as starting early but taking weeks to show, with some early size being swelling

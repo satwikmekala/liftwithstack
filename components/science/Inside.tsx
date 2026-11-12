@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { drawScene } from "@/lib/science/scene";
 import { LEVELS } from "@/lib/science/story";
 import { Foot } from "./Foot";
-import { Keep, Reveal, Step, Stop, useFinish } from "./lesson";
+import { Keep, Point, Step, Stop } from "./lesson";
 import { prefersReducedMotion } from "./useProgress";
 
 const LEVEL_TEXT: { size: string; body: ReactNode }[] = [
@@ -94,60 +94,6 @@ function Zoom({ onBottom }: { onBottom: () => void }) {
   );
 }
 
-const ORDER = ["Fascicle", "Muscle fiber", "Myofibril", "Sarcomere"] as const;
-const SHUFFLED = ["Myofibril", "Fascicle", "Sarcomere", "Muscle fiber"] as const;
-const HINT: Record<(typeof ORDER)[number], string> = {
-  Fascicle: "A fascicle is a bundle of fibers, so it is the biggest of these four.",
-  "Muscle fiber": "A fiber sits inside a fascicle and is packed with myofibrils.",
-  Myofibril: "A myofibril is one rod inside a fiber, and it is a chain of sarcomeres.",
-  Sarcomere: "A sarcomere is one link in a myofibril, the smallest of the four.",
-};
-
-/** Put four parts in order of size: recall, with the picture taken away. */
-function Sort() {
-  const [placed, setPlaced] = useState<string[]>([]);
-  const [miss, setMiss] = useState<string | null>(null);
-  const finish = useFinish();
-  const solved = placed.length === ORDER.length;
-  const tap = (name: (typeof ORDER)[number]) => {
-    if (placed.includes(name)) return;
-    if (name === ORDER[placed.length]) {
-      const next = [...placed, name];
-      setPlaced(next); setMiss(null);
-      if (next.length === ORDER.length) finish();
-    } else setMiss(name);
-  };
-  const show = () => { setPlaced([...ORDER]); setMiss(null); finish(); };
-  const wanted = ORDER[placed.length];
-  return (
-    <div className={`ask sort${solved ? " is-solved" : ""}`}>
-      <p className="ask__prompt">Without looking back: tap these from largest to smallest.</p>
-      <div className="sort__chips" role="group" aria-label="Parts of a muscle">
-        {SHUFFLED.map((name) => {
-          const rank = placed.indexOf(name);
-          return (
-            <button key={name} type="button" className={`sort__chip${rank >= 0 ? " is-placed" : ""}${miss === name ? " is-miss" : ""}`}
-              onClick={() => tap(name)} disabled={rank >= 0}>
-              <span className="ask__key mono" aria-hidden="true">{rank >= 0 ? rank + 1 : "·"}</span>{name}
-              {rank >= 0 && <span className="sr-only">, number {rank + 1}</span>}
-            </button>
-          );
-        })}
-      </div>
-      <p className={`ask__feedback${miss || solved ? " is-shown" : ""}${solved ? " is-right" : ""}`} aria-live="polite">
-        {solved ? "Fascicle, fiber, myofibril, sarcomere. Bundles inside bundles."
-          : miss ? <><b>Not yet. </b>{placed.length === 0 ? "Start with the biggest. " : ""}{HINT[wanted]}</>
-            : placed.length === 0 ? "Start with the biggest." : "Keep going."}
-      </p>
-      {!solved && <button type="button" className="ask__skip" onClick={show}>Show me</button>}
-      <Reveal open={solved}>
-        <Keep>A muscle is bundles inside bundles: fascicle, fiber, myofibril, sarcomere. At the bottom are two filaments, actin and myosin.</Keep>
-        <p className="step__bridge">Those small heads on the myosin are where force begins.</p>
-      </Reveal>
-    </div>
-  );
-}
-
 /** Stop 2: the hierarchy, and its names. */
 export function Inside() {
   const [bottom, setBottom] = useState(false);
@@ -155,7 +101,11 @@ export function Inside() {
     <Stop n={2} title="Bundles inside bundles." lead={<p>A muscle looks like one solid thing, but it’s built more like a rope. Five presses take you from the biceps to the molecules that do the work.</p>}>
       <Step wide stage={<Zoom onBottom={() => setBottom(true)} />}>
         <p className={`step__nudge${bottom ? " is-done" : ""}`}><span className="mono">{bottom ? "DONE" : "TRY IT"}</span>Zoom in until you can’t go any further.</p>
-        <div className={`gate${bottom ? " is-open" : ""}`}><Sort /></div>
+        <Point>Each level is a bundle of the one below it.</Point>
+        <p>A muscle is a bundle of fascicles. A fascicle is a bundle of fibers, and each fiber is a single long cell. A fiber is packed with myofibrils, and a myofibril is a chain of sarcomeres, one after another.</p>
+        <p>The sarcomere is where the names stop being about packaging. Inside it are two filaments, <b className="t-actin">actin</b> and <b className="t-myosin">myosin</b>, and they are the parts that move.</p>
+        <Keep>Fascicle, fiber, myofibril, sarcomere. At the bottom are two filaments, actin and myosin.</Keep>
+        <p className="step__bridge">The small heads on the myosin are where force begins.</p>
       </Step>
     </Stop>
   );

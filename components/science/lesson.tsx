@@ -1,30 +1,17 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useId, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 
 /**
- * The parts every stop of the lesson is built from. A stop asks before it tells: the reader acts
- * or answers, then the explanation opens. Nothing is locked. Every question has a "Show me", and
+ * The parts every stop of the lesson is built from. A stop puts something in the reader's hands
+ * and explains it beside the picture. A few steps ask a question first. Nothing is locked, and
  * without scripts every explanation is simply on the page.
  */
 
-export const STOPS = ["The lift", "Inside the muscle", "The pull", "After you put it down", "The same 10 kg", "Check, then log"] as const;
+export const STOPS = ["The lift", "Inside the muscle", "The pull", "After you put it down", "The same 10 kg", "The short version"] as const;
 
-type Progress = { done: ReadonlySet<number>; finish: (stop: number) => void };
-const ProgressContext = createContext<Progress>({ done: new Set(), finish: () => undefined });
-const StopContext = createContext(0);
-
-export function LessonProvider({ children }: { children: ReactNode }) {
-  const [done, setDone] = useState<ReadonlySet<number>>(() => new Set());
-  const finish = useCallback((stop: number) => setDone((current) => (current.has(stop) ? current : new Set(current).add(stop))), []);
-  const value = useMemo(() => ({ done, finish }), [done, finish]);
-  return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>;
-}
-export const useLesson = () => useContext(ProgressContext);
-
-/** The six stops in the header: which are done, and which one is on screen. */
+/** The six stops in the header: which are behind the reader, and which one is on screen. */
 export function LessonRail() {
-  const { done } = useLesson();
   const [current, setCurrent] = useState(0);
   useEffect(() => {
     const sections = [...document.querySelectorAll<HTMLElement>("[data-stop]")];
@@ -48,9 +35,9 @@ export function LessonRail() {
         {STOPS.map((name, index) => {
           const stop = index + 1;
           return (
-            <li key={name} className={`${done.has(stop) ? "is-done" : ""}${current === stop ? " is-current" : ""}`}>
+            <li key={name} className={stop < current ? "is-done" : current === stop ? "is-current" : ""}>
               <a href={`#stop-${stop}`} aria-current={current === stop ? "step" : undefined} title={`${stop}. ${name}`}>
-                <span className="sr-only">Stop {stop}: {name}{done.has(stop) ? ", done" : ""}</span>
+                <span className="sr-only">Stop {stop}: {name}</span>
               </a>
             </li>
           );
@@ -61,10 +48,9 @@ export function LessonRail() {
   );
 }
 
-/** One stop of the lesson. It counts as done once every question inside it has been settled. */
+/** One stop of the lesson. */
 export function Stop({ n, title, lead, children }: { n: number; title: string; lead?: ReactNode; children: ReactNode }) {
   return (
-    <StopContext.Provider value={n}>
       <section className="stop" id={`stop-${n}`} data-stop={n} aria-labelledby={`stop-${n}-title`}>
         <header className="stop__head">
           <p className="stop__count mono"><span>{n}</span>{STOPS[n - 1]}</p>
@@ -73,23 +59,13 @@ export function Stop({ n, title, lead, children }: { n: number; title: string; l
         </header>
         {children}
       </section>
-    </StopContext.Provider>
   );
 }
 
-/** Marks the stop done; call it from the last thing the stop asks of the reader. */
-export function useFinish() {
-  const stop = useContext(StopContext);
-  const { finish } = useLesson();
-  return useCallback(() => finish(stop), [finish, stop]);
-}
-
-/** A step inside a stop: the words on one side, the thing you act on on the other. */
-/** `askFirst` keeps the question above the picture on a phone, for a step that opens with a guess. */
-export function Step({ stage, children, flip = false, wide = false, askFirst = false }: { stage?: ReactNode; children: ReactNode; flip?: boolean; wide?: boolean; askFirst?: boolean }) {
+export function Step({ stage, children, flip = false, wide = false }: { stage?: ReactNode; children: ReactNode; flip?: boolean; wide?: boolean }) {
   if (!stage) return <div className="step step--text">{children}</div>;
   return (
-    <div className={`step${flip ? " step--flip" : ""}${wide ? " step--wide" : ""}${askFirst ? " step--ask-first" : ""}`}>
+    <div className={`step${flip ? " step--flip" : ""}${wide ? " step--wide" : ""}`}>
       <div className="step__words">{children}</div>
       <div className="step__stage">{stage}</div>
     </div>
@@ -101,6 +77,11 @@ export function Reveal({ open, children }: { open: boolean; children: ReactNode 
   return <div className={`reveal${open ? " is-open" : ""}`}>{children}</div>;
 }
 
+/** What a step teaches, said plainly above its explanation. */
+export function Point({ children }: { children: ReactNode }) {
+  return <h3 className="step__title">{children}</h3>;
+}
+
 /** The one line to keep from a step. */
 export function Keep({ children }: { children: ReactNode }) {
   return <p className="keep"><span className="keep__mark mono">KEEP</span><span>{children}</span></p>;
@@ -109,24 +90,23 @@ export function Keep({ children }: { children: ReactNode }) {
 export type Option = { label: ReactNode; correct?: boolean; why: ReactNode };
 
 /**
- * A question with a few answers. A wrong pick says why and stays open for another try; the right
- * one fills orange and opens the explanation. "Show me" does the same without a guess.
+ * A question with a few answers, used sparingly: a few times in the whole lesson. A wrong pick says
+ * why and stays open for another try; the right one fills orange and opens the explanation. "Show me"
+ * does the same without a guess.
  */
-export function Ask({ prompt, options, children, onSolved, last = false, hint = "Pick one. A wrong guess costs nothing." }: {
-  prompt: ReactNode; options: Option[]; children?: ReactNode; onSolved?: (firstTry: boolean) => void; last?: boolean; hint?: string;
+export function Ask({ prompt, options, children, onSolved, hint = "Pick one. A wrong guess costs nothing." }: {
+  prompt: ReactNode; options: Option[]; children?: ReactNode; onSolved?: (firstTry: boolean) => void; hint?: string;
 }) {
   const id = useId();
   const [tried, setTried] = useState<number[]>([]);
   const [picked, setPicked] = useState<number | null>(null);
   const [solved, setSolved] = useState(false);
-  const finish = useFinish();
   const right = options.findIndex((option) => option.correct);
 
   const settle = (firstTry: boolean) => {
     setSolved(true);
     setPicked(right);
     onSolved?.(firstTry);
-    if (last) finish();
   };
   const choose = (index: number) => {
     if (solved) return;

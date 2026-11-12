@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { CLASSIC_CURL } from "@/lib/science/story";
 import { Foot } from "./Foot";
 import { classicCurl } from "./frames";
-import { Ask, Keep, Step, Stop } from "./lesson";
+import { Ask, Keep, Point, Step, Stop } from "./lesson";
 import { Note } from "./Note";
 
 const CX = 380;
@@ -256,16 +256,11 @@ export function Pull() {
     <Stop n={3} title="What happens when it shortens?" lead={<p>This is one sarcomere between its two Z-discs, the unit you just reached. Squeeze it and watch the two kinds of filament.</p>}>
       <Step wide stage={<Sliding onMoved={() => setSlid(true)} />}>
         <p className={`step__nudge${slid ? " is-done" : ""}`}><span className="mono">{slid ? "DONE" : "TRY IT"}</span>Drag the sarcomere to fully contracted and read the numbers under it.</p>
-        <Ask prompt="The sarcomere got shorter. What did the filaments inside it do?"
-          options={[
-            { label: "They shrank", why: "Check the readout while you drag. Both filaments stay the same length the whole way." },
-            { label: "They slid past each other", correct: true, why: "Right. Neither filament changes length. They overlap more." },
-            { label: "They coiled up", why: "Look at the beads of actin. They stay in a straight line, and so does the myosin." },
-          ]}>
+        <Point>The filaments don’t shrink. They slide.</Point>
+          <p>Read the numbers as you drag. The sarcomere gets shorter, but the actin and the myosin stay exactly as long as they were. The only thing that changes is how far they overlap.</p>
           <p>For a long time this wasn’t obvious. Then in 1954 two teams, working separately, published the answer in the same issue of <i>Nature</i>: the filaments don’t shrink. They slide.<Foot of="huxley" /></p>
           <p>The actin is drawn in toward the middle, the Z-discs come closer together, and the whole sarcomere gets shorter. It is called the sliding filament model.</p>
           <Keep>Filaments keep their length and slide. Shortening is more overlap.</Keep>
-        </Ask>
       </Step>
 
       <Step wide flip stage={<Cycle phase={phase} setPhase={setPhase} onStuck={() => setStuck(true)} onCycle={countCycle} taught={taught} />}>
@@ -290,19 +285,13 @@ export function Pull() {
       </Step>
 
       <Step wide stage={<Builder onBuilt={() => setBuilt(true)} />}>
-        <p className="step__intro">One stroke moves actin a few billionths of a metre. A dumbbell needs far more than that, so sarcomeres work in numbers. Build some.</p>
+        <p className="step__intro">One stroke moves actin a few billionths of a metre. A dumbbell needs far more than that, so sarcomeres work in numbers, and it matters which way you add them.</p>
         <p className={`step__nudge${built ? " is-done" : ""}`}><span className="mono">{built ? "DONE" : "TRY IT"}</span>Add sarcomeres both ways, hold to contract, and compare the two readouts.</p>
-        <Ask last prompt="You want this muscle to pull harder. Where do you add sarcomeres?"
-          options={[
-            { label: "End to end, in a longer chain", why: "A longer chain shortens further, but each link passes on the same pull. Try it and watch “pulls with”." },
-            { label: "Side by side, in more rows", correct: true, why: "Right. Rows pull at the same time, so their forces add." },
-            { label: "Either. More is more", why: "They do different jobs. Change one stepper at a time and watch which readout moves." },
-          ]}>
+        <Point>Side by side for force. End to end for distance.</Point>
           <p><b>End to end, shortening adds up.</b> About 5,000 sarcomeres in each centimetre all shorten together, so a tiny change in each becomes a big change in length.</p>
           <p><b>Side by side, force adds up.</b> Myofibrils and fibers lie in parallel and pull at the same time. More of them pulling means more force.</p>
           <Keep>More side by side means more force. Hold on to that one. It is what a bigger muscle is.</Keep>
           <p className="step__bridge">That’s one rep. It doesn’t explain why the same dumbbell feels lighter next month. For that, we need what happens after you put it down.</p>
-        </Ask>
       </Step>
     </Stop>
   );

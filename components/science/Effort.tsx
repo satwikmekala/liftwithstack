@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { HARD_ENOUGH, LIMIT_BY_LOAD, LIMIT_BY_WEEK, TRIAL, effort } from "@/lib/science/story";
 import { Foot } from "./Foot";
-import { Ask, Keep, Reveal, Step, Stop } from "./lesson";
+import { Ask, Keep, Point, Reveal, Step, Stop } from "./lesson";
 import { Stepper } from "./Pull";
 
 function Dots({ reps, left }: { reps: number; left: number }) {
@@ -120,16 +120,11 @@ export function Effort() {
     <Stop n={5} title="10 kg doesn’t feel the same anymore." lead={<p>Back to the dumbbell. Same person, same 10&nbsp;kg, same eight curls. Only the weeks change.</p>}>
       <Step stage={<SameSet onMoved={() => setMoved(true)} />}>
         <p className={`step__nudge${moved ? " is-done" : ""}`}><span className="mono">{moved ? "DONE" : "TRY IT"}</span>Drag from week 1 to week 6 and watch the open dots.</p>
-        <Ask prompt="The dumbbell is the same and so are the eight reps. Why does the set feel easier in week 6?"
-          options={[
-            { label: "The dumbbell is easier to move once it’s familiar", why: "It’s still 10 kg, and gravity pulls on it exactly as hard. Look at what changed in the picture: the open dots." },
-            { label: "Eight reps now uses a smaller share of what you can do", correct: true, why: "Right. The set stayed where it was. Your limit moved away from it." },
-            { label: "You’re putting in less effort on purpose", why: "You’re doing the same eight reps. What changed is how many more you could have done." },
-          ]}>
+        <Point>The set didn’t move. Your limit did.</Point>
+          <p>It’s still 10&nbsp;kg, and gravity pulls on it exactly as hard. What changed is the open dots: how many more reps you could have done.</p>
           <p>The load hasn’t moved. The share of your capacity it takes has, and that share is what you feel. It’s called <b>relative effort</b>. A stronger, better-coordinated arm lifts the same 10&nbsp;kg further from its limit.</p>
           <p>How quickly this happens varies a lot between people. In one study of 585 people on the same 12-week programme, muscle size changed by anything from a slight loss to a gain of more than half.<Foot of="hubal" /></p>
           <Keep>What you feel is the share of your limit a set takes. As you get stronger, the same set takes less.</Keep>
-        </Ask>
       </Step>
 
       <Step flip stage={<NextSet onLanded={() => setLanded(true)} />}>
@@ -145,23 +140,13 @@ export function Effort() {
 
       <Step stage={<Trial shown={guessed} />}>
         <p className="step__intro">Does it matter? A trial published in 2026 tested it directly. Untrained young women did the same triceps exercise for eight weeks. One arm had its load raised whenever it reached the top of the rep range. Another arm kept the same load the whole time.</p>
-        <Ask last prompt="Before you see the result: how much did the arms that never added load grow?" onSolved={() => setGuessed(true)}
+        <Ask prompt="Before you see the result: how much did the arms that never added load grow?" onSolved={() => setGuessed(true)}
           options={[
             { label: "Not at all", why: "They did grow. Repeating a workout still trains you, especially when you’re new to it." },
             { label: "About half as much", correct: true, why: "Right. Both trained arms grew, and the one with overload grew about twice as much." },
             { label: "Just as much", why: "Close to a common belief, but the arms that kept adding load pulled clearly ahead." },
           ]}>
           <p>Neither arm wasted its time. Repeating a workout still trains you, and the authors note that training without progression was enough to cause growth in these beginners.<Foot of="kassiano" /> It just asks a little less of you each week, because you’re getting further from your limit while the workout stays where it is. What happens over years is still open.</p>
-          <aside className="sci-summary" aria-labelledby="summary-title">
-            <p id="summary-title" className="sci-summary__title mono">THE SHORT VERSION</p>
-            <ol>
-              <li>Myosin heads pull on actin, powered by ATP. Sarcomeres shorten, fibers shorten, your arm bends.</li>
-              <li>A load that’s hard for you creates tension, and tension starts the change.</li>
-              <li>Over weeks your nervous system improves and your fibers thicken. Those are two different things.</li>
-              <li>So the same weight takes a smaller share of what you’ve got. It gets easier, and it asks less of you.</li>
-              <li>Asking for a little more, in whichever way fits, is progressive overload.</li>
-            </ol>
-          </aside>
         </Ask>
       </Step>
     </Stop>
