@@ -125,7 +125,7 @@ const jsonLd = (html) => [...html.matchAll(/<script type="application\/ld\+json"
 test("the home page tells search engines and assistants what Stack is", async () => {
   const html = await (await render()).text();
   assert.match(html, /<link rel="canonical" href="https:\/\/www\.liftwithstack\.com\/?"/);
-  assert.match(html, /<meta name="description" content="Stack is a workout tracker for iPhone\./);
+  assert.match(html, /<meta name="description" content="Stack is a workout tracker for iPhone, built for people/);
   const graph = jsonLd(html);
   const app = graph.find((node) => [].concat(node["@type"]).includes("MobileApplication"));
   assert.equal(app.operatingSystem, "iOS");
@@ -140,16 +140,20 @@ test("the About page states the facts in plain HTML, and its FAQ data matches wh
   const response = await render("/about");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /<title>What is Stack\? Facts and FAQ<\/title>/);
+  assert.match(html, /<title>Stack — iPhone Workout Tracker for Strength Training<\/title>/);
+  assert.equal(html.match(/<h1[\s>]/g).length, 1);
   assert.match(html, /<link rel="canonical" href="https:\/\/www\.liftwithstack\.com\/about"/);
   assert.match(html, /<h1[^>]*>What is Stack\?<\/h1>/);
   const body = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, "");
   const text = body.replace(/<[^>]+>/g, "").replace(/&#x27;/g, "'").replace(/&amp;/g, "&");
-  assert.match(text, /Stack is a workout tracker for iPhone/);
-  assert.match(text, /TestFlight beta/);
-  assert.match(text, /not on the App Store/);
+  assert.match(text, /Stack is an iPhone workout tracker built for people who want to get stronger/);
+  assert.match(text, /The gym is part of your life\. Not the other way around\./);
+  for (const heading of ["At a glance", "Why Stack exists", "What you can do with Stack", "How Stack fits into a workout", "Questions and answers", "Want to try Stack?"]) assert.ok(text.includes(heading), heading);
+  assert.match(text, /TestFlight beta\. Not on the App Store/);
+  // Nothing unverified: no price and no promises.
+  assert.doesNotMatch(text, /\bfree\b|subscription|\$\d|guaranteed/i);
   const faq = jsonLd(html).find((node) => node["@type"] === "FAQPage");
-  assert.ok(faq.mainEntity.length >= 8);
+  assert.equal(faq.mainEntity.length, 15);
   for (const { name, acceptedAnswer } of faq.mainEntity) {
     assert.ok(text.includes(name), name);
     assert.ok(text.includes(acceptedAnswer.text), acceptedAnswer.text);
@@ -173,7 +177,7 @@ test("robots, sitemap and llms.txt welcome crawlers and assistants", async () =>
   const llms = await render("/llms.txt");
   assert.equal(llms.status, 200);
   const brief = await llms.text();
-  assert.match(brief, /^# Stack\n\n> Stack is a workout tracker for iPhone\./);
-  assert.match(brief, /TestFlight beta\. Stack is not on the App Store yet\./);
+  assert.match(brief, /^# Stack\n\n> Stack is an iPhone workout tracker /);
+  assert.match(brief, /TestFlight beta\. Not on the App Store/);
   assert.match(brief, /\]\(https:\/\/www\.liftwithstack\.com\/about\)/);
 });

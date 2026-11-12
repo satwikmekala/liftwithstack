@@ -18,19 +18,35 @@
 .about__glance dt { font: 400 12px/1.7 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ash-dim); }
 .about__glance dd { margin: 0; color: var(--bone); }
 
-.about__group + .about__group { margin-top: 44px; }
-.about__group ul { margin-top: 14px; display: grid; gap: 10px; }
-.about__group li { padding-left: 18px; position: relative; }
-.about__group li::before { content: ""; position: absolute; left: 0; top: 0.72em; width: 6px; height: 6px; border-radius: 2px; background: var(--accent); }
-.about__note { margin-top: 16px; padding: 14px 16px; border-radius: 12px; background: var(--surface); font-size: 15px; }
+.about__lead { font-weight: 600; }
+.about__intro { margin-top: 18px; font-size: clamp(17px, 1.6vw, 19px); }
+.about__belief { margin-top: 28px; padding-left: 18px; border-left: 2px solid var(--accent); font: 700 clamp(20px, 2.2vw, 26px)/1.25 var(--display); letter-spacing: -0.02em; color: var(--bone) !important; }
+.about__updated { margin-top: 32px; }
+
+.about__prose > p + p { margin-top: 16px; }
+.about__prose > h3 + p { margin-top: 12px; }
+.about__section.about__prose > p, .about__topic > p { max-width: 62ch; font-size: 17px; }
+.about__close { color: var(--bone) !important; font-weight: 600; }
+.about__topic + .about__topic { margin-top: 52px; }
+.about__topic h3 { font: 700 clamp(21px, 2.3vw, 26px)/1.2 var(--display); letter-spacing: -0.02em; }
+.about__topic .about__note { margin-top: 18px; padding: 14px 16px; border-radius: 12px; background: var(--surface); font-size: 15px; max-width: none; }
+
+.about__flow { margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.about__flow > div { padding: 20px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); }
+.about__flow dt { font: 400 12px/1 var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+.about__flow dd { margin: 14px 0 0; font-size: 15.5px; }
+.about__after { margin-top: 24px; color: var(--bone) !important; }
 
 .about__faq { display: grid; gap: 32px; }
 .about__faq p { margin-top: 8px; }
 
-.about__get p { max-width: 52ch; }
+.about__get > p:not(.eyebrow) { max-width: 52ch; }
+.about__get .eyebrow { margin-bottom: 16px; }
+.about__section.about__get > h2 { margin-bottom: 20px; }
 .about__get .download { margin-top: 28px; text-decoration: none; color: var(--ink); }
 .about__more { margin-top: 24px; font-size: 15px; }
 
-@media (max-width: 560px) {
+@media (max-width: 640px) {
   .about__glance > div { grid-template-columns: 1fr; gap: 2px; }
+  .about__flow { grid-template-columns: 1fr; }
 }

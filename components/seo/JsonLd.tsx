@@ -1,4 +1,4 @@
-import { FAQ, FEATURE_GROUPS, SUMMARY, abs } from "@/lib/facts";
+import { FAQ, FEATURE_LIST, SHORT, abs } from "@/lib/facts";
 import { INSTAGRAM_URL, SITE_URL } from "@/lib/site";
 
 const ORG = `${SITE_URL}/#organization`;
@@ -36,7 +36,7 @@ const app = {
   "@id": APP,
   name: "Stack",
   alternateName: "Stack workout tracker",
-  description: SUMMARY,
+  description: SHORT,
   url: abs("/"),
   image: abs("/og.png"),
   operatingSystem: "iOS",
@@ -44,7 +44,7 @@ const app = {
   applicationCategory: "HealthApplication",
   applicationSubCategory: "Workout tracker",
   creativeWorkStatus: "Beta (TestFlight). Not yet on the App Store.",
-  featureList: FEATURE_GROUPS.flatMap((group) => group.features.map(({ name, text }) => `${name}: ${text}`)),
+  featureList: FEATURE_LIST,
   publisher: { "@id": ORG },
   mainEntityOfPage: abs("/about"),
 };
