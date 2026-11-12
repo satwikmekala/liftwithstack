@@ -1,7 +1,11 @@
 # The weight story: manuscript and storyboard
 
-The `/science` page rewritten as one article. This file is the editorial source. If the page and this
-file disagree, fix one of them on purpose.
+The `/science` page. This file is the editorial source. If the page and this file disagree, fix one of
+them on purpose.
+
+Since November 2026 the page is a lesson rather than an article: six stops that each ask before they tell.
+Part 1 is still the source for every explanation on the page. Part 2 is the storyboard of the earlier
+scroll-driven article, kept for the record. **Part 3 describes the page as it is now.**
 
 **The question the page answers:** why does a weight that once felt heavy eventually become easier?
 
@@ -211,3 +215,31 @@ an image sequence. Reduced motion shows a still for each stage with the text unc
 
 **Licence.** Only chapter 3's small arm is adapted from Écorché; it is shared under CC BY-SA 4.0, with credit on
 the page, in the README and beside the files. Everything else is original.
+
+---
+
+## Part 3: The lesson
+
+**Method.** Borrowed from how Brilliant teaches: the question comes before the explanation, the reader
+handles a picture before it is named, each step carries one idea, a wrong answer gets one line on why and
+another try, and the lesson ends with questions in new settings and no pictures. Nothing is locked: every
+question has a "Show me", and without scripts every explanation is plain text on the page.
+
+| Stop | The question | What the reader does | Keep |
+| --- | --- | --- | --- |
+| Opening | Which muscle lifts a dumbbell in a curl? | Taps it on Stack's own 3D figure | The biceps leads, the forearm helps |
+| 1. The lift | What can a muscle actually do? | Drags the drawn arm through a curl | Muscles only pull |
+| 2. Inside the muscle | How far down does it go? | Presses "Zoom in" five times, then orders four parts by size | Bundles inside bundles |
+| 3. The pull | Do filaments shrink, slide or coil? What frees a locked head? Where do you add sarcomeres for force? | Squeezes a sarcomere, runs one myosin head by hand, builds rows and chains | Filaments slide; ATP lets go; side by side adds force |
+| 4. After you put it down | Four weeks in, what changed most? Is soreness the signal? | Guesses, then drags through 12 weeks of two lanes | Strength and size are two changes; nerves lead |
+| 5. The same 10 kg | Why is week 6 easier? How much did the fixed-load arm grow? | Drags week 1 to 6, then sets week 7 until it is "Hard enough" | Relative effort; progressive overload by reps, weight or sets |
+| 6. Check, then log | Four questions: a squat, a friend, a stale bench, what counts as overload | Answers unaided, then logs one more rep on the Stack phone and sees the figure light | Can explain it; why logging helps |
+
+**Changes to the manuscript's claims.** A curl names the brachialis and brachioradialis as helpers. Early
+growth is described as starting early but taking weeks to show, with some early size being swelling
+(Seynnes 2007, Damas 2016). The protein-building window is "about a day or two" (MacDougall 1995 is six
+men). The lifter in stops 4 and 5 is made up and labelled so; the trial bars are Kassiano 2026.
+
+**The 3D figure.** `components/body/BodyFigure.tsx` and `lib/body/stage.ts`, the site's one loader for the
+app's sculpt. It is a fixed pose with no skeleton, so the drawn arm (`lib/science/arm.ts`) still does the
+curl.

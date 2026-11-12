@@ -10,9 +10,9 @@ export function ScienceTeaser() {
         <Reveal className="teaser__copy">
           <p className="eyebrow">THE SCIENCE</p>
           <h2 id="teaser-title" className="teaser__title">Remember when 10&nbsp;kg felt heavy?</h2>
-          <p className="teaser__body">Why the same weight gets easier, from a curl down to the molecules, and what it means for your next workout.</p>
-          <span className="teaser__link">Read the story<Icon name="arrowRight" size={18} /></span>
-          <span className="teaser__meta mono">8 MIN READ · 7 CHAPTERS</span>
+          <p className="teaser__body">Work out why the same weight gets easier, from a curl down to the molecules, in a short lesson you do rather than read.</p>
+          <span className="teaser__link">Start the lesson<Icon name="arrowRight" size={18} /></span>
+          <span className="teaser__meta mono">6 MIN · 6 STOPS</span>
         </Reveal>
         <div className="teaser__stage" aria-hidden="true">
           <Plate className="teaser__figure" angle={96} />

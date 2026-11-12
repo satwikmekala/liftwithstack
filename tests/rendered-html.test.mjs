@@ -79,16 +79,20 @@ test("server-renders the science of getting stronger", async () => {
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /<title>Remember when 10 kg felt heavy\?/);
-  // Seven chapters, in order.
-  const order = ["The weight hasn’t changed", "Inside your muscle", "How muscles actually pull", "How training changes the muscle",
-    "10 kg doesn’t feel the same anymore", "Two ways to continue", "Why you remember your workouts"];
+  // Six stops, in order, each one opening with something to do or answer.
+  const order = ["Tap the muscle that lifts a dumbbell in a curl", "Lift it yourself", "Bundles inside bundles", "What happens when it shortens?",
+    "The lifting is the start", "10 kg doesn’t feel the same anymore", "Now explain it yourself", "You might remember what you lifted today"];
   let at = 0;
   for (const heading of order) {
     const next = html.indexOf(heading, at);
     assert.ok(next > at, `${heading} comes in order`);
     at = next;
   }
-  // Real terms, introduced in the article itself.
+  // Every explanation is in the HTML, whether or not its question has been answered.
+  for (const kept of ["Muscles only pull", "Filaments keep their length and slide", "needs a fresh ATP to let go", "Strength and size are two different changes", "Progressive overload is keeping the set hard"]) {
+    assert.match(html, new RegExp(kept));
+  }
+  // Real terms, introduced in the lesson itself.
   for (const term of ["Biceps brachii", "Fascicle", "Muscle fiber", "Myofibril", "Sarcomere", "Z-disc", "cross-bridge cycle", "ATP", "mechanical tension", "mTORC1", "motor unit", "relative effort", "progressive overload"]) {
     assert.match(html, new RegExp(term));
   }

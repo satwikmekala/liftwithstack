@@ -24,7 +24,7 @@ function load(file) {
 const { makeDemoBlock, makeGuidedBlock } = load('lib/demo-block.ts');
 const { guidedReducer, initialGuided, GUIDED_PLAN } = load('lib/guided.ts');
 const { effectiveShare, sharingSummary, DEFAULT_SHARE } = load('lib/circle.ts');
-const { PATHS, SAME_WEIGHT, TRIAL, effort, CLASSIC_CURL } = load('lib/science/story.ts');
+const { LIMIT_BY_WEEK, LIMIT_BY_LOAD, HARD_ENOUGH, TRIAL, effort, CLASSIC_CURL } = load('lib/science/story.ts');
 const { platePose } = load('lib/science/arm.ts');
 const { initialWorkout, workoutReducer } = load('lib/workout.ts');
 const { finaleHistory } = load('lib/stack/history.ts');
@@ -93,14 +93,23 @@ test('a new circle member shares this week only; detail needs workouts on', () =
   assert.equal(sharingSummary({ ...DEFAULT_SHARE, paused: true }), 'Sharing is paused. Friends see your name and that you’ve paused.');
 });
 
-test('the two paths stay honest: same start, repeating drifts from the limit, progressing stays near it', () => {
-  assert.deepEqual(PATHS.repeat[0], PATHS.progress[0]);
-  assert.deepEqual(PATHS.repeat[0], SAME_WEIGHT.week6);
-  assert.ok(PATHS.repeat.every((set) => set.load === 10 && set.reps === 8));
-  assert.deepEqual(PATHS.progress.map((set) => `${set.load}x${set.reps}`), ['10x8', '10x9', '10x10', '10x12', '12x8']);
-  assert.ok(effort(PATHS.repeat.at(-1)) < effort(PATHS.repeat[0]));
-  assert.ok(effort(PATHS.progress.at(-1)) > effort(PATHS.repeat.at(-1)));
-  assert.ok(effort(SAME_WEIGHT.week1) > effort(SAME_WEIGHT.week6));
+test('the made-up lifter stays honest: same set, a limit that moves away, and more than one way back to hard', () => {
+  // Weeks 1 to 6: 10 kg × 8 never changes; what it leaves in reserve only grows.
+  assert.equal(LIMIT_BY_WEEK[0] - 8, 1);
+  assert.equal(LIMIT_BY_WEEK.at(-1) - 8, 4);
+  assert.ok(LIMIT_BY_WEEK.every((limit, i) => i === 0 || limit >= LIMIT_BY_WEEK[i - 1]));
+  assert.ok(effort(8, LIMIT_BY_WEEK[0]) > effort(8, LIMIT_BY_WEEK.at(-1)));
+  // Week 7 starts where week 6 ended, and that set is no longer hard enough.
+  assert.equal(LIMIT_BY_LOAD[10], LIMIT_BY_WEEK.at(-1));
+  const left = (load, reps) => LIMIT_BY_LOAD[load] - reps;
+  const hard = (load, reps) => left(load, reps) >= HARD_ENOUGH.min && left(load, reps) <= HARD_ENOUGH.max;
+  assert.equal(hard(10, 8), false);
+  // Adding reps gets there, and so does adding weight.
+  assert.ok(hard(10, 10));
+  assert.ok(hard(12, 8));
+  // A heavier dumbbell always allows fewer reps.
+  const loads = Object.keys(LIMIT_BY_LOAD).map(Number).sort((a, b) => a - b);
+  assert.ok(loads.every((load, i) => i === 0 || LIMIT_BY_LOAD[load] < LIMIT_BY_LOAD[loads[i - 1]]));
   // The trial's numbers, as published.
   assert.deepEqual(TRIAL.map((row) => row.change), [22.9, 11.6, 1.8]);
 });

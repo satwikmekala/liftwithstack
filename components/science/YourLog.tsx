@@ -10,11 +10,17 @@ import { CURL_HISTORY } from "@/lib/science/story";
 import { block, HEIGHTS } from "@/lib/stack/model";
 import { muscle } from "@/lib/tokens";
 import { armsWorkout, workoutReducer } from "@/lib/workout";
+import { BodyFigure } from "@/components/body/BodyFigure";
+import type { BodyRegion, RegionStates } from "@/lib/body/regions";
 import { Foot } from "./Foot";
+
+const TRAINED: RegionStates = { biceps: "primary", forearms: "secondary" };
+const REST: RegionStates = {};
+const ARMS: readonly BodyRegion[] = ["biceps", "forearms"];
 
 const PAST = [HEIGHTS[0], HEIGHTS[1], HEIGHTS[1], HEIGHTS[0], HEIGHTS[1]].map((height, i) => block(`past-${i}`, muscle.arms, height));
 
-/** Chapter 7: the log that makes the next rep a decision. Live: open history, add a rep, log it. */
+/** The end of the lesson: the log that makes the next rep a decision. Live: open history, add a rep, log it. */
 export function YourLog() {
   const [workout, dispatch] = useReducer(workoutReducer, undefined, armsWorkout);
   const [history, setHistory] = useState(false);
@@ -32,9 +38,9 @@ export function YourLog() {
   const slabs = landed ? [...PAST, block("today", muscle.arms, beat ? HEIGHTS[1] : HEIGHTS[0])] : PAST;
 
   return (
-    <section className="log-chapter" id="chapter-7" aria-labelledby="log-title">
+    <section className="log-chapter" id="log" aria-labelledby="log-title">
       <div className="log-chapter__copy">
-        <p className="chapter mono"><span>7</span>Why you remember your workouts</p>
+        <p className="chapter mono">One last thing to do</p>
         <h2 id="log-title" className="d-title">You might remember what you lifted today. But six weeks ago?</h2>
         <p>Progressing needs one small thing: last time’s number, in front of you when you pick the dumbbell up.</p>
         <p>Writing a workout down doesn’t build any muscle, and plenty of people progress on feel or with a notebook. What a log does is make last time visible before you start, so that one more rep is something you decide rather than something you hope happened. People who keep track of their progress toward a goal are more likely to reach it, especially when they physically record it.<Foot of="harkin" /></p>
@@ -58,10 +64,17 @@ export function YourLog() {
           </div>
           <HistorySheet open={history} onClose={() => setHistory(false)} name="Dumbbell Curl" entries={CURL_HISTORY} />
         </Phone>
-        <figure className="log-chapter__stack" aria-label={`Your stack: ${slabs.length} arm workouts`}>
-          <MiniStack slabs={slabs} width={150} height={190} unit={TRUE_UNIT} base="plinth" flash={landed} glow />
-          <figcaption className="mono">YOUR STACK</figcaption>
-        </figure>
+        <div className="log-chapter__side">
+          <figure className={`log-chapter__map${landed ? " is-lit" : ""}`}>
+            <BodyFigure states={landed ? TRAINED : REST} focus={ARMS} interactive={false} className="log-chapter__figure"
+              label={landed ? "Stack’s 3D figure with the biceps lit and the forearms lit lighter" : "Stack’s 3D figure, nothing trained yet"} />
+            <figcaption className="mono">{landed ? "WHAT THAT TRAINED" : "LOG IT TO LIGHT IT"}</figcaption>
+          </figure>
+          <figure className="log-chapter__stack" aria-label={`Your stack: ${slabs.length} arm workouts`}>
+            <MiniStack slabs={slabs} width={150} height={190} unit={TRUE_UNIT} base="plinth" flash={landed} glow />
+            <figcaption className="mono">YOUR STACK</figcaption>
+          </figure>
+        </div>
       </div>
     </section>
   );

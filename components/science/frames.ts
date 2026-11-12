@@ -3,7 +3,7 @@
 import { CLASSIC_CURL } from "@/lib/science/story";
 
 /**
- * The small anatomical arm beside the sarcomere in chapter 3 is an image sequence: 28 WebP
+ * The small anatomical arm beside the sarcomere in stop 3 is an image sequence: 28 WebP
  * frames of the curl, rendered from the Écorché model. Phones get the smaller set (`s/`).
  */
 const BASE = "/science/";
@@ -76,6 +76,6 @@ class Sequence {
   }
 }
 
-/** The anatomical arm beside the sarcomere in chapter 3. */
+/** The anatomical arm beside the sarcomere in stop 3. */
 export const classicCurl = new Sequence(CLASSIC_CURL);
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./science.css";
 
 const title = "Remember when 10 kg felt heavy? — Stack";
-const description = "Why the same weight gets easier: from a curl down to actin and myosin, how training changes your muscle, and what that means for your next workout.";
+const description = "Why the same weight gets easier, as a six-stop interactive lesson: from a curl down to actin and myosin, how training changes your muscle, and what that means for your next workout.";
 
 export const metadata: Metadata = {
   title,
