@@ -32,6 +32,9 @@ export function Footer() {
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/about">What is Stack?</a>
         <span aria-hidden="true">·</span>
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+        <a href="/guides">Guides</a>
+        <span aria-hidden="true">·</span>
         <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">Built in public</a>
         <span aria-hidden="true">·</span>
         <span>© 2026 Stack</span>

@@ -28,7 +28,7 @@ test("server-renders the Stack marketing page", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Stack: workout tracker for iPhone — Every workout stacks up\.<\/title>/);
+  assert.match(html, /<title>Stack by Lift with Stack: the iPhone workout tracker where every workout stacks up<\/title>/);
   assert.match(html, /Every workout[\s\S]*stacks up\./);
   assert.match(html, /Log your training\. See your progress take shape\.[\s\S]*Bring your gym friends along\./);
   assert.match(html, /Don’t overthink it\./);
@@ -130,6 +130,8 @@ test("the home page tells search engines and assistants what Stack is", async ()
   const app = graph.find((node) => [].concat(node["@type"]).includes("MobileApplication"));
   assert.equal(app.operatingSystem, "iOS");
   assert.match(app.creativeWorkStatus, /TestFlight/);
+  assert.match(app.disambiguatingDescription, /not the same app as “Stack - Gym Tracker”/);
+  assert.ok(app.alternateName.includes("Stack by Lift with Stack"));
   // Nothing that does not exist yet: no price, no rating, no store link.
   for (const absent of ["offers", "aggregateRating", "downloadUrl", "installUrl"]) assert.equal(absent in app, false);
   assert.ok(graph.some((node) => node["@type"] === "Organization" && node.sameAs.includes("https://www.instagram.com/liftwithstack")));
@@ -140,7 +142,7 @@ test("the About page states the facts in plain HTML, and its FAQ data matches wh
   const response = await render("/about");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /<title>Stack — iPhone Workout Tracker for Strength Training<\/title>/);
+  assert.match(html, /<title>Stack by Lift with Stack — iPhone Workout Tracker for Strength Training<\/title>/);
   assert.equal(html.match(/<h1[\s>]/g).length, 1);
   assert.match(html, /<link rel="canonical" href="https:\/\/www\.liftwithstack\.com\/about"/);
   assert.match(html, /<h1[^>]*>What is Stack\?<\/h1>/);
@@ -153,7 +155,10 @@ test("the About page states the facts in plain HTML, and its FAQ data matches wh
   // Nothing unverified: no price and no promises.
   assert.doesNotMatch(text, /\bfree\b|subscription|\$\d|guaranteed/i);
   const faq = jsonLd(html).find((node) => node["@type"] === "FAQPage");
-  assert.equal(faq.mainEntity.length, 15);
+  assert.equal(faq.mainEntity.length, 17);
+  // The other apps called Stack are named, so assistants don’t mix them up with this one.
+  assert.match(text, /not the same app as “Stack - Gym Tracker”/);
+  assert.match(text, /What makes Stack different/);
   for (const { name, acceptedAnswer } of faq.mainEntity) {
     assert.ok(text.includes(name), name);
     assert.ok(text.includes(acceptedAnswer.text), acceptedAnswer.text);
@@ -173,11 +178,36 @@ test("robots, sitemap and llms.txt welcome crawlers and assistants", async () =>
   assert.match(robots, /Disallow: \/r\//);
   assert.match(robots, /Sitemap: https:\/\/www\.liftwithstack\.com\/sitemap\.xml/);
   const sitemap = await (await render("/sitemap.xml")).text();
-  for (const path of ["/", "/about", "/science"]) assert.match(sitemap, new RegExp(`<loc>https://www\\.liftwithstack\\.com${path}</loc>`));
+  for (const path of ["/", "/about", "/science", "/guides", "/guides/choosing-a-workout-tracker", "/guides/workout-tracker-with-friends", "/guides/switch-from-hevy"]) assert.match(sitemap, new RegExp(`<loc>https://www\\.liftwithstack\\.com${path}</loc>`));
   const llms = await render("/llms.txt");
   assert.equal(llms.status, 200);
   const brief = await llms.text();
-  assert.match(brief, /^# Stack\n\n> Stack is an iPhone workout tracker /);
+  assert.match(brief, /^# Stack\n\n> Stack \(liftwithstack\.com\) is an iPhone workout tracker /);
   assert.match(brief, /TestFlight beta\. Not on the App Store/);
   assert.match(brief, /\]\(https:\/\/www\.liftwithstack\.com\/about\)/);
+});
+
+test("each guide is a server-rendered article with its own FAQ, and keeps to the site's truth rules", async () => {
+  const index = await (await render("/guides")).text();
+  for (const slug of ["choosing-a-workout-tracker", "workout-tracker-with-friends", "switch-from-hevy"]) {
+    assert.match(index, new RegExp(`href="/guides/${slug}"`));
+    const response = await render(`/guides/${slug}`);
+    assert.equal(response.status, 200, slug);
+    const html = await response.text();
+    assert.equal(html.match(/<h1[\s>]/g).length, 1, slug);
+    assert.match(html, new RegExp(`<link rel="canonical" href="https://www\\.liftwithstack\\.com/guides/${slug}"`));
+    const body = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, "");
+    const text = body.replace(/<[^>]+>/g, "").replace(/&#x27;/g, "'").replace(/&amp;/g, "&");
+    const faq = jsonLd(html).find((node) => node["@type"] === "FAQPage");
+    for (const { name, acceptedAnswer } of faq.mainEntity) {
+      assert.ok(text.includes(name), name);
+      assert.ok(text.includes(acceptedAnswer.text), acceptedAnswer.text);
+    }
+    assert.match(text, /TestFlight beta/);
+    assert.doesNotMatch(html, /\bAI\b|analy[sz]e your form|real-time feedback|Download on the App Store|\bfree app\b|guaranteed/i);
+    for (const banned of [/\bsplits?\b/i, /\bprogram\b/i, /\bsession\b/i, /\bsealed\b/i, /\bvolume\b/i, /\blbs\b/, /!(?=[\s<])/]) {
+      assert.doesNotMatch(body, banned, `${slug} ${banned}`);
+    }
+  }
+  assert.equal((await render("/guides/not-a-guide")).status, 404);
 });

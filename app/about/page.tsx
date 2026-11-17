@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Fragment } from "react";
 import { FaqJsonLd } from "@/components/seo/JsonLd";
-import { Footer } from "@/components/sections/Closing";
+import { RefShell } from "@/components/seo/RefShell";
 import { Download } from "@/components/ui/Download";
-import { StackMark } from "@/components/ui/Icon";
-import { ABOUT_DESCRIPTION, ABOUT_TITLE, AT_A_GLANCE, BETA, CAN_DO, FACTS_UPDATED, FACTS_UPDATED_LONG, FAQ, FLOW, FLOW_CLOSE, INTRO, SHARE_DESCRIPTION, SHARE_TITLE, WHY } from "@/lib/facts";
-import { INSTAGRAM_URL } from "@/lib/site";
+import { ABOUT_DESCRIPTION, ABOUT_TITLE, AT_A_GLANCE, DIFFERENT, DIFFERENT_LINE, NOT_TO_CONFUSE, BETA, CAN_DO, FACTS_UPDATED, FACTS_UPDATED_LONG, FAQ, FLOW, FLOW_CLOSE, INTRO, SHARE_DESCRIPTION, SHARE_TITLE, WHY } from "@/lib/facts";
 import "./about.css";
 
 export const metadata: Metadata = {
@@ -28,18 +26,8 @@ function Rich({ text }: { text: string }) {
  */
 export default function About() {
   return (
-    <div className="about">
+    <RefShell>
       <FaqJsonLd />
-      <header className="nav">
-        {/* A plain anchor: next/link pulls a second React into the vinext dev bundle. */}
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a className="nav__brand" href="/" aria-label="Stack, home">
-          <StackMark size={26} />
-          <span>Stack</span>
-        </a>
-        <a className="download download--small download--soon" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">Get the beta</a>
-      </header>
-      <main className="about__main">
         <article>
           <header className="about__head">
             <p className="eyebrow">ABOUT STACK</p>
@@ -47,8 +35,19 @@ export default function About() {
             <p className="about__lead">{INTRO.lead}</p>
             {INTRO.body.map((text) => <p key={text} className="about__intro"><Rich text={text} /></p>)}
             <p className="about__belief">{INTRO.belief}</p>
+            <p className="about__aside">{NOT_TO_CONFUSE}</p>
             <p className="about__updated">Last updated <time dateTime={FACTS_UPDATED}>{FACTS_UPDATED_LONG}</time></p>
           </header>
+
+          <section className="about__section" aria-labelledby="different">
+            <h2 id="different">What makes Stack different</h2>
+            <p className="about__lede">{DIFFERENT_LINE}</p>
+            <ul className="about__diff">
+              {DIFFERENT.map(({ name, text }) => (
+                <li key={name}><h3>{name}</h3><p>{text}</p></li>
+              ))}
+            </ul>
+          </section>
 
           <section className="about__section" aria-labelledby="glance">
             <h2 id="glance">At a glance</h2>
@@ -110,11 +109,12 @@ export default function About() {
               <span aria-hidden="true"> · </span>
               {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
               <a href="/science">Read the science lesson</a>
+              <span aria-hidden="true"> · </span>
+              {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+              <a href="/guides">Guides</a>
             </p>
           </section>
         </article>
-      </main>
-      <Footer />
-    </div>
+    </RefShell>
   );
 }

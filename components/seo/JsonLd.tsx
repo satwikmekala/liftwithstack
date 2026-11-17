@@ -1,4 +1,5 @@
-import { FAQ, FEATURE_LIST, SHORT, abs } from "@/lib/facts";
+import { DIFFERENT_LINE, FAQ, FEATURE_LIST, MAKER, NOT_TO_CONFUSE, SHORT, abs } from "@/lib/facts";
+import type { Guide } from "@/lib/guides";
 import { INSTAGRAM_URL, SITE_URL } from "@/lib/site";
 
 const ORG = `${SITE_URL}/#organization`;
@@ -13,8 +14,8 @@ export function JsonLd({ data }: { data: object }) {
 const organization = {
   "@type": "Organization",
   "@id": ORG,
-  name: "Stack",
-  alternateName: "Lift with Stack",
+  name: MAKER,
+  alternateName: ["liftwithstack", "Stack"],
   url: abs("/"),
   logo: abs("/apple-touch-icon.png"),
   sameAs: [INSTAGRAM_URL],
@@ -23,8 +24,8 @@ const organization = {
 const website = {
   "@type": "WebSite",
   "@id": SITE,
-  name: "Stack",
-  alternateName: "liftwithstack.com",
+  name: "Stack by Lift with Stack",
+  alternateName: ["liftwithstack.com", "Lift with Stack"],
   url: abs("/"),
   inLanguage: "en-GB",
   publisher: { "@id": ORG },
@@ -35,8 +36,11 @@ const app = {
   "@type": ["MobileApplication", "SoftwareApplication"],
   "@id": APP,
   name: "Stack",
-  alternateName: "Stack workout tracker",
+  alternateName: ["Stack by Lift with Stack", "Stack workout tracker", "liftwithstack"],
   description: SHORT,
+  disambiguatingDescription: `${DIFFERENT_LINE} ${NOT_TO_CONFUSE}`,
+  identifier: { "@type": "PropertyValue", propertyID: "iOS bundle ID", value: "com.liftwithstack.stack" },
+  sameAs: [INSTAGRAM_URL],
   url: abs("/"),
   image: abs("/og.png"),
   operatingSystem: "iOS",
@@ -83,6 +87,39 @@ export function LessonJsonLd({ title, description }: { title: string; descriptio
       image: abs("/og.png"),
       author: { "@id": ORG },
       publisher: { "@id": ORG },
+    }],
+  }} />;
+}
+
+export function GuideJsonLd({ guide }: { guide: Guide }) {
+  const url = abs(`/guides/${guide.slug}`);
+  return <JsonLd data={{
+    "@context": "https://schema.org",
+    "@graph": [organization, website, app, {
+      "@type": "Article",
+      "@id": `${url}#guide`,
+      headline: guide.h1,
+      description: guide.description,
+      url,
+      inLanguage: "en-GB",
+      image: abs("/og.png"),
+      author: { "@id": ORG },
+      publisher: { "@id": ORG },
+      about: { "@id": APP },
+      isPartOf: { "@id": SITE },
+    }, {
+      "@type": "FAQPage",
+      "@id": `${url}#faq`,
+      url,
+      about: { "@id": APP },
+      mainEntity: guide.faq.map(({ q, a }) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
+    }, {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Stack", item: abs("/") },
+        { "@type": "ListItem", position: 2, name: "Guides", item: abs("/guides") },
+        { "@type": "ListItem", position: 3, name: guide.h1, item: url },
+      ],
     }],
   }} />;
 }

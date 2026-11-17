@@ -9,3 +9,4 @@ export const APP_STORE_URL: string | null = null;
 
 /** Stack on Instagram: updates and beta requests. */
 export const INSTAGRAM_URL = "https://www.instagram.com/liftwithstack";
+export const INDEXNOW_KEY = "cddb44337311da55d4f218d2771894c2";

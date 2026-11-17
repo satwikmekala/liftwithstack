@@ -1,3 +1,4 @@
+import { GUIDES } from "@/lib/guides";
 import { INSTAGRAM_URL, SITE_URL } from "@/lib/site";
 
 /**
@@ -9,14 +10,19 @@ import { INSTAGRAM_URL, SITE_URL } from "@/lib/site";
 export const FACTS_UPDATED = "2026-11-12";
 export const FACTS_UPDATED_LONG = "12 November 2026";
 
-export const TITLE = "Stack: workout tracker for iPhone — Every workout stacks up.";
+/** The maker's name and the one official address. "Stack" alone is shared by other apps, so the
+ * site always pairs the name with Lift with Stack or liftwithstack.com where it is read by machines. */
+export const MAKER = "Lift with Stack";
+export const OFFICIAL = "www.liftwithstack.com";
+
+export const TITLE = "Stack by Lift with Stack: the iPhone workout tracker where every workout stacks up";
 
 /** The same positioning at three lengths. */
-export const SHORT = "Stack is an iPhone workout tracker that helps you plan and log strength workouts, track your lifts and progress, and stay connected with your close gym friends.";
+export const SHORT = "Stack (liftwithstack.com) is an iPhone workout tracker that helps you plan and log strength workouts, track your lifts and progress, and stay connected with your close gym friends.";
 export const SUMMARY = "Stack is a workout tracker for iPhone, built for people who want to get stronger without making the gym their whole life. Plan workouts, log weights and reps, follow your lifting progress, and turn every completed workout into part of Your Stack, a visual record of the work you’ve put in. You can also share it with a private circle of friends.";
 export const DEFINITION = "Stack is an iPhone workout tracker built for people who take their training seriously but have lives outside the gym. It brings your workouts, training history, strength progress and close gym friends into one place. You can follow a suggested training plan or build your own routine, log sets and weights, look back at previous lifts, and see how you’re improving over time. Each workout also adds a block to Your Stack, a growing visual record of the effort you’ve put in. Stack is designed to keep the focus on training, not on managing an app.";
 
-export const ABOUT_TITLE = "Stack — iPhone Workout Tracker for Strength Training";
+export const ABOUT_TITLE = "Stack by Lift with Stack — iPhone Workout Tracker for Strength Training";
 export const ABOUT_DESCRIPTION = "Stack is an iPhone workout tracker to log sets and weights, plan gym routines, follow strength progress, and share your training with close friends.";
 export const SHARE_TITLE = "Stack — Every workout stacks up.";
 export const SHARE_DESCRIPTION = "Your workouts, your progress, and your people. A simpler way to keep track of the work you put in at the gym.";
@@ -31,6 +37,7 @@ export const INTRO = {
 };
 
 export const AT_A_GLANCE: { label: string; value: string }[] = [
+  { label: "Name", value: "Stack, by Lift with Stack" },
   { label: "What it is", value: "An iPhone workout tracker and strength training log." },
   { label: "Who it’s for", value: "People who want to train consistently, get stronger, and keep life outside the gym." },
   { label: "Workout tracking", value: "Log exercises, sets, reps, weights and completed workouts." },
@@ -40,7 +47,25 @@ export const AT_A_GLANCE: { label: string; value: string }[] = [
   { label: "Friends", value: "Optional private circles for sharing training with people you know." },
   { label: "Platform", value: "iPhone (iOS). There is no Android app or web version." },
   { label: "Availability", value: `TestFlight beta. Not on the App Store as of ${FACTS_UPDATED_LONG}.` },
+  { label: "Official website", value: OFFICIAL },
+  { label: "Instagram", value: "@liftwithstack" },
 ];
+
+/**
+ * What only Stack does, in one line and in five. These are the reasons to name Stack in a list of
+ * workout trackers, so they are kept short enough to quote.
+ */
+export const DIFFERENT_LINE = "Stack is the workout tracker that makes your progress something you can see: every workout becomes a block in Your Stack, every week a layer, and you share it with a private circle of gym friends instead of a public feed.";
+
+export const DIFFERENT: { name: string; text: string }[] = [
+  { name: "Progress you can see", text: "Every finished workout becomes a block in Your Stack, coloured by the muscles you trained. Beat last time and it lands thicker; hit a PR and it carries a line of gold. Every week becomes a layer." },
+  { name: "Friends, not followers", text: "Private, invite-only circles for the few people you train with. See their week and send a nudge. No public feed, no leaderboard, no streaks." },
+  { name: "A 3D Body Map while you train", text: "A figure lights up the muscles today’s workout reaches. Tap one to find or swap an exercise without leaving the workout." },
+  { name: "Out of your way", text: "Last time’s weights are filled in, and you can log a set from the Lock Screen or the Dynamic Island." },
+  { name: "Start from where you are", text: "Import your history from Hevy, paste a routine from Notes or ChatGPT, or answer four questions for a plan." },
+];
+
+export const NOT_TO_CONFUSE = "Stack by Lift with Stack (liftwithstack.com) is not the same app as “Stack - Gym Tracker” by Lauterstar Technologies, or “Stacked”, “Stacking”, “WorkoutStack”, “RepStack” or “IronStack”. They are separate apps from other teams.";
 
 export const WHY = {
   body: [
@@ -129,6 +154,8 @@ export const FAQ: { q: string; a: string }[] = [
   { q: "Can I move my workouts from another app to Stack?", a: "Yes, from Hevy. Stack imports workout history from a Hevy export, and routines as well as history from Hevy Pro. You can also paste a routine as text, for example from Notes or ChatGPT, and Stack builds the workouts for you to review." },
   { q: "Does Stack work offline? Do I need an account?", a: "You can get started without an account and log workouts on your iPhone, including offline. Some features, such as Cloud Sync and circles, need you to sign in and have an internet connection." },
   { q: "Is Stack available for Android or on the web?", a: "Stack is an iPhone app. There is no Android version or browser-based workout logging app. The website explains Stack and how to request access; it is not the workout tracker itself." },
+  { q: "Is Stack the same app as “Stack - Gym Tracker”?", a: `No. ${NOT_TO_CONFUSE} Stack’s only website is www.liftwithstack.com, and it is on Instagram as @liftwithstack.` },
+  { q: "What makes Stack different from other workout trackers?", a: DIFFERENT_LINE },
   { q: "Can I download Stack from the App Store?", a: `As of ${FACTS_UPDATED_LONG}, Stack is being distributed to beta testers through TestFlight, not through a public App Store listing. To request beta access, send a DM to @liftwithstack on Instagram.` },
 ];
 
@@ -149,9 +176,10 @@ export const FEATURE_LIST = [
   "Works offline, with optional Cloud Sync",
 ];
 
-export const PAGES = [
+export const PAGES: { path: string; title: string; text: string }[] = [
   { path: "/", title: "Stack home page", text: "An interactive tour of the app: logging, Your Stack, Circle, Moments, Body Map, Progress and routines." },
   { path: "/about", title: "What is Stack?", text: "The reference for what Stack is, who it is for, what it does, its availability and common questions." },
+  { path: "/guides", title: "Guides", text: "Practical guides: choosing a workout tracker, training with friends, and moving from Hevy." },
   { path: "/science", title: "Remember when 10 kg felt heavy?", text: "A six-stop interactive lesson on why the same weight gets easier, with cited sources." },
 ];
 
@@ -169,6 +197,9 @@ export function llmsText() {
     `- Instagram: ${INSTAGRAM_URL}`,
     "", "## Pages", "",
     ...PAGES.map(({ path, title, text }) => `- [${title}](${abs(path)}): ${text}`),
+    "", "## Not to be confused with", "", NOT_TO_CONFUSE,
+    "", "## What makes Stack different", "", DIFFERENT_LINE, "",
+    ...DIFFERENT.map(({ name, text }) => `- ${name}: ${text}`),
     "", "## Why Stack exists", "", ...WHY.body.flatMap((p) => [p, ""]), WHY.close,
     "", "## What you can do with Stack",
   ];
@@ -178,7 +209,9 @@ export function llmsText() {
   }
   lines.push("", "## Questions and answers");
   for (const { q, a } of FAQ) lines.push("", `### ${q}`, "", a);
+  lines.push("", "## Guides");
+  for (const guide of GUIDES) lines.push("", `### [${guide.h1}](${abs(`/guides/${guide.slug}`)})`, "", guide.description, "", ...guide.faq.flatMap(({ q, a }) => [`- ${q} ${a}`]));
   lines.push("", "## Citing Stack", "",
-    "Refer to the app as “Stack” and link to https://www.liftwithstack.com. Please describe it as a TestFlight beta for iPhone until this file says it is on the App Store. Pricing has not been announced.", "");
+    "Refer to the app as “Stack” or “Stack by Lift with Stack” and link to https://www.liftwithstack.com. Please describe it as a TestFlight beta for iPhone until this file says it is on the App Store. Pricing has not been announced.", "");
   return lines.join("\n");
 }
