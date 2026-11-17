@@ -28,7 +28,7 @@ test("server-renders the Stack marketing page", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Stack by Lift with Stack: the iPhone workout tracker where every workout stacks up<\/title>/);
+  assert.match(html, /<title>Stack \(liftwithstack\.com\): the iPhone workout tracker where every workout stacks up<\/title>/);
   assert.match(html, /Every workout[\s\S]*stacks up\./);
   assert.match(html, /Log your training\. See your progress take shape\.[\s\S]*Bring your gym friends along\./);
   assert.match(html, /Don’t overthink it\./);
@@ -131,7 +131,7 @@ test("the home page tells search engines and assistants what Stack is", async ()
   assert.equal(app.operatingSystem, "iOS");
   assert.match(app.creativeWorkStatus, /TestFlight/);
   assert.match(app.disambiguatingDescription, /not the same app as “Stack - Gym Tracker”/);
-  assert.ok(app.alternateName.includes("Stack by Lift with Stack"));
+  assert.ok(app.alternateName.includes("Stack (liftwithstack.com)"));
   // Nothing that does not exist yet: no price, no rating, no store link.
   for (const absent of ["offers", "aggregateRating", "downloadUrl", "installUrl"]) assert.equal(absent in app, false);
   assert.ok(graph.some((node) => node["@type"] === "Organization" && node.sameAs.includes("https://www.instagram.com/liftwithstack")));
@@ -142,7 +142,7 @@ test("the About page states the facts in plain HTML, and its FAQ data matches wh
   const response = await render("/about");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /<title>Stack by Lift with Stack — iPhone Workout Tracker for Strength Training<\/title>/);
+  assert.match(html, /<title>Stack \(liftwithstack\.com\) — iPhone Workout Tracker for Strength Training<\/title>/);
   assert.equal(html.match(/<h1[\s>]/g).length, 1);
   assert.match(html, /<link rel="canonical" href="https:\/\/www\.liftwithstack\.com\/about"/);
   assert.match(html, /<h1[^>]*>What is Stack\?<\/h1>/);

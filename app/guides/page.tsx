@@ -3,7 +3,7 @@ import { RefShell } from "@/components/seo/RefShell";
 import { GUIDES } from "@/lib/guides";
 import "../about/about.css";
 
-const title = "Guides — Stack by Lift with Stack";
+const title = "Guides — Stack (liftwithstack.com)";
 const description = "Practical guides from the team behind Stack, the iPhone workout tracker: choosing a workout tracker, training with friends, and moving from Hevy.";
 
 export const metadata: Metadata = {

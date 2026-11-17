@@ -1,4 +1,4 @@
-import { DIFFERENT_LINE, FAQ, FEATURE_LIST, MAKER, NOT_TO_CONFUSE, SHORT, abs } from "@/lib/facts";
+import { DIFFERENT_LINE, FAQ, FEATURE_LIST, NAME, NOT_TO_CONFUSE, SHORT, abs } from "@/lib/facts";
 import type { Guide } from "@/lib/guides";
 import { INSTAGRAM_URL, SITE_URL } from "@/lib/site";
 
@@ -14,8 +14,8 @@ export function JsonLd({ data }: { data: object }) {
 const organization = {
   "@type": "Organization",
   "@id": ORG,
-  name: MAKER,
-  alternateName: ["liftwithstack", "Stack"],
+  name: "Stack",
+  alternateName: ["liftwithstack", NAME],
   url: abs("/"),
   logo: abs("/apple-touch-icon.png"),
   sameAs: [INSTAGRAM_URL],
@@ -24,8 +24,8 @@ const organization = {
 const website = {
   "@type": "WebSite",
   "@id": SITE,
-  name: "Stack by Lift with Stack",
-  alternateName: ["liftwithstack.com", "Lift with Stack"],
+  name: NAME,
+  alternateName: ["liftwithstack.com", "liftwithstack"],
   url: abs("/"),
   inLanguage: "en-GB",
   publisher: { "@id": ORG },
@@ -36,7 +36,7 @@ const app = {
   "@type": ["MobileApplication", "SoftwareApplication"],
   "@id": APP,
   name: "Stack",
-  alternateName: ["Stack by Lift with Stack", "Stack workout tracker", "liftwithstack"],
+  alternateName: [NAME, "Stack workout tracker", "liftwithstack"],
   description: SHORT,
   disambiguatingDescription: `${DIFFERENT_LINE} ${NOT_TO_CONFUSE}`,
   identifier: { "@type": "PropertyValue", propertyID: "iOS bundle ID", value: "com.liftwithstack.stack" },
