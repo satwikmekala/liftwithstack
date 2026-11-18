@@ -738,6 +738,11 @@ a.nav__beta:hover, a.nav__beta:focus-visible { background: var(--accent); color:
 .footer__meta a { display: inline-flex; align-items: center; color: var(--bone); transition: color 0.2s; }
 .footer__meta a:hover { color: #fff; }
 .footer__brand { display: inline-flex; align-items: center; gap: 8px; font: 700 16px/1 var(--display); color: var(--bone); }
+/* Legal links: their own row under the brand and links, wrapping on narrow phones. */
+.footer { flex-wrap: wrap; }
+.footer__legal { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 0 20px; font-size: 13px; }
+.footer__legal a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ash); transition: color 0.2s; }
+.footer__legal a:hover { color: var(--bone); }
 
 /* ── Tablet and phone ────────────────────────────────────────── */
 @media (max-width: 960px) {

@@ -211,3 +211,37 @@ test("each guide is a server-rendered article with its own FAQ, and keeps to the
   }
   assert.equal((await render("/guides/not-a-guide")).status, 404);
 });
+
+test("privacy, terms and support are server-rendered, linked from the footer and listed for crawlers", async () => {
+  const pages = { "/privacy": /<title>Privacy Policy — Stack \(liftwithstack\.com\)<\/title>/, "/terms": /<title>Terms of Use — Stack \(liftwithstack\.com\)<\/title>/, "/support": /<title>Support — Stack \(liftwithstack\.com\)<\/title>/ };
+  for (const [path, title] of Object.entries(pages)) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.match(html, title);
+    assert.equal(html.match(/<h1[\s>]/g).length, 1, path);
+    assert.match(html, new RegExp(`<link rel="canonical" href="https://www\\.liftwithstack\\.com${path}"`));
+    assert.match(html, /<meta name="description" content="[^"]+"/);
+    const body = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, "");
+    // A draft says so at the top, and every unconfirmed fact is highlighted, never plain text.
+    const draft = body.includes("Draft — not yet in effect");
+    const marks = (body.match(/class="legal__confirm"/g) ?? []).length;
+    const placeholders = (body.replace(/<[^>]+>/g, "").match(/\[CONFIRM: /g) ?? []).length;
+    assert.equal(marks, placeholders, `${path}: every placeholder is highlighted`);
+    if (!draft) assert.equal(placeholders, 0, `${path}: a final page has no placeholders`);
+    // No unrendered inline marks.
+    assert.doesNotMatch(body.replace(/<[^>]+>/g, ""), /\*\*|\]\(/);
+    // The style sheet's banned words apply here too. "AI" is allowed: these pages must name the AI features.
+    for (const banned of [/\bsplits?\b/i, /\bprogram\b/i, /\bsession\b/i, /\bsealed\b/i, /\bvolume\b/i, /\blbs\b/, /!(?=[\s<])/]) {
+      assert.doesNotMatch(body, banned, `${path} ${banned}`);
+    }
+  }
+  const support = (await (await render("/support")).text()).replace(/<[^>]+>/g, "");
+  for (const heading of ["Report someone in Circle", "Delete your account", "AI features", "Data requests"]) assert.ok(support.includes(heading), heading);
+  const terms = (await (await render("/terms")).text()).replace(/<[^>]+>/g, "");
+  assert.match(terms, /zero tolerance for objectionable content and abusive users/);
+  const home = await (await render()).text();
+  for (const path of Object.keys(pages)) assert.match(home, new RegExp(`<footer[\\s\\S]*href="${path}"`));
+  const sitemap = await (await render("/sitemap.xml")).text();
+  for (const path of Object.keys(pages)) assert.match(sitemap, new RegExp(`<loc>https://www\\.liftwithstack\\.com${path}</loc>`));
+});
