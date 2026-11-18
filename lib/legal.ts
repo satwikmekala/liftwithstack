@@ -69,7 +69,7 @@ export const PRIVACY: LegalDocument = {
         "Workouts, routines, notes, records and photos are stored on your iPhone. No account is needed to use Stack.",
         "If you sign in (with Apple or Google), Stack keeps a small account record. Cloud Sync, Moments backup and Circle send data to Stack’s servers only when you turn them on.",
         "AI features send the text or summaries they need to an AI provider, only after you allow it in the app. You can withdraw that at any time.",
-        "Usage analytics are anonymous: they are not linked to your account, name or email. You can turn them off.",
+        "Usage analytics are not linked to your account, name or email, and you can turn them off.",
         "Stack shows no ads, contains no advertising or tracking code, and does not sell your personal information.",
         "You can delete your account in the app. We delete what we hold for it within 7 days.",
       ] }],
@@ -149,10 +149,10 @@ export const PRIVACY: LegalDocument = {
       id: "ai",
       title: "AI features",
       body: [
-        "Two features use an AI model. Neither runs until you allow AI features in the app, and you can withdraw that at any time in Settings → Manage data → AI features.",
-        "**Paste my routine:** the routine text you paste is sent to Stack’s routine server, which sends it to OpenRouter, an AI service, and from there to the AI model provider (currently a Google Gemini model) to turn it into a routine you can check and edit.",
-        "**Highlights:** to write short highlights about your training, the app sends a few summaries it has already worked out on your iPhone (for example an exercise name, a recent best and how many days you usually train), the date, and a random ID for your installation. It does not send your name, notes, photos or full history. These go to Stack’s server, then OpenRouter and the model provider (currently a DeepSeek model).",
-        "Stack’s server does not store the text or summaries; it keeps request counts, error codes and timings. We ask OpenRouter to route requests only to model providers that do not store or train on them. OpenRouter keeps request metadata (such as time, model and size). [CONFIRM: OpenRouter’s and each model provider’s retention terms, and that the data-collection setting is on in production]",
+        "Two features use an AI model. Neither sends anything until you allow AI features in the app; one choice covers both. You can withdraw it at any time in Settings → Manage data → AI features. Turning it off stops all later requests at once and deletes AI-written Highlights from your iPhone. Your choice is stored on your iPhone.",
+        "**Paste my routine:** the text you paste, exactly as you wrote it, and nothing else from your account or workouts. Stack’s routine server sends it to OpenRouter, an AI service, which passes it to the model provider (currently Google’s Gemini model), to turn it into workouts you review before anything is saved.",
+        "**Highlights:** short summaries Stack writes on your iPhone about your recent lifts and records (exercise and workout names, weights, reps and dates) and your weight unit, with a random code for your iPhone that limits how often it asks. Not your full history, your name, your notes, your photos or your account. Stack’s server sends them to OpenRouter, which passes them to the model provider (currently a DeepSeek model, run by a hosting provider OpenRouter chooses). Stack checks every sentence against your workouts before showing it.",
+        "Stack does not use this to identify you. Stack’s server does not store the text or summaries; its logs keep sizes, timings, token counts and error codes, a scrambled form of the Highlights code, and sometimes an exercise name when a highlight is rejected. We ask OpenRouter to use only model providers that do not keep or train on what you send. OpenRouter keeps request metadata (such as time, model and size). [CONFIRM: OpenRouter account logging setting, each model provider’s retention terms, which host serves the DeepSeek model, and that the data-collection setting is on in production]",
         "Models can change; this policy names the current ones. AI output can be wrong; check it before you use it.",
       ],
     },
@@ -170,7 +170,7 @@ export const PRIVACY: LegalDocument = {
       id: "crashes",
       title: "Crash reports",
       body: [
-        "Stack has no crash-reporting service of its own. If you share analytics with app developers in iOS Settings, Apple may send us crash reports and diagnostics; Apple decides what they contain. When Stack closes unexpectedly, it notes this on your iPhone and may send an anonymous reliability event (see Usage analytics).",
+        "Stack has no crash-reporting service of its own. If you share analytics with app developers in iOS Settings, Apple may send us crash reports and diagnostics; Apple decides what they contain. When Stack closes unexpectedly, it notes this on your iPhone and may send a reliability event that carries no personal details (see Usage analytics).",
       ],
     },
     {
@@ -223,7 +223,7 @@ export const PRIVACY: LegalDocument = {
             ["Railway", "Stack’s API servers", "Singapore"],
             ["Railway", "Routine import, Highlights, shared routine links", "United States (West)"],
             ["OpenRouter and the AI model provider (currently Google and DeepSeek models)", "AI features, after you allow them", "United States; the model provider’s location varies [CONFIRM: model host locations]"],
-            ["PostHog", "Anonymous usage analytics", "European Union (Germany)"],
+            ["PostHog", "Usage analytics", "European Union (Germany)"],
             ["Apple", "Sign in with Apple, app distribution, crash reports you allow", "Apple’s locations"],
             ["Google", "Google sign-in; YouTube form videos", "Google’s locations"],
             ["[CONFIRM: website host]", "Hosting liftwithstack.com", "[CONFIRM: hosting region]"],
@@ -255,7 +255,7 @@ export const PRIVACY: LegalDocument = {
           ["Apple token during account deletion", "Until revoked, about two days at most"],
           ["Record that an account was deleted", "Account ID and dates only, kept so a deleted account stays deleted if we restore our systems [CONFIRM: retention period]"],
           ["Shared routine links", "Indefinitely, unless taken down on request"],
-          ["Anonymous analytics", "[CONFIRM: analytics retention]"],
+          ["Usage analytics", "[CONFIRM: analytics retention]"],
           ["Server logs", "[CONFIRM: Railway and website log retention]"],
         ],
       } }],
@@ -266,7 +266,7 @@ export const PRIVACY: LegalDocument = {
       body: [
         "**Delete your account:** in Stack, go to Settings → Account → Delete account. You’ll be asked to sign in again first. Deletion is permanent.",
         "Your account stops working at once. Within 7 days (usually within an hour) we delete your account and sign-in records, Cloud Sync copies and checkpoints, your Circle profile, friends, requests, nudges, bolts and what you shared, and photos you backed up. If you signed in with Apple, we also revoke Stack’s access to your Apple ID. We keep only a record of the account ID and dates, with no name, email or content, so the account stays deleted if we ever restore our systems.",
-        "Not covered by account deletion: anonymous analytics (not linked to you), shared routine links (not linked to your account), and AI request metadata held by OpenRouter.",
+        "Not covered by account deletion: usage analytics (not linked to you), shared routine links (not linked to your account), and AI request metadata held by OpenRouter.",
         "Workouts and photos on your iPhone are not deleted with your account. Remove them with Settings → Manage data → Delete all data.",
         `You can also ask us to delete your data by contacting ${CONTACT}.`,
       ],
@@ -551,7 +551,7 @@ export const SUPPORT: LegalDocument = {
       title: "AI features",
       body: [
         "Paste my routine and Highlights use an AI model. Stack asks before sending anything, and explains what is sent and to whom.",
-        "**Withdraw consent:** Settings → Manage data → AI features. Once off, nothing more is sent; Stack works the same without AI features. [CONFIRM: final Settings path after the AI consent screen ships]",
+        "**Withdraw consent:** Settings → Manage data → AI features, then turn off Allow AI features. Nothing more is sent, requests in progress are cancelled, and AI-written Highlights are deleted from your iPhone. Everything else in Stack works the same.",
         "AI can be wrong. Check imported routines and highlights before you use them.",
       ],
     },
@@ -559,7 +559,7 @@ export const SUPPORT: LegalDocument = {
       id: "analytics",
       title: "Usage data",
       body: [
-        "To stop sending anonymous usage data, turn off Settings → Manage data → Share anonymous usage data.",
+        "To stop sending usage data, turn off Settings → Manage data → Share anonymous usage data.",
       ],
     },
     {
