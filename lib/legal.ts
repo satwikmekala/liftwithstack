@@ -141,6 +141,7 @@ export const PRIVACY: LegalDocument = {
       body: [
         "You can report a person, a photo, a workout or a Circle page, and block anyone. A report stores who reported whom, what kind of thing was reported, the reason you picked, an optional note of up to 300 characters, and a small record of what was reported (the handle, display name and a reference to the photo or workout) so we can review it.",
         "We review reports to keep Circle safe and to enforce the Terms of Use. We may hide content and restrict an account’s access to Circle. The person you report is not told who reported them. Stack may send its team an alert that a new report arrived; the alert contains no names or content.",
+        "To keep reporting possible after someone leaves your circle, we note who has seen whom in Circle (an ended friendship, an opened invite, a handle you looked up) for 180 days. We also keep the date you agreed to the Circle rules and which version you agreed to, a record of content we removed so it can’t be shared again, and any restriction on an account. Handles, display names, workout names and page names are checked against a short list of words Circle doesn’t allow.",
         "Resolved reports are deleted 180 days after they are resolved. If you delete your account, reports you made are kept without the link to you, and reports about you are closed and their record of the content is cleared.",
         "[CONFIRM: who at Stack reviews reports, and that report review and the 180-day deletion are live in production]",
       ],
@@ -252,6 +253,7 @@ export const PRIVACY: LegalDocument = {
           ["Old handle", "30 days after you change it"],
           ["Circle invites", "Expire after 7 days; deleted 30 days after that"],
           ["Reports", "180 days after they are resolved"],
+          ["Who has seen whom in Circle (for reporting only)", "180 days"],
           ["Apple token during account deletion", "Until revoked, about two days at most"],
           ["Record that an account was deleted", "Account ID and dates only, kept so a deleted account stays deleted if we restore our systems [CONFIRM: retention period]"],
           ["Shared routine links", "Indefinitely, unless taken down on request"],
