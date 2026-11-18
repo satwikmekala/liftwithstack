@@ -100,7 +100,7 @@ export const PRIVACY: LegalDocument = {
         "**What we receive:** a sign-in token from Apple or Google that contains a stable ID for you at that provider and an email address. With Sign in with Apple you can choose to hide your email, in which case Apple gives us a private relay address. Google’s token can also include your name and profile picture address.",
         "**What we keep:** our sign-in service (Supabase Auth) stores the email address and provider details from the token, sign-in times and a security log of sign-in events, which includes IP addresses. Stack’s own account records hold a random account ID, the provider name and provider ID, a random ID for each iPhone you sign in on, and records of sign-ins and account events. Stack’s own account records do not hold your email or name. [CONFIRM: exact fields Supabase Auth stores for Apple and Google sign-ins]",
         "**Why:** to create your account, sign you in, keep your account secure, and stop the same sign-in being used twice. Stack never merges two accounts because their emails match.",
-        "When you delete your account and you signed in with Apple, we ask Apple to revoke Stack’s access to your Apple ID. To do that, Stack sends Apple a one-time code from your last sign-in, and we keep the resulting Apple token only until the revocation goes through (we retry for about two days).",
+        "When you delete your account and you signed in with Apple, we ask Apple to revoke Stack’s access to your Apple ID. To do that, Stack’s server exchanges a one-time code from the sign-in that confirms the deletion, and keeps the resulting Apple token only until the revocation goes through (it retries for about two days).",
       ],
     },
     {
