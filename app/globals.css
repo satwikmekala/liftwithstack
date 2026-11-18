@@ -743,6 +743,8 @@ a.nav__beta:hover, a.nav__beta:focus-visible { background: var(--accent); color:
 .footer__legal { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 0 20px; font-size: 13px; }
 .footer__legal a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ash); transition: color 0.2s; }
 .footer__legal a:hover { color: var(--bone); }
+.footer__meta { flex-wrap: wrap; row-gap: 0; }
+.footer__meta > a, .footer__meta > span { white-space: nowrap; }
 
 /* ── Tablet and phone ────────────────────────────────────────── */
 @media (max-width: 960px) {
