@@ -520,7 +520,7 @@ export const SUPPORT: LegalDocument = {
       title: "Community and safety",
       body: [
         "Circle is for friends who train together, and Stack has zero tolerance for harassment, hate, sexual or violent content, spam and impersonation. Read the [Circle rules](/terms#circle) any time in the app: Circle → Sharing settings → Safety → Circle rules.",
-        "**Block someone:** tap the friend → “…” → Block, or Circle → Sharing settings → tap the friend → Block. Blocking removes them from your circle, cancels requests between you and deletes their nudges; they can’t find you, send you a request or use your invite. Unblock in Circle → Sharing settings → Blocked.",
+        "**Block someone:** tap the friend → “…” → Block, or Circle → Sharing settings → Your circle → tap the friend → Block. Blocking removes them from your circle, cancels requests between you and deletes their nudges; they can’t find you, send you a request or use your invite. Unblock in Circle → Sharing settings → Blocked.",
         "**Leave someone’s circle:** tap the friend → “…” → Remove from circle.",
         "If your Circle access was restricted after a report and you think it’s a mistake, contact us.",
         "If someone is in danger, contact your local emergency services first.",
