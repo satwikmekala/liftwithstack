@@ -375,7 +375,7 @@ export const TERMS: LegalDocument = {
       id: "reporting",
       title: "Reporting and moderation",
       body: [
-        "You can report a person, photo, workout or Circle page from the “…” menu where it appears, and block anyone. See [Support](/support#report) for the steps. We aim to review reports within [CONFIRM: report review time, e.g. 24 hours].",
+        "You can report a person, photo, workout or Circle page from the “…” menu where it appears, and block anyone. See [Support](/support#report) for the steps. We review reports and remove content or suspend accounts that break the Circle rules.",
         "We may review reported content, hide or remove content, restrict an account’s access to Circle, or suspend or end an account, with or without notice, when we reasonably believe it breaks these terms or the law, or puts someone at risk. We may keep records of reports as described in the Privacy Policy. If you think we made a mistake, contact us.",
       ],
     },
@@ -514,7 +514,7 @@ export const SUPPORT: LegalDocument = {
           "A friend request or invite: the request’s “…” → Report, or Report on the invite screen.",
           "Pick a reason, add a note if you like (up to 300 characters), and send. You can block the person at the same time.",
         ] },
-        "A photo you report disappears from your view straight away. We aim to review reports within [CONFIRM: report review time, e.g. 24 hours] and remove content and suspend accounts that break the [Circle rules](/terms#circle).",
+        "A photo you report disappears from your view straight away. We review reports and remove content or suspend accounts that break the [Circle rules](/terms#circle).",
       ],
     },
     {
