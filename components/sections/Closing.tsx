@@ -39,6 +39,11 @@ export function Footer() {
         <span aria-hidden="true">·</span>
         <span>© 2026 Stack</span>
       </span>
+      <nav className="footer__legal" aria-label="Legal">
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Use</a>
+        <a href="/support">Support</a>
+      </nav>
     </footer>
   );
 }

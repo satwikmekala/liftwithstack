@@ -153,6 +153,19 @@ Checked all four chapters in Chromium and WebKit at 393 × 852, 393 × 740,
 or browser errors. The existing logged-set/first-block flow and reduced-motion
 checks still pass. Physical iPhone Safari remains unverified.
 
+## /privacy, /terms and /support
+
+Plain reference pages in the /about frame (`components/legal/LegalDoc.tsx`, `app/legal.css`). The words live in
+`lib/legal.ts`; the app repo keeps the same text as markdown in `docs/legal/`, with the evidence for each claim in
+`docs/legal/claims-to-confirm.md`. Change a claim there first.
+
+- `[CONFIRM: …]` marks a fact only the owner or a lawyer can supply (legal name, address, governing law, support
+  email, minimum age, retention periods). It renders as a highlighted placeholder, never as plain text.
+- `LEGAL_IS_DRAFT` shows "Draft — not yet in effect" on all three pages. Flip it to `false` only when every
+  placeholder is replaced; the smoke test then fails if any placeholder is left.
+- `SUPPORT_EMAIL` stays `null` until the mailbox is verified; the pages show a placeholder instead of an address.
+- The app opens these URLs from `constants/legal.ts` (`LEGAL_URLS`); keep the paths stable.
+
 ## /science: Remember when 10 kg felt heavy?
 
 One article in seven chapters answering a single question: why does a weight that once felt heavy become

@@ -181,6 +181,9 @@ export const PAGES: { path: string; title: string; text: string }[] = [
   { path: "/about", title: "What is Stack?", text: "The reference for what Stack is, who it is for, what it does, its availability and common questions." },
   { path: "/guides", title: "Guides", text: "Practical guides: choosing a workout tracker, training with friends, and moving from Hevy." },
   { path: "/science", title: "Remember when 10 kg felt heavy?", text: "A six-stop interactive lesson on why the same weight gets easier, with cited sources." },
+  { path: "/support", title: "Support", text: "How to get help, report someone in Circle, delete your account, manage AI features and make data requests." },
+  { path: "/privacy", title: "Privacy Policy", text: "What Stack keeps on your iPhone, what it sends and when, who processes it, and how to delete it. Draft until marked otherwise." },
+  { path: "/terms", title: "Terms of Use", text: "The terms for using Stack, including Circle’s rules and AI features. Draft until marked otherwise." },
 ];
 
 export const abs = (path: string) => `${SITE_URL}${path === "/" ? "/" : path}`;
