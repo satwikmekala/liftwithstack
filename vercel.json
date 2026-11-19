@@ -9,6 +9,10 @@
     {
       "source": "/r/:path*",
       "destination": "https://motivated-caring-production-04ef.up.railway.app/r/:path*"
+    },
+    {
+      "source": "/i/:path*",
+      "destination": "https://motivated-caring-production-04ef.up.railway.app/i/:path*"
     }
   ],
   "headers": [
@@ -31,6 +35,19 @@
     },
     {
       "source": "/r/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        }
+      ]
+    },
+    {
+      "source": "/i/:path*",
       "headers": [
         {
           "key": "Cache-Control",
